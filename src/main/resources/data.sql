@@ -1,0 +1,415 @@
+INSERT INTO functional_roles (name)
+VALUES('Desarrollador Fullstack'),
+      ('Desarrollador Frontend'),
+      ('Desarrollador Backend'),
+      ('QA Tester'),
+      ('DevOps'),
+      ('Analista Funcional');
+
+INSERT INTO countries (name)
+VALUES ('Argentina'),
+       ('Brasil'),
+       ('Chile');
+
+INSERT INTO provinces (name, country_id)
+VALUES ('Buenos Aires', 1),
+       ('Córdoba', 1),
+       ('Mendoza', 1),
+       ('São Paulo', 2),
+       ('Rio de Janeiro', 2);
+
+INSERT INTO cities (name, province_id)
+VALUES ('La Plata', 1),
+       ('Córdoba', 2),
+       ('Mendoza', 3),
+       ('São Paulo', 4),
+       ('Rio de Janeiro', 5);
+
+INSERT INTO zip_codes (name)
+VALUES ('1900'),
+       ('5000'),
+       ('5500'),
+       ('01000'),
+       ('20000');
+
+INSERT INTO directions (description, city_id, zip_code_id)
+VALUES ('Calle 1 #123', 1, 1),
+       ('Av. Siempre Viva 742', 2, 2),
+       ('San Martín 456', 3, 3),
+       ('Rua Augusta 1500', 4, 4),
+       ('Copacabana 999', 5, 5);
+
+INSERT INTO users (email, password, is_enabled, is_account_not_expired, is_account_not_locked,
+                   is_credential_not_expired)
+VALUES ('user1@example.com', 'hashedpassword1', true, true, true, true),
+       ('user2@example.com', 'hashedpassword2', true, true, true, true);
+
+INSERT INTO people (user_id, first_name, last_name, direction_id, date_birth)
+VALUES (1, 'Tobias', 'Gonzalez', 1, '1990-05-15T00:00:00'),
+       (2, 'Matias', 'Espinoza', 2, '1985-08-22T00:00:00');
+
+INSERT INTO identification_type (description)
+VALUES ('DNI'),
+       ('PASAPORTE');
+
+INSERT INTO identifications (description, document_type_id, person_id)
+VALUES ('40862018', 1, 1),
+       ('40018234', 1, 2),
+       ('26412563', 1, 2);
+
+INSERT INTO permissions (description)
+VALUES ('CREATE_USER'),
+       ('EDIT_USER'),
+       ('DELETE_USER'),
+       ('VIEW_USER'),
+       ('MANAGE_ROLES');
+
+INSERT INTO roles (name)
+VALUES ('ADMIN'),
+       ('DEFAULT'),
+       ('RECRUITER'),
+       ('APPLICANT');
+
+INSERT INTO roles_permissions (role_id, permission_id)
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (1, 4),
+       (1, 5),
+       (2, 4),
+       (2, 5),
+       (3, 4);
+
+INSERT INTO languages (language_level, name)
+VALUES ('Basico', 'Ingles'),
+        ('Intermedio', 'Ingles'),
+       ('Avanzado', 'Ingles'),
+       ('Nativo/Bilingüe', 'Ingles');
+
+
+INSERT INTO categories (name)
+VALUES ('Programming'),
+       ('Design'),
+       ('Marketing');
+
+INSERT INTO skills (description, category_id)
+VALUES ('Java', 1),
+       ('Photoshop', 2),
+       ('SEO', 3);
+
+INSERT INTO companies (name)
+VALUES ('TechForb'),
+       ('Google'),
+       ('Microsoft');
+
+
+INSERT INTO cvs (version, is_last, name, person_id, public_id, creation_date)
+VALUES ('1744399955', false, 'CV TEST 1', 1, 'cvs/TEST/cv_4febbc99-f562-4a43-9ba0-36e11b8bee4f.pdf',
+        '2025-04-11 16:35:33.683289'),
+       ('1744400135', false, 'CV TEST 2', 1, 'cvs/TEST/cv_1ed526db-161b-414b-bc48-c4aead6ff606.pdf',
+        '2025-04-11 16:35:34.683289'),
+       ('1744400292', true, 'CV TEST 3', 1, 'cvs/TEST/cv_74e8ef53-1e60-4fed-82ac-c6f88cedcf81.pdf',
+        '2025-04-11 16:35:35.683289');
+
+INSERT INTO users_roles(user_id, role_id)
+VALUES (1, 1),
+       (2, 2),
+       (2, 3),
+       (1, 2);
+
+INSERT INTO vacancies (company_id, recruiter_id, role, description, active, years_experience_required,
+                       creation_date, update_date, expiration_date)
+VALUES (1, 1, 'Software Engineer', 'Desarrollo de software en Java', true, 3, '2025-01-01T10:00:00',
+        '2025-01-02T10:00:00', '2025-06-01T10:00:00'),
+       (1, 1, 'Software Engineer', 'Desarrollador Frontend Angular', true, 2, '2025-04-04T10:00:00',
+        '2025-04-04T10:00:00', '2025-05-04T10:00:00');
+
+INSERT INTO applications (person_id, comments, application_date, update_date, application_state, vacancy_id, cv_id)
+VALUES (1, 'Me interesa la posición', '2025-02-01T14:00:00', '2025-02-02T14:00:00', 'IN_PROCESS', 1, 1),
+       (2, 'Baja de Solicitud de Aplicación', '2025-02-01T14:00:00', '2025-02-02T14:00:00', 'CANCELED', 1, 1);
+
+INSERT INTO detail_skills (vacancy_id, skill_id, application_id, language_id, is_obligatory, priority,
+                           years_experience)
+VALUES (1, 1, null, null, true, 1, 3),
+       (1, 1, 1, null, false, 2, 3),
+       (1, null, null, 1, true, 1, 5),
+       (1, null, 1, 1, false, 2, 5),
+       (2, 2, null, null, false, 2, 2),
+       (2, 2, 2, null, false, 2, 2),
+       (2, null, null, 2, false, 2, 1),
+       (2, null, 2, 2, false, 2, 1);
+
+
+INSERT INTO notifications (user_id, message, created_date, updated_date, is_read, is_deleted,
+                           notification_type)
+VALUES (1, 'Nueva vacante disponible', '2025-03-01T08:00:00', '2025-03-01T08:30:00', false, false, 'VACANT');
+
+INSERT INTO person_skill (person_id, skill_id)
+VALUES (1, 1),
+       (1, 2),
+       (2, 1);
+
+INSERT INTO contact_types (id, name)
+VALUES (1, 'EMAIL'),
+       (2, 'WHATSAPP'),
+       (3, 'INSTAGRAM'),
+       (4, 'FACEBOOK'),
+       (5, 'LINKEDIN'),
+       (6, 'TWITTER'),
+       (7, 'TIKTOK'),
+       (8, 'OTHER');
+
+INSERT INTO contacts (contact_type_id, contact_value, label, person_id, created_at, updated_at)
+VALUES (1, 'tobias.moreno@gmail.com', 'Trabajo', 1, NOW(), NOW()),
+       (2, '+5491123456789', 'Personal', 1, NOW(), NOW()),
+       (5, 'https://www.linkedin.com/in/tobiasmoreno', 'LinkedIn Profesional', 1, NOW(), NOW()),
+       (3, '@tobias_dev', 'Instagram personal', 1, NOW(), NOW());
+
+
+-- ISO 3166-1 países 
+INSERT INTO countries (name) VALUES
+('Afganistán'),
+('Albania'),
+('Argelia'),
+('Samoa Americana'),
+('Andorra'),
+('Angola'),
+('Anguila'),
+('Antártida'),
+('Antigua y Barbuda'),
+('Armenia'),
+('Aruba'),
+('Australia'),
+('Austria'),
+('Azerbaiyán'),
+('Bahamas'),
+('Baréin'),
+('Bangladés'),
+('Barbados'),
+('Bielorrusia'),
+('Bélgica'),
+('Belice'),
+('Benín'),
+('Bermudas'),
+('Bután'),
+('Bolivia'),
+('Bonaire, San Eustaquio y Saba'),
+('Bosnia y Herzegovina'),
+('Botsuana'),
+('Isla Bouvet'),
+('Territorio Británico del Océano Índico'),
+('Brunéi'),
+('Bulgaria'),
+('Burkina Faso'),
+('Burundi'),
+('Cabo Verde'),
+('Camboya'),
+('Camerún'),
+('Canadá'),
+('Islas Caimán'),
+('República Centroafricana'),
+('Chad'),
+('China'),
+('Isla de Navidad'),
+('Islas Cocos (Keeling)'),
+('Colombia'),
+('Comoras'),
+('República del Congo'),
+('República Democrática del Congo'),
+('Islas Cook'),
+('Costa Rica'),
+('Costa de Marfil'),
+('Croacia'),
+('Cuba'),
+('Curazao'),
+('Chipre'),
+('Chequia'),
+('Dinamarca'),
+('Yibuti'),
+('Dominica'),
+('República Dominicana'),
+('Ecuador'),
+('Egipto'),
+('El Salvador'),
+('Guinea Ecuatorial'),
+('Eritrea'),
+('Estonia'),
+('Esuatini'),
+('Etiopía'),
+('Islas Malvinas'),
+('Islas Feroe'),
+('Fiyi'),
+('Finlandia'),
+('Francia'),
+('Guayana Francesa'),
+('Polinesia Francesa'),
+('Territorios Australes Franceses'),
+('Gabón'),
+('Gambia'),
+('Georgia'),
+('Alemania'),
+('Ghana'),
+('Gibraltar'),
+('Grecia'),
+('Groenlandia'),
+('Granada'),
+('Guadalupe'),
+('Guam'),
+('Guatemala'),
+('Guernsey'),
+('Guinea'),
+('Guinea-Bisáu'),
+('Guyana'),
+('Haití'),
+('Islas Heard y McDonald'),
+('Ciudad del Vaticano'),
+('Honduras'),
+('Hong Kong'),
+('Hungría'),
+('Islandia'),
+('India'),
+('Indonesia'),
+('Irán'),
+('Irak'),
+('Irlanda'),
+('Isla de Man'),
+('Israel'),
+('Italia'),
+('Jamaica'),
+('Japón'),
+('Jersey'),
+('Jordania'),
+('Kazajistán'),
+('Kenia'),
+('Kiribati'),
+('Corea del Norte'),
+('Corea del Sur'),
+('Kuwait'),
+('Kirguistán'),
+('Laos'),
+('Letonia'),
+('Líbano'),
+('Lesoto'),
+('Liberia'),
+('Libia'),
+('Liechtenstein'),
+('Lituania'),
+('Luxemburgo'),
+('Macao'),
+('Madagascar'),
+('Malaui'),
+('Malasia'),
+('Maldivas'),
+('Malí'),
+('Malta'),
+('Islas Marshall'),
+('Martinica'),
+('Mauritania'),
+('Mauricio'),
+('Mayotte'),
+('México'),
+('Micronesia'),
+('Moldavia'),
+('Mónaco'),
+('Mongolia'),
+('Montenegro'),
+('Montserrat'),
+('Marruecos'),
+('Mozambique'),
+('Myanmar'),
+('Namibia'),
+('Nauru'),
+('Nepal'),
+('Países Bajos'),
+('Nueva Caledonia'),
+('Nueva Zelanda'),
+('Nicaragua'),
+('Níger'),
+('Nigeria'),
+('Niue'),
+('Isla Norfolk'),
+('Macedonia del Norte'),
+('Islas Marianas del Norte'),
+('Noruega'),
+('Omán'),
+('Pakistán'),
+('Palaos'),
+('Palestina'),
+('Panamá'),
+('Papúa Nueva Guinea'),
+('Paraguay'),
+('Perú'),
+('Filipinas'),
+('Islas Pitcairn'),
+('Polonia'),
+('Portugal'),
+('Puerto Rico'),
+('Catar'),
+('Reunión'),
+('Rumanía'),
+('Rusia'),
+('Ruanda'),
+('San Bartolomé'),
+('Santa Elena'),
+('San Cristóbal y Nieves'),
+('Santa Lucía'),
+('San Martín'),
+('San Pedro y Miquelón'),
+('San Vicente y las Granadinas'),
+('Samoa'),
+('San Marino'),
+('Santo Tomé y Príncipe'),
+('Arabia Saudita'),
+('Senegal'),
+('Serbia'),
+('Seychelles'),
+('Sierra Leona'),
+('Singapur'),
+('Sint Maarten'),
+('Eslovaquia'),
+('Eslovenia'),
+('Islas Salomón'),
+('Somalia'),
+('Sudáfrica'),
+('Islas Georgias del Sur y Sandwich del Sur'),
+('Sudán del Sur'),
+('España'),
+('Sri Lanka'),
+('Sudán'),
+('Surinam'),
+('Svalbard y Jan Mayen'),
+('Suecia'),
+('Suiza'),
+('Siria'),
+('Taiwán'),
+('Tayikistán'),
+('Tanzania'),
+('Tailandia'),
+('Timor-Leste'),
+('Togo'),
+('Tokelau'),
+('Tonga'),
+('Trinidad y Tobago'),
+('Túnez'),
+('Turquía'),
+('Turkmenistán'),
+('Islas Turcas y Caicos'),
+('Tuvalu'),
+('Uganda'),
+('Ucrania'),
+('Emiratos Árabes Unidos'),
+('Reino Unido'),
+('Estados Unidos'),
+('Islas Ultramarinas Menores de Estados Unidos'),
+('Uruguay'),
+('Uzbekistán'),
+('Vanuatu'),
+('Venezuela'),
+('Vietnam'),
+('Islas Vírgenes Británicas'),
+('Islas Vírgenes de los Estados Unidos'),
+('Wallis y Futuna'),
+('Sahara Occidental'),
+('Yemen'),
+('Zambia'),
+('Zimbabue');

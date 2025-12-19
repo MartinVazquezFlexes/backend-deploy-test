@@ -1,0 +1,13 @@
+services:
+  recruiting-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      CLOUDINARY_FOLDER_NAME: cvs
+      LINKEDIN_SCOPE: openid profile email
+    ports:
+      - "8080:8080"
