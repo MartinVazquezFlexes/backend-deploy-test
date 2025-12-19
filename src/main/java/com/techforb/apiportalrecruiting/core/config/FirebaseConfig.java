@@ -8,24 +8,40 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 
 @Configuration
 @RequiredArgsConstructor
 public class FirebaseConfig {
 
-	@Bean
+    @Bean
     public GoogleCredentials firebaseCredentials() throws IOException {
-		ClassPathResource resource = new ClassPathResource("serviceAccountKey.json");
-        return GoogleCredentials.fromStream(resource.getInputStream());
+        String base64 = System.getenv("FIREBASE_CREDENTIALS_BASE64");
+
+        if (base64 == null || base64.isBlank()) {
+            throw new IllegalStateException("FIREBASE_CREDENTIALS_BASE64 is not set");
+        }
+
+        byte[] decoded = Base64.getDecoder().decode(base64);
+        InputStream serviceAccount =
+                new ByteArrayInputStream(decoded);
+
+        return GoogleCredentials.fromStream(serviceAccount);
     }
 
     @Bean
     public FirebaseApp initializeFirebase(GoogleCredentials credentials) {
+        if (!FirebaseApp.getApps().isEmpty()) {
+            return FirebaseApp.getInstance();
+        }
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
+        FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
                 .build();
+
         return FirebaseApp.initializeApp(options);
     }
 }
