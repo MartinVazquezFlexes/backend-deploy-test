@@ -1,6 +1,5 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.controllers;
 
-import com.techforb.apiportalrecruiting.core.dtos.LanguageDetailDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.LanguageDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.LanguageService;
 import io.swagger.v3.oas.annotations.Operation;

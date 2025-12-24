@@ -1,26 +1,20 @@
 package com.techforb.apiportalrecruiting.core.services.impl;
+
 import com.techforb.apiportalrecruiting.core.config.CloudinaryConfig;
-import com.techforb.apiportalrecruiting.core.config.mapper.ModelMapperUtils;
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
-import com.techforb.apiportalrecruiting.core.dtos.LanguageDetailDTO;
-import com.techforb.apiportalrecruiting.core.dtos.RequestFullVacancyDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyRequestUpdateDTO;
-import com.techforb.apiportalrecruiting.core.entities.Company;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyNotActiveDTO;
-import com.techforb.apiportalrecruiting.core.entities.DetailSkill;
-import com.techforb.apiportalrecruiting.core.entities.Language;
-import com.techforb.apiportalrecruiting.core.entities.Role;
-import com.techforb.apiportalrecruiting.core.entities.UserEntity;
-import com.techforb.apiportalrecruiting.core.entities.Vacancy;
+import com.techforb.apiportalrecruiting.core.config.mapper.ModelMapperUtils;
+import com.techforb.apiportalrecruiting.core.dtos.*;
+import com.techforb.apiportalrecruiting.core.entities.*;
 import com.techforb.apiportalrecruiting.core.exceptions.UnauthorizedActionException;
+import com.techforb.apiportalrecruiting.core.exceptions.VacancyNotActiveException;
 import com.techforb.apiportalrecruiting.core.repositories.DetailSkillRepository;
 import com.techforb.apiportalrecruiting.core.repositories.VacancyRepository;
 import com.techforb.apiportalrecruiting.core.security.cloudinary.CloudinaryService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.CustomUserDetails;
-import com.techforb.apiportalrecruiting.modules.portal.applications.services.LanguageService;
 import com.techforb.apiportalrecruiting.core.services.CompanyService;
+import com.techforb.apiportalrecruiting.core.services.DetailSkillService;
+import com.techforb.apiportalrecruiting.modules.backoffice.user.CustomUserDetails;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.UserService;
+import com.techforb.apiportalrecruiting.modules.portal.applications.services.LanguageService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,17 +32,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import com.techforb.apiportalrecruiting.core.dtos.ResponseDetailSkillDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyDetailsDTO;
-import com.techforb.apiportalrecruiting.core.exceptions.VacancyNotActiveException;
-import com.techforb.apiportalrecruiting.core.services.DetailSkillService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
-import java.util.Collections;
 @SpringBootTest
 @ActiveProfiles("test")
 class VacancyServiceImplTest {

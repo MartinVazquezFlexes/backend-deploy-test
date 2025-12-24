@@ -1,10 +1,6 @@
 package com.techforb.apiportalrecruiting.modules.portal.savedvacancies.repository;
 
-import com.techforb.apiportalrecruiting.core.entities.Company;
-import com.techforb.apiportalrecruiting.core.entities.Person;
-import com.techforb.apiportalrecruiting.core.entities.SavedVacancy;
-import com.techforb.apiportalrecruiting.core.entities.UserEntity;
-import com.techforb.apiportalrecruiting.core.entities.Vacancy;
+import com.techforb.apiportalrecruiting.core.entities.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest

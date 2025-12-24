@@ -2,8 +2,8 @@ package com.techforb.apiportalrecruiting.core.config.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.techforb.apiportalrecruiting.core.dtos.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.core.dtos.LanguageDetailDTO;
+import com.techforb.apiportalrecruiting.core.dtos.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.core.dtos.VacancyDetailsDTO;
 import com.techforb.apiportalrecruiting.core.entities.DetailSkill;
 import com.techforb.apiportalrecruiting.core.entities.Language;

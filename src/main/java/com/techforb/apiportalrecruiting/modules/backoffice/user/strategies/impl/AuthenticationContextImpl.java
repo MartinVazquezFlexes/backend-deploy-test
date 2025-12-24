@@ -2,10 +2,10 @@ package com.techforb.apiportalrecruiting.modules.backoffice.user.strategies.impl
 
 import com.google.firebase.auth.FirebaseAuthException;
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.EmailLoginRequestDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.GoogleLoginRequestDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LinkedInCallbackRequestDTO;
+import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.strategies.AuthenticationContextService;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.strategies.EmailAuthenticationStrategy;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.strategies.GoogleAuthenticationStrategy;

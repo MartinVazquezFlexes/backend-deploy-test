@@ -1,18 +1,13 @@
 package com.techforb.apiportalrecruiting.core.controllers;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techforb.apiportalrecruiting.core.dtos.LanguageDetailDTO;
-import com.techforb.apiportalrecruiting.core.dtos.RequestFullVacancyDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyRequestUpdateDTO;
-import com.techforb.apiportalrecruiting.core.exceptions.UnauthorizedActionException;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyNotActiveDTO;
+import com.techforb.apiportalrecruiting.core.dtos.*;
 import com.techforb.apiportalrecruiting.core.entities.Vacancy;
+import com.techforb.apiportalrecruiting.core.exceptions.UnauthorizedActionException;
+import com.techforb.apiportalrecruiting.core.exceptions.VacancyNotActiveException;
 import com.techforb.apiportalrecruiting.core.services.VacancyService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
-import com.techforb.apiportalrecruiting.core.dtos.ResponseDetailSkillDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyDetailsDTO;
-import com.techforb.apiportalrecruiting.core.exceptions.VacancyNotActiveException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,8 +21,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import java.util.Collections;
 import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;

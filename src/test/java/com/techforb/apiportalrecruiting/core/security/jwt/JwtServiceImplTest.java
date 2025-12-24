@@ -1,10 +1,9 @@
 package com.techforb.apiportalrecruiting.core.security.jwt;
 
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,9 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.cloud.storage.Acl.User;
-import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 
   @ExtendWith(MockitoExtension.class)
     public class JwtServiceImplTest {
@@ -27,6 +26,13 @@ import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
         private ObjectMapper objectMapper;
         @Mock
         private LocalizedMessageService localizedMessageService;
+
+      @BeforeEach
+      void setUp() {
+          jwtServiceImpl.setSecretKey(
+                  "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXphYmNkZWY="
+          );
+      }
 
     @Test
     public void testEncodeAuthData_Success() throws Exception {

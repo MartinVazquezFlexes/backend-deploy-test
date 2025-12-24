@@ -23,15 +23,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class EmailAuthenticationStrategyImplTest {
 
@@ -69,6 +67,16 @@ class EmailAuthenticationStrategyImplTest {
         requestDTO = new EmailLoginRequestDTO();
         requestDTO.setEmail("test@email.com");
         requestDTO.setPassword("123456");
+
+        // ✅ Inyecta manualmente el API_KEY antes del @PostConstruct
+        ReflectionTestUtils.setField(
+                emailAuthenticationStrategy,
+                "apiKey",
+                "test-api-key"
+        );
+
+        // ✅ Llama manualmente al @PostConstruct
+        emailAuthenticationStrategy.init();
     }
 
     @Test

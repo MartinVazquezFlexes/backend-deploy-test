@@ -5,6 +5,7 @@ import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,14 @@ import java.util.function.Function;
 
 @Service
 public class JwtServiceImpl implements JwtService{
-    private static final String SECRET_KEY = "yQL9iJXtO6GCVtY9FgFTeLtmJrZdxHT2KkL7M6k9jPE=";
+
+    private String secretKey;
+
+    @Value("${SECRET_KEY}")
+    public void setSecretKey(String key) {
+        this.secretKey = key;
+    }
+
     private static final long TOKEN_TIME = 1000 * 60 * 60;
     private static final long TEMP_TOKEN_TIME = 1000 * 60 * 5; // 5 minutos
     
@@ -97,7 +105,7 @@ public class JwtServiceImpl implements JwtService{
     }
 
     private SecretKey getKey(){
-        byte[] keyBytes = Base64.getDecoder().decode(SECRET_KEY);
+        byte[] keyBytes = Base64.getDecoder().decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

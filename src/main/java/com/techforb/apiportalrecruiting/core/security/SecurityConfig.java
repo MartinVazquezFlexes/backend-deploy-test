@@ -1,10 +1,10 @@
 package com.techforb.apiportalrecruiting.core.security;
 
+import com.cloudinary.Api.HttpMethod;
 import com.techforb.apiportalrecruiting.core.security.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -29,7 +30,6 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 		http.
 				authorizeHttpRequests(request -> request
-						// Swagger endpoints
 						.requestMatchers("/swagger-ui/**",
 								"/swagger-ui.html",
 								"/v3/api-docs/**",
@@ -37,14 +37,12 @@ public class SecurityConfig {
 								"/v3/api-docs/swagger-config",
 								"/swagger-resources/**",
 								"/webjars/**").permitAll()
-						// Auth endpoints - permitir todos los métodos
-						.requestMatchers("/api/auth/**").permitAll()
-						.requestMatchers("/api/public/**").permitAll()
-						// Role assignment
-						.requestMatchers(HttpMethod.POST, "/api/role/self-assign").hasRole("DEFAULT")
-						.requestMatchers(HttpMethod.GET, "/api/role-functional/**").hasRole("APPLICANT")
-//                 .requestMatchers("/api/dev/**").hasRole("DEVELOPER")
-//                 .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "DEVELOPER")
+						.requestMatchers(new RegexRequestMatcher(".*/auth/.*", null)).permitAll()
+						.requestMatchers(new RegexRequestMatcher(".*/(auth|public)/.*", null)).permitAll()
+						.requestMatchers(new RegexRequestMatcher(".*/role/self-assign", HttpMethod.POST.name())).hasRole("DEFAULT")
+						.requestMatchers(new RegexRequestMatcher(".*/role-functional/.*", HttpMethod.GET.name())).hasRole("APPLICANT")
+//                 .requestMatchers(new RegexRequestMatcher("./dev/.", null)).hasRole("DEVELOPER")
+//                 .requestMatchers(new RegexRequestMatcher("./admin/.", null)).hasAnyRole("ADMIN", "DEVELOPER")
 						.anyRequest().authenticated())
 				.csrf(AbstractHttpConfigurer::disable)
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -60,7 +58,7 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
-
+		
 		// Configuración para desarrollo
 		config.setAllowCredentials(false);
 		config.addAllowedOrigin("*");

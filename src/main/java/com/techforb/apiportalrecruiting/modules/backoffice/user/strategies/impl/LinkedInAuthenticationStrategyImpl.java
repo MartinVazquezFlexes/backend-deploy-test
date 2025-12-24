@@ -1,6 +1,7 @@
 package com.techforb.apiportalrecruiting.modules.backoffice.user.strategies.impl;
 
 import com.google.firebase.auth.FirebaseAuthException;
+import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import com.techforb.apiportalrecruiting.core.config.mapper.ModelMapperUtils;
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 import com.techforb.apiportalrecruiting.core.security.jwt.Jwt;
@@ -8,11 +9,10 @@ import com.techforb.apiportalrecruiting.core.security.jwt.JwtService;
 import com.techforb.apiportalrecruiting.core.security.linkedin.LinkedInService;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.CustomUserDetails;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.UserService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LinkedInCallbackRequestDTO;
+import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.UserLoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.strategies.LinkedInAuthenticationStrategy;
-import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

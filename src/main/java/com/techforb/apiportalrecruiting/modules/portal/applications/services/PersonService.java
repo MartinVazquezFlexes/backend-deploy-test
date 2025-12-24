@@ -1,9 +1,9 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.services;
 
 import com.techforb.apiportalrecruiting.core.entities.Person;
+import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 import com.techforb.apiportalrecruiting.modules.portal.person.dto.PersonRequestDTO;
 import com.techforb.apiportalrecruiting.modules.portal.person.dto.PersonResponseDTO;
-import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 
 
 public interface PersonService {

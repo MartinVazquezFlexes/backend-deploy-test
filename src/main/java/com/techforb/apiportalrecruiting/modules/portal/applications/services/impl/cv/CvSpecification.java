@@ -1,22 +1,19 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.services.impl.cv;
 
-import com.techforb.apiportalrecruiting.core.entities.City;
-import com.techforb.apiportalrecruiting.core.entities.Country;
-import com.techforb.apiportalrecruiting.core.entities.Cv;
-import com.techforb.apiportalrecruiting.core.entities.Direction;
-import com.techforb.apiportalrecruiting.core.entities.Person;
-import com.techforb.apiportalrecruiting.core.entities.Province;
-import com.techforb.apiportalrecruiting.core.entities.Skill;
+import com.techforb.apiportalrecruiting.core.entities.*;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 
 public class CvSpecification {
+
+	private static final String PERSON="person";
+
 	public static Specification<Cv> hasCountryLike(String countryName) {
 		return (rootCv, query, criteriaBuilder) -> {
 			if (countryName == null || countryName.isEmpty()) {
 				return criteriaBuilder.conjunction();
 			}
-			Join<Cv, Person> personJoin = rootCv.join("person");
+			Join<Cv, Person> personJoin = rootCv.join(PERSON);
 			Join<Person, Direction> directionJoin = personJoin.join("direction");
 			Join<Direction, City> cityJoin = directionJoin.join("city");
 			Join<City, Province> provinceJoin = cityJoin.join("province");
@@ -31,7 +28,7 @@ public class CvSpecification {
 			if (skill == null || skill.isEmpty()) {
 				return criteriaBuilder.conjunction();
 			}
-			Join<Cv, Person> personJoin = root.join("person");
+			Join<Cv, Person> personJoin = root.join(PERSON);
 			Join<Person, Skill> skillJoin = personJoin.join("skills");
 
 			return criteriaBuilder.like(criteriaBuilder.lower(skillJoin.get("description")), skill.toLowerCase() + "%");
@@ -48,7 +45,7 @@ public class CvSpecification {
 	}
 
 	public static Specification<Cv> hasIdPerson(Long idPerson){
-		return (root, query, criteriaBuilder) ->  criteriaBuilder.equal(root.get("person").get("id"),idPerson);
+		return (root, query, criteriaBuilder) ->  criteriaBuilder.equal(root.get(PERSON).get("id"),idPerson);
 
 	}
 }

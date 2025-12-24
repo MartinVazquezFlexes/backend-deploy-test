@@ -20,8 +20,10 @@ import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.GoogleLogin
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.UserLoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.PersonService;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -41,10 +43,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-  
-  private static final String API_KEY = "AIzaSyDCNiCZ5oOFW6akmLvX4RdWcdwv5wQLWHQ";
-  private static final String FIREBASE_AUTH_URL_WITH_PASSWORD = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="+API_KEY;
-  private static final String FIREBASE_AUTH_URL_WITH_PROVIDER = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key="+API_KEY;
+
+    @Value("${API_KEY}")
+    private String apiKey;
+    private String firebaseAuthUrlWithPassword;
+    private String firebaseAuthUrlWithProvider;
   private final UserRepository userRepository;
   private final PersonService personService;
   private final RoleService roleService;
@@ -56,6 +59,19 @@ public class UserServiceImpl implements UserService {
   private final LocalizedMessageService localizedMessageService;
   private final RestTemplate restTemplate;
 
+    private static final String ROLE_NAME = "DEFAULT";
+    private static final String EMAIL = "email";
+    private static final String ID_TOKEN = "idToken";
+
+    @PostConstruct
+    public void init() {
+        this.firebaseAuthUrlWithPassword =
+                "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + apiKey;
+
+        this.firebaseAuthUrlWithProvider =
+                "https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=" + apiKey;
+    }
+
 
 	@Override
 	public void emailRegister(EmailLoginRequestDTO newUser) throws FirebaseAuthException {
@@ -63,7 +79,7 @@ public class UserServiceImpl implements UserService {
 		String password = newUser.getPassword();
 		String uid = firebaseAuthService.registerUser(email, password);
 
-		if (userRepository.findByEmail(email).isEmpty()) addUserToDb(email, "DEFAULT",password);
+		if (userRepository.findByEmail(email).isEmpty()) addUserToDb(email, ROLE_NAME,password);
 	}
 
 	@Override
@@ -72,27 +88,27 @@ public class UserServiceImpl implements UserService {
 		String password = loginRequestDTO.getPassword();
 
 		Map<String, Object> request = new HashMap<>();
-		request.put("email", email);
+		request.put(EMAIL, email);
 		request.put("password", password);
 		request.put("returnSecureToken", true);
 
     Map<String, Object> response;
      try {
-       response = callFirebaseAuth(FIREBASE_AUTH_URL_WITH_PASSWORD, request);
+       response = callFirebaseAuth(firebaseAuthUrlWithPassword, request);
     } catch (RestClientException e) {
         throw new AuthenticationServiceException(localizedMessageService.getMessage("firebase.auth.error", e.getMessage()), e);
     }
 
-    if (response == null || !response.containsKey("idToken")) {
+    if (response == null || !response.containsKey(ID_TOKEN)) {
         throw new AuthenticationServiceException(localizedMessageService.getMessage("firebase.invalid_id_token"));
     }
 
-		String idToken = (String) response.get("idToken");
+		String idToken = (String) response.get(ID_TOKEN);
    
    
 		firebaseAuthService.verifyToken(idToken);
 
-		if (userRepository.findByEmail(email).isEmpty()) addUserToDb(email, "DEFAULT", password);
+		if (userRepository.findByEmail(email).isEmpty()) addUserToDb(email, ROLE_NAME, password);
 
 		Authentication auth = authenticationManager.authenticate(
 				new FirebaseAuthenticationToken(idToken)
@@ -119,26 +135,26 @@ public class UserServiceImpl implements UserService {
 
 		Map<String, Object> response;
 		try {
-			response = callFirebaseAuth(FIREBASE_AUTH_URL_WITH_PROVIDER, request);
+			response = callFirebaseAuth(firebaseAuthUrlWithProvider, request);
 		} catch (RestClientException e) {
 			throw new AuthenticationServiceException("Auth with firebase error: " + e.getMessage(), e);
 		}
 
-		if (response == null || !response.containsKey("idToken")) {
+		if (response == null || !response.containsKey(ID_TOKEN)) {
       throw new AuthenticationServiceException(localizedMessageService.getMessage("firebase.invalid_id_token"));
     }
 
-		String idToken = (String) response.get("idToken");
+		String idToken = (String) response.get(ID_TOKEN);
 
 		firebaseAuthService.verifyToken(idToken);
 
-		String email = (String) response.get("email");
+		String email = (String) response.get(EMAIL);
 
 		if (response.containsKey("isNewUser") && userRepository.findByEmail(email).isEmpty())
-			addUserToDb(email, "DEFAULT", null);
+			addUserToDb(email, ROLE_NAME, null);
 
 		if (!response.containsKey("isNewUser") && userRepository.findByEmail(email).isEmpty())
-			addUserToDb(email, "DEFAULT", null);
+			addUserToDb(email, ROLE_NAME, null);
 
 		Authentication auth = authenticationManager.authenticate(
 				new FirebaseAuthenticationToken(idToken)
@@ -160,11 +176,11 @@ public class UserServiceImpl implements UserService {
 		String newPassword = changePasswordRequestDTO.getNewPassword();
 
 		Map<String, Object> request = new HashMap<>();
-		request.put("email", email);
+		request.put(EMAIL, email);
 		request.put("password", changePasswordRequestDTO.getOldPassword());
 
 		try {
-			callFirebaseAuth(FIREBASE_AUTH_URL_WITH_PASSWORD, request);
+			callFirebaseAuth(firebaseAuthUrlWithPassword, request);
 		} catch (RestClientException e) {
 			throw new AuthenticationServiceException("Auth with firebase error: " + e.getMessage(), e);
 		}

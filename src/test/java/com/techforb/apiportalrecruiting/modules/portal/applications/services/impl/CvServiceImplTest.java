@@ -1,14 +1,7 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.services.impl;
 
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
-import com.techforb.apiportalrecruiting.core.entities.City;
-import com.techforb.apiportalrecruiting.core.entities.Country;
-import com.techforb.apiportalrecruiting.core.entities.Cv;
-import com.techforb.apiportalrecruiting.core.entities.Direction;
-import com.techforb.apiportalrecruiting.core.entities.Person;
-import com.techforb.apiportalrecruiting.core.entities.Province;
-import com.techforb.apiportalrecruiting.core.entities.Role;
-import com.techforb.apiportalrecruiting.core.entities.UserEntity;
+import com.techforb.apiportalrecruiting.core.entities.*;
 import com.techforb.apiportalrecruiting.core.exceptions.UnauthorizedActionException;
 import com.techforb.apiportalrecruiting.core.security.cloudinary.CloudinaryService;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.UserService;
@@ -17,32 +10,26 @@ import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.cv.Resp
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.ApplicationRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.CvRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.CvService;
-import com.techforb.apiportalrecruiting.modules.portal.applications.services.impl.cv.CvServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.Arrays;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")

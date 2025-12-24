@@ -2,13 +2,15 @@ package com.techforb.apiportalrecruiting.modules.portal.applications.dtos;
 
 import com.techforb.apiportalrecruiting.core.dtos.LanguageDetailDTO;
 import com.techforb.apiportalrecruiting.core.dtos.ResponseDetailSkillDTO;
-import com.techforb.apiportalrecruiting.core.entities.*;
+import com.techforb.apiportalrecruiting.core.entities.Application;
+import com.techforb.apiportalrecruiting.core.entities.Cv;
+import com.techforb.apiportalrecruiting.core.entities.DetailSkill;
+import com.techforb.apiportalrecruiting.core.entities.Vacancy;
 import com.techforb.apiportalrecruiting.core.security.cloudinary.CloudinaryService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application.ResponseApplicationDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

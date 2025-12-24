@@ -1,10 +1,8 @@
 package com.techforb.apiportalrecruiting.modules.backoffice.user.impl;
 
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
-import com.techforb.apiportalrecruiting.core.entities.Person;
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +14,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")

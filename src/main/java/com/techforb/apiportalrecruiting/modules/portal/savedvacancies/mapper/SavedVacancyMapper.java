@@ -1,12 +1,12 @@
 package com.techforb.apiportalrecruiting.modules.portal.savedvacancies.mapper;
 
 import com.techforb.apiportalrecruiting.core.dtos.LanguageDetailDTO;
+import com.techforb.apiportalrecruiting.core.entities.DetailSkill;
 import com.techforb.apiportalrecruiting.core.entities.Direction;
+import com.techforb.apiportalrecruiting.core.entities.SavedVacancy;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.dto.ResponseDetailSkillWithoutPriorityDTO;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.dto.SavedVacancyDTO;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.dto.SavedVacancyDetailsDTO;
-import com.techforb.apiportalrecruiting.core.entities.DetailSkill;
-import com.techforb.apiportalrecruiting.core.entities.SavedVacancy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

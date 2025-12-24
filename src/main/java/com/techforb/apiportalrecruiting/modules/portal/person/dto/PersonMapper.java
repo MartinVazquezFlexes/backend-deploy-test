@@ -1,23 +1,13 @@
 package com.techforb.apiportalrecruiting.modules.portal.person.dto;
 
 import com.techforb.apiportalrecruiting.core.dtos.contacts.ReqResContactDTO;
-import com.techforb.apiportalrecruiting.core.entities.Category;
-import com.techforb.apiportalrecruiting.core.entities.City;
-import com.techforb.apiportalrecruiting.core.entities.Contact;
-import com.techforb.apiportalrecruiting.core.entities.Country;
-import com.techforb.apiportalrecruiting.core.entities.Cv;
-import com.techforb.apiportalrecruiting.core.entities.Direction;
-import com.techforb.apiportalrecruiting.core.entities.Person;
-import com.techforb.apiportalrecruiting.core.entities.Province;
-import com.techforb.apiportalrecruiting.core.entities.Skill;
+import com.techforb.apiportalrecruiting.core.entities.*;
 import com.techforb.apiportalrecruiting.core.security.cloudinary.CloudinaryService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.CategoryDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.CvDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.SkillDTO;
 import com.techforb.apiportalrecruiting.modules.portal.identification.dto.IdentificationDTO;
 import com.techforb.apiportalrecruiting.modules.portal.identification.dto.IdentificationTypeDTO;
-import com.techforb.apiportalrecruiting.core.entities.Identification;
-import com.techforb.apiportalrecruiting.core.entities.IdentificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

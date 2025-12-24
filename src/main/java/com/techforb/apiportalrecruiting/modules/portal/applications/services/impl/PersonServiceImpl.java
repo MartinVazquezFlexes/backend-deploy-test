@@ -64,21 +64,23 @@ public class PersonServiceImpl implements PersonService {
 	private final LocalizedMessageService localizedMessageService;
 	private final ContactTypeService contactTypeService;
 
+	private static final String CODE_NOT_FOUND = "person.not_found";
+
 	@Override
 	public Person getPersonById(Long id) {
-		return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage("person.not_found")));
+		return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(CODE_NOT_FOUND)));
 	}
 
 	@Override
 	public PersonResponseDTO getPersonByIdDTO(Long id) {
-		Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage("person.not_found")));
+		Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(CODE_NOT_FOUND)));
 		return personMapper.mapToPersonDTO(person);
 	}
 
 	@Override
 	@Transactional
 	public PersonResponseDTO updatePerson(Long id, PersonRequestDTO dto) {
-		Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage("person.not_found")));
+		Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(CODE_NOT_FOUND)));
 		UserEntity user = userRepository.findByEmail(dto.getEmail())
 				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage("user.not_found")));
 

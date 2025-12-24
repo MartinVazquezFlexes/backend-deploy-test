@@ -1,6 +1,5 @@
 package com.techforb.apiportalrecruiting.core.config;
 
-import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import com.techforb.apiportalrecruiting.core.security.firebase.FirebaseAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

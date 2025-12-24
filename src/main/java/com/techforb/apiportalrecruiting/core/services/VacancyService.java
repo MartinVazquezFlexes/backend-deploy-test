@@ -1,13 +1,10 @@
 package com.techforb.apiportalrecruiting.core.services;
-import com.techforb.apiportalrecruiting.core.dtos.RequestFullVacancyDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyRequestUpdateDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyNotActiveDTO;
+
+import com.techforb.apiportalrecruiting.core.dtos.*;
 import com.techforb.apiportalrecruiting.core.entities.Vacancy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyDetailsDTO;
 
 /**
  * Service interface for managing vacancy-related operations.

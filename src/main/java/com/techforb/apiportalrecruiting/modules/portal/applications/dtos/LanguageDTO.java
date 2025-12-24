@@ -1,6 +1,5 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.dtos;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

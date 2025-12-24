@@ -1,13 +1,13 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.services.impl;
 
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
+import com.techforb.apiportalrecruiting.core.entities.Language;
 import com.techforb.apiportalrecruiting.core.entities.Person;
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
-import com.techforb.apiportalrecruiting.core.entities.Language;
+import com.techforb.apiportalrecruiting.modules.backoffice.user.UserRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.LanguageDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.LanguageRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.LanguageService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

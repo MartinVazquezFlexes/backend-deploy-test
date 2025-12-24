@@ -13,7 +13,9 @@ import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.GoogleLogin
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.UserLoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.strategies.GoogleAuthenticationStrategy;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -27,9 +29,10 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class GoogleAuthenticationStrategyImpl implements GoogleAuthenticationStrategy {
-    
-    private static final String API_KEY = "AIzaSyDCNiCZ5oOFW6akmLvX4RdWcdwv5wQLWHQ";
-    private static final String FIREBASE_AUTH_URL_WITH_PROVIDER = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=" + API_KEY;
+
+    @Value("${API_KEY}")
+    private String apiKey;
+    private String firebaseAuthUrlWithProvider;
     
     private final UserService userService;
     private final ModelMapperUtils modelMapperUtils;
@@ -38,6 +41,13 @@ public class GoogleAuthenticationStrategyImpl implements GoogleAuthenticationStr
     private final JwtService jwtService;
     private final FirebaseAuthService firebaseAuthService;
     private final AuthenticationManager authenticationManager;
+
+    @PostConstruct
+    public void init() {
+        this.firebaseAuthUrlWithProvider =
+                "https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=" + apiKey;
+    }
+
     
     @Override
     public void register(GoogleLoginRequestDTO request) throws FirebaseAuthException {
@@ -57,7 +67,7 @@ public class GoogleAuthenticationStrategyImpl implements GoogleAuthenticationStr
         
         Map<String, Object> response;
         try {
-            response = callFirebaseAuth(FIREBASE_AUTH_URL_WITH_PROVIDER, requestMap);
+            response = callFirebaseAuth(firebaseAuthUrlWithProvider, requestMap);
         } catch (RestClientException e) {
             throw new AuthenticationServiceException("Auth with firebase error: " + e.getMessage(), e);
         }

@@ -15,6 +15,7 @@ import com.techforb.apiportalrecruiting.modules.portal.applications.services.Lan
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.SkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 

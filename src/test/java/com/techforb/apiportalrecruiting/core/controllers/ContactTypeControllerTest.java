@@ -5,26 +5,24 @@ import com.techforb.apiportalrecruiting.core.dtos.contactTypes.RequestContactTyp
 import com.techforb.apiportalrecruiting.core.dtos.contactTypes.ResponseContactTypeDTO;
 import com.techforb.apiportalrecruiting.core.security.jwt.JwtFilter;
 import com.techforb.apiportalrecruiting.core.security.jwt.JwtService;
-import com.techforb.apiportalrecruiting.core.services.ContactService;
 import com.techforb.apiportalrecruiting.core.services.ContactTypeService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.mockito.BDDMockito.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ContactTypeController.class)
 @AutoConfigureMockMvc(addFilters = false)

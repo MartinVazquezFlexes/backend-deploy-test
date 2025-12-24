@@ -1,16 +1,10 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.services.impl.cv;
 
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
-import com.techforb.apiportalrecruiting.core.entities.Application;
-import com.techforb.apiportalrecruiting.core.entities.Cv;
-import com.techforb.apiportalrecruiting.core.entities.Person;
-import com.techforb.apiportalrecruiting.core.entities.Skill;
-import com.techforb.apiportalrecruiting.core.entities.UserEntity;
+import com.techforb.apiportalrecruiting.core.entities.*;
 import com.techforb.apiportalrecruiting.core.exceptions.UnauthorizedActionException;
 import com.techforb.apiportalrecruiting.core.security.cloudinary.CloudinaryService;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.UserService;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.ApplicationModified;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.CvDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.CvWithCreationDateDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.cv.ResponsePagCvDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.ApplicationRepository;
@@ -19,8 +13,6 @@ import com.techforb.apiportalrecruiting.modules.portal.applications.services.CvS
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
@@ -22,7 +21,8 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
 	@Value("${cloudinary.folder-name}")
 	private String cloudinaryFolderName;
-
+	private  static final String RESOURCE_TYPE="resource_type";
+	private  static  final String AUTHENTICATED="authenticated";
 
 	public Map uploadCv(MultipartFile multipartFile, String paramFolder) {
 		try {
@@ -30,8 +30,8 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
 			Map uploadParams = ObjectUtils.asMap(
 					"folder", cloudinaryFolderName + paramFolder,
-					"resource_type", "raw",
-					"type", "authenticated",
+					RESOURCE_TYPE, "raw",
+					"type", AUTHENTICATED,
 					"private_cdn", true,
 					"public_id", uniqueName + ".pdf"
 			);
@@ -47,14 +47,14 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
 	public String generateSignedUrl(String publicId, String version) {
 		Map<String, Object> options = ObjectUtils.asMap(
-				"resource_type", "raw",
-				"type", "authenticated",
+				RESOURCE_TYPE, "raw",
+				"type", AUTHENTICATED,
 				"version", version,
 				"sign_url", true
 		);
 
 		return cloudinary.url().resourceType("raw")
-				.type("authenticated")
+				.type(AUTHENTICATED)
 				.publicId(publicId)
 				.version(Long.parseLong(version))
 				.signed(true)
@@ -66,8 +66,8 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
 			Map<String, Object> options = ObjectUtils.asMap(
 					"invalidate", true,
-					"resource_type", "raw",
-					"type", "authenticated"
+					RESOURCE_TYPE, "raw",
+					"type",AUTHENTICATED
 			);
 
 

@@ -1,13 +1,13 @@
 package com.techforb.apiportalrecruiting.modules.backoffice.user;
 
-import java.util.Optional;
-
 import com.google.firebase.auth.FirebaseAuthException;
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.EmailChangePasswordRequestDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.EmailLoginRequestDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.GoogleLoginRequestDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LoginResponseDTO;
+
+import java.util.Optional;
 
 public interface UserService {
 

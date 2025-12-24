@@ -1,22 +1,17 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.repositories;
 
-import com.techforb.apiportalrecruiting.core.entities.Application;
-import com.techforb.apiportalrecruiting.core.entities.ApplicationState;
-import com.techforb.apiportalrecruiting.core.entities.Company;
-import com.techforb.apiportalrecruiting.core.entities.Cv;
-import com.techforb.apiportalrecruiting.core.entities.Person;
-import com.techforb.apiportalrecruiting.core.entities.UserEntity;
-import com.techforb.apiportalrecruiting.core.entities.Vacancy;
-
+import com.techforb.apiportalrecruiting.core.entities.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
+
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @DataJpaTest
 @ActiveProfiles("test")

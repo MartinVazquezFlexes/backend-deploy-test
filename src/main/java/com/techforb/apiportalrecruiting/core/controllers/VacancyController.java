@@ -1,30 +1,23 @@
 package com.techforb.apiportalrecruiting.core.controllers;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyRequestUpdateDTO;
-import com.techforb.apiportalrecruiting.core.dtos.RequestFullVacancyDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyDetailsDTO;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyNotActiveDTO;
+
+import com.techforb.apiportalrecruiting.core.dtos.*;
 import com.techforb.apiportalrecruiting.core.services.VacancyService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.web.PageableDefault;
-
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import com.techforb.apiportalrecruiting.core.dtos.VacancyDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller for managing vacancy-related API endpoints.
@@ -45,7 +38,7 @@ public class VacancyController {
     @ApiResponse(responseCode="410",description="La vacante Esta inactiva")
     @GetMapping("/public/{id}/details")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> getDetailsVacancyById(@PathVariable Long id){
+    public ResponseEntity<VacancyDetailsDTO> getDetailsVacancyById(@PathVariable Long id){
 
         return ResponseEntity.ok(vacancyService.getDetailsVacancyById(id));
 
