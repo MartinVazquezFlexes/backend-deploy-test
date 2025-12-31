@@ -1,7 +1,7 @@
 package com.techforb.apiportalrecruiting.core.controllers;
 
-import com.techforb.apiportalrecruiting.core.dtos.contactTypes.RequestContactTypeDTO;
-import com.techforb.apiportalrecruiting.core.dtos.contactTypes.ResponseContactTypeDTO;
+import com.techforb.apiportalrecruiting.core.dtos.contacttypes.RequestContactTypeDTO;
+import com.techforb.apiportalrecruiting.core.dtos.contacttypes.ResponseContactTypeDTO;
 import com.techforb.apiportalrecruiting.core.services.ContactTypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

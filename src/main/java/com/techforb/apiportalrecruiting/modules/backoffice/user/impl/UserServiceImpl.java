@@ -20,6 +20,8 @@ import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.GoogleLogin
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.UserLoginResponseDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.PersonService;
+import com.techforb.apiportalrecruiting.core.exceptions.PasswordMismatchException;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -77,7 +79,7 @@ public class UserServiceImpl implements UserService {
 	public void emailRegister(EmailLoginRequestDTO newUser) throws FirebaseAuthException {
 		String email = newUser.getEmail();
 		String password = newUser.getPassword();
-		String uid = firebaseAuthService.registerUser(email, password);
+		firebaseAuthService.registerUser(email, password);
 
 		if (userRepository.findByEmail(email).isEmpty()) addUserToDb(email, ROLE_NAME,password);
 	}
@@ -185,9 +187,9 @@ public class UserServiceImpl implements UserService {
 			throw new AuthenticationServiceException("Auth with firebase error: " + e.getMessage(), e);
 		}
 
-		if (!changePasswordRequestDTO.getConfirmPassword().equals(newPassword)) {
-			throw new RuntimeException(localizedMessageService.getMessage("user.passwords_not_match"));
-		}
+        if (!changePasswordRequestDTO.getConfirmPassword().equals(newPassword)) {
+            throw new PasswordMismatchException(localizedMessageService.getMessage("user.passwords_not_match"));
+        }
 
 		firebaseAuthService.changeUserPassword(email, newPassword);
 		user.setPassword(passwordEncoder.encode(newPassword));
@@ -207,7 +209,6 @@ public class UserServiceImpl implements UserService {
               if(user.isEnabled()){
                   user.setEnabled(false);
                   userRepository.save(user);
-                  return true;
               }
               return true;
           }

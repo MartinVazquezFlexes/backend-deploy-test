@@ -1,8 +1,8 @@
 package com.techforb.apiportalrecruiting.core.services.impl;
 
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
-import com.techforb.apiportalrecruiting.core.dtos.contactTypes.RequestContactTypeDTO;
-import com.techforb.apiportalrecruiting.core.dtos.contactTypes.ResponseContactTypeDTO;
+import com.techforb.apiportalrecruiting.core.dtos.contacttypes.RequestContactTypeDTO;
+import com.techforb.apiportalrecruiting.core.dtos.contacttypes.ResponseContactTypeDTO;
 import com.techforb.apiportalrecruiting.core.entities.ContactType;
 import com.techforb.apiportalrecruiting.core.repositories.ContactTypeRepository;
 import com.techforb.apiportalrecruiting.core.services.ContactTypeService;
@@ -39,7 +39,7 @@ class ContactTypeServiceImplTest {
 	@MockitoBean
 	private ModelMapper modelMapper;
 
-	private final String CONTACT_NAME = "WHATSAPP";
+	private final String contactName = "WHATSAPP";
 
 	private ContactType contactType;
 	private List<ContactType> contactTypes;
@@ -50,24 +50,24 @@ class ContactTypeServiceImplTest {
 	void setUp() {
 		contactType = new ContactType();
 		contactType.setId(1L);
-		contactType.setName(CONTACT_NAME);
+		contactType.setName(contactName);
 
 		contactTypes = new ArrayList<>();
 		contactTypes.add(contactType);
 
 		requestContactTypeDTO = new RequestContactTypeDTO();
-		requestContactTypeDTO.setName(CONTACT_NAME);
+		requestContactTypeDTO.setName(contactName);
 
 		responseContactTypeDTO = new ResponseContactTypeDTO();
-		responseContactTypeDTO.setName(CONTACT_NAME);
+		responseContactTypeDTO.setName(contactName);
 		responseContactTypeDTO.setId(1L);
 	}
 
 	@Test
 	void getContactTypeByName__Success() {
-		when(contactTypeRepository.findByName(CONTACT_NAME)).thenReturn(contactType);
+		when(contactTypeRepository.findByName(contactName)).thenReturn(contactType);
 
-		ContactType result = contactTypeService.getContactTypeByName(CONTACT_NAME);
+		ContactType result = contactTypeService.getContactTypeByName(contactName);
 
 		assertNotNull(result);
 		assertEquals(contactType.getName(), result.getName());
@@ -75,12 +75,12 @@ class ContactTypeServiceImplTest {
 
 	@Test
 	void getContactTypeByName__Error() {
-		when(contactTypeRepository.findByName(CONTACT_NAME)).thenReturn(null);
-		when(localizedMessageService.getMessage("contact_type.not_found_by_name", CONTACT_NAME))
+		when(contactTypeRepository.findByName(contactName)).thenReturn(null);
+		when(localizedMessageService.getMessage("contact_type.not_found_by_name", contactName))
 				.thenReturn("El tipo de Contacto no fue encontrado.");
 
 		EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
-			contactTypeService.getContactTypeByName(CONTACT_NAME);
+			contactTypeService.getContactTypeByName(contactName);
 		});
 
 		assertNotNull(exception);

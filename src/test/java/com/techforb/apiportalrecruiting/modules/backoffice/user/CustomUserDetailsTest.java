@@ -4,9 +4,6 @@ import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 import org.junit.jupiter.api.Test;
 
 import com.techforb.apiportalrecruiting.core.entities.Role;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 

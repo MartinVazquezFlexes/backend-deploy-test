@@ -27,22 +27,22 @@ public class AuthenticationContextImpl implements AuthenticationContextService {
     public void register(String strategyType, Object request) throws FirebaseAuthException {
         switch (strategyType.toUpperCase()) {
             case "EMAIL":
-                if (request instanceof EmailLoginRequestDTO) {
-                    emailStrategy.register((EmailLoginRequestDTO) request);
+                if (request instanceof EmailLoginRequestDTO emailLoginRequestDTO) {
+                    emailStrategy.register(emailLoginRequestDTO);
                 } else {
                     throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.email.invalid_request"));
                 }
                 break;
             case "GOOGLE":
-                if (request instanceof GoogleLoginRequestDTO) {
-                    googleStrategy.register((GoogleLoginRequestDTO) request);
+                if (request instanceof GoogleLoginRequestDTO googleLoginRequestDTO) {
+                    googleStrategy.register(googleLoginRequestDTO);
                 } else {
                     throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.google.invalid_request"));
                 }
                 break;
             case "LINKEDIN":
-                if (request instanceof LinkedInCallbackRequestDTO) {
-                    linkedInStrategy.register((LinkedInCallbackRequestDTO) request);
+                if (request instanceof LinkedInCallbackRequestDTO linkedInCallbackRequestDTO) {
+                    linkedInStrategy.register(linkedInCallbackRequestDTO);
                 } else {
                     throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.linkedin.invalid_request"));
                 }
@@ -56,20 +56,20 @@ public class AuthenticationContextImpl implements AuthenticationContextService {
     public LoginResponseDTO login(String strategyType, Object request) throws FirebaseAuthException {
         switch (strategyType.toUpperCase()) {
             case "EMAIL":
-                if (request instanceof EmailLoginRequestDTO) {
-                    return emailStrategy.login((EmailLoginRequestDTO) request);
+                if (request instanceof EmailLoginRequestDTO emailLoginRequestDTO) {
+                    return emailStrategy.login(emailLoginRequestDTO);
                 } else {
                     throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.email.invalid_request"));
                 }
             case "GOOGLE":
-                if (request instanceof GoogleLoginRequestDTO) {
-                    return googleStrategy.login((GoogleLoginRequestDTO) request);
+                if (request instanceof GoogleLoginRequestDTO googleLoginRequestDTO) {
+                    return googleStrategy.login(googleLoginRequestDTO);
                 } else {
                     throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.google.invalid_request"));
                 }
             case "LINKEDIN":
-                if (request instanceof LinkedInCallbackRequestDTO) {
-                    return linkedInStrategy.login((LinkedInCallbackRequestDTO) request);
+                if (request instanceof LinkedInCallbackRequestDTO linkedInCallbackRequestDTO) {
+                    return linkedInStrategy.login(linkedInCallbackRequestDTO);
                 } else {
                     throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.linkedin.invalid_request"));
                 }

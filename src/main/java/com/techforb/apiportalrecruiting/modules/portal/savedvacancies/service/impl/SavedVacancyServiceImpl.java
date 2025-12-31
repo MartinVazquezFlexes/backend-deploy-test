@@ -51,7 +51,7 @@ public class SavedVacancyServiceImpl implements SavedVacancyService {
                 .orElseThrow(() -> new SavedVacancyNotFoundException(
                         localizedMessageService.getMessage("saved.vacancy.not_found", vacancyId)));
 
-        if (!vacancy.getActive()) {
+        if (!Boolean.TRUE.equals(vacancy.getActive())) {
             throw new SavedVacancyInactiveException(
                     localizedMessageService.getMessage("saved.vacancy.inactive"));
         }

@@ -25,7 +25,7 @@ class ApplicationRepositoryTest {
     private Cv cv;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         UserEntity user = new UserEntity();
         user.setEmail("test@example.com");
         user.setPassword("password123");

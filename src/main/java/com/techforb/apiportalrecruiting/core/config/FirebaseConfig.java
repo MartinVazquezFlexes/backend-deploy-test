@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Profile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Base64;
 
 @Configuration
@@ -20,18 +19,20 @@ public class FirebaseConfig {
 
     @Bean
     public GoogleCredentials firebaseCredentials() throws IOException {
-        String base64 = System.getenv("FIREBASE_CREDENTIALS_BASE64");
+        return firebaseCredentialsFromBase64(
+                System.getenv("FIREBASE_CREDENTIALS_BASE64")
+        );
+    }
 
+    GoogleCredentials firebaseCredentialsFromBase64(String base64) throws IOException {
         if (base64 == null || base64.isBlank()) {
             throw new IllegalStateException("FIREBASE_CREDENTIALS_BASE64 is not set");
         }
 
         byte[] decoded = Base64.getDecoder().decode(base64);
-        InputStream serviceAccount =
-                new ByteArrayInputStream(decoded);
-
-        return GoogleCredentials.fromStream(serviceAccount);
+        return GoogleCredentials.fromStream(new ByteArrayInputStream(decoded));
     }
+
 
     @Bean
     public FirebaseApp initializeFirebase(GoogleCredentials credentials) {

@@ -8,6 +8,9 @@ public class CvSpecification {
 
 	private static final String PERSON="person";
 
+    private CvSpecification() {
+        throw new IllegalStateException("Utility class");
+    }
 	public static Specification<Cv> hasCountryLike(String countryName) {
 		return (rootCv, query, criteriaBuilder) -> {
 			if (countryName == null || countryName.isEmpty()) {

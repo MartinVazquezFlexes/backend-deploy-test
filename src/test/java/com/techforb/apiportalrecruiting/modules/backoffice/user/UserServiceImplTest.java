@@ -18,7 +18,6 @@ import com.techforb.apiportalrecruiting.modules.backoffice.user.impl.UserService
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.PersonService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -139,8 +139,6 @@ class VacancyServiceImplTest {
         mockVacancy.setId(id);
         mockVacancy.setActive(true);
         List<DetailSkill> mockSkills = List.of(new DetailSkill());
-        VacancyDetailsDTO mockDTO = new VacancyDetailsDTO();
-        List<ResponseDetailSkillDTO> mockSkillDTOs = List.of(new ResponseDetailSkillDTO());
 
         when(vacancyRepository.findById(id)).thenReturn(Optional.of(mockVacancy));
         when(detailSkillService.findByVacancyId(id)).thenReturn(mockSkills);

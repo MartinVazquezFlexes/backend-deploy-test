@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public interface CvService {
 
-	Cv uploadCv(MultipartFile cvFile, Person person, String paramFolder, Boolean fromProfile);
+	Cv uploadCv(MultipartFile cvFile, Person person, String paramFolder, boolean fromProfile);
 
 	Cv findCvById(Long id);
 

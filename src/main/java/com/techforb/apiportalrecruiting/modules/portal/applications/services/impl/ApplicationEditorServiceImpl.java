@@ -31,12 +31,13 @@ public class ApplicationEditorServiceImpl implements ApplicationEditorService {
     private final ApplicationMapper applicationMapper;
     private final LocalizedMessageService localizedMessageService;
 
+
     @Override
     public List<ApplicationDTO> getApplicationByApplicantId(Long id) {
         List<Application> applications = applicationRepository.findByPersonId(id);
         return applications.stream()
                 .map(applicationMapper::mapToDTO)
-                .collect(Collectors.toList());
+                .toList();  // Compliant: Produces an unmodifiable list directly
     }
 
     @Override

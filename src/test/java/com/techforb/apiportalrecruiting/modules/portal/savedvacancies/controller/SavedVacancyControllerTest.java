@@ -27,7 +27,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -129,7 +128,7 @@ class SavedVacancyControllerTest {
     @Test
     void saveJob_ShouldReturnCreatedSavedJob_WhenValidRequest() throws Exception {
         Long vacancyId = 1L;
-        when(savedVacancyService.saveVacancy(eq(vacancyId))).thenReturn(mockSavedVacancyDTO);
+        when(savedVacancyService.saveVacancy(vacancyId)).thenReturn(mockSavedVacancyDTO);
 
         mockMvc.perform(post("/api/portal/saved-jobs/{vacancyId}", vacancyId))
                 .andDo(MockMvcResultHandlers.print())
@@ -143,7 +142,7 @@ class SavedVacancyControllerTest {
     @Test
     void saveJob_ShouldReturn404_WhenVacancyNotFound() throws Exception {
         Long vacancyId = 999L;
-        when(savedVacancyService.saveVacancy(eq(vacancyId)))
+        when(savedVacancyService.saveVacancy(vacancyId))
                 .thenThrow(new SavedVacancyNotFoundException("Vacancy not found"));
 
         mockMvc.perform(post("/api/portal/saved-jobs/{vacancyId}", vacancyId)
@@ -154,7 +153,7 @@ class SavedVacancyControllerTest {
     @Test
     void saveJob_ShouldReturn400_WhenVacancyIsInactive() throws Exception {
         Long vacancyId = 1L;
-        when(savedVacancyService.saveVacancy(eq(vacancyId)))
+        when(savedVacancyService.saveVacancy(vacancyId))
                 .thenThrow(new SavedVacancyInactiveException("Cannot save inactive vacancy"));
 
         mockMvc.perform(post("/api/portal/saved-jobs/{vacancyId}", vacancyId)
@@ -165,7 +164,7 @@ class SavedVacancyControllerTest {
     @Test
     void saveJob_ShouldReturn409_WhenVacancyAlreadySaved() throws Exception {
         Long vacancyId = 1L;
-        when(savedVacancyService.saveVacancy(eq(vacancyId)))
+        when(savedVacancyService.saveVacancy(vacancyId))
                 .thenThrow(new SavedVacancyAlreadySavedException("Vacancy already saved"));
 
         mockMvc.perform(post("/api/portal/saved-jobs/{vacancyId}", vacancyId)
@@ -176,7 +175,7 @@ class SavedVacancyControllerTest {
     @Test
     void saveJob_ShouldReturn401_WhenUserNotAuthenticated() throws Exception {
         Long vacancyId = 1L;
-        when(savedVacancyService.saveVacancy(eq(vacancyId)))
+        when(savedVacancyService.saveVacancy(vacancyId))
                 .thenThrow(new SavedVacancyAuthenticationException("User not authenticated"));
 
         mockMvc.perform(post("/api/portal/saved-jobs/{vacancyId}", vacancyId)
@@ -194,7 +193,7 @@ class SavedVacancyControllerTest {
     @Test
     void saveJob_ShouldHandleNegativeVacancyId() throws Exception {
         Long negativeVacancyId = -1L;
-        when(savedVacancyService.saveVacancy(eq(negativeVacancyId)))
+        when(savedVacancyService.saveVacancy(negativeVacancyId))
                 .thenThrow(new SavedVacancyNotFoundException("Vacancy not found"));
 
         mockMvc.perform(post("/api/portal/saved-jobs/{vacancyId}", negativeVacancyId)

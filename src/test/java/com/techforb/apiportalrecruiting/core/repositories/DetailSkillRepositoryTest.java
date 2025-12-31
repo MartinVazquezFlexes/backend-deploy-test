@@ -17,14 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles("test")
 @DataJpaTest
-public class DetailSkillRepositoryTest {
+class DetailSkillRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
     @Autowired
     private DetailSkillRepository detailSkillRepository;
     private Long vacancyId;
     private Long vacancyLanguageNullId;
-    private DetailSkill persistedDetailSkill;
 
     @BeforeEach
     void setUp() {

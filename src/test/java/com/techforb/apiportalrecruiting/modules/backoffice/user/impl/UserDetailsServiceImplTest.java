@@ -27,11 +27,6 @@ class UserDetailsServiceImplTest {
     @MockitoBean
     private LocalizedMessageService localizedMessageService;
 
-    /*@BeforeEach
-    void setUp(){
-
-    }*/
-
     @Test
     void loadUserByUsername_ShouldReturnUser() {
         String email = "test@test.com";

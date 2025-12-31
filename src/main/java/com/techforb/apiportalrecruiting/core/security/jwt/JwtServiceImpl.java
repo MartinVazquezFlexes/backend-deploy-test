@@ -26,9 +26,9 @@ public class JwtServiceImpl implements JwtService{
         this.secretKey = key;
     }
 
-    private static final long TOKEN_TIME = 1000 * 60 * 60;
-    private static final long TEMP_TOKEN_TIME = 1000 * 60 * 5; // 5 minutos
-    
+    private static final long TOKEN_TIME = 1000L * 60 * 60;
+    private static final long TEMP_TOKEN_TIME = 1000L * 60 * 5;
+
     private final ObjectMapper objectMapper;
     private final LocalizedMessageService localizedMessageService;
     
@@ -67,7 +67,7 @@ public class JwtServiceImpl implements JwtService{
             String jsonData = objectMapper.writeValueAsString(authData);
             return Base64.getEncoder().encodeToString(jsonData.getBytes());
         } catch (Exception e) {
-            throw new RuntimeException(localizedMessageService.getMessage("jwt.encode.error"), e);
+            throw new IllegalStateException(localizedMessageService.getMessage("jwt.encode.error"), e);
         }
     }
     

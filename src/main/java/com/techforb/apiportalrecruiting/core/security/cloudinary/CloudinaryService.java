@@ -9,7 +9,7 @@ import java.util.Map;
 @Service
 public interface CloudinaryService {
 
-	Map uploadCv(MultipartFile multipartFile, String paramFolder);
+	Map<String, Object>  uploadCv(MultipartFile multipartFile, String paramFolder);
 
 	String generateSignedUrl(String publicId, String version);
 	void deleteAuthenticatedFile(String publicId)throws IOException;

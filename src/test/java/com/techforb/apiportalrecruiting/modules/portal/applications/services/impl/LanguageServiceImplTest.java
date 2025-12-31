@@ -7,6 +7,7 @@ import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 import com.techforb.apiportalrecruiting.modules.backoffice.user.UserRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.LanguageDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.LanguageRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,7 +62,7 @@ class LanguageServiceImplTest {
 	@Test
 	void findById_ShouldThrowRuntimeException_WhenNotFound() {
 		when(languageRepository.findById(2L)).thenReturn(Optional.empty());
-
+        when(localizedMessageService.getMessage("language.not_found")).thenReturn("Lenguaje no encontrado");
 		Exception exception = assertThrows(RuntimeException.class, () -> languageService.findById(2L));
 
 		assertEquals("Lenguaje no encontrado", exception.getMessage());
@@ -144,7 +145,7 @@ class LanguageServiceImplTest {
 		when(languageRepository.findById(10L)).thenReturn(Optional.empty());
 		when(localizedMessageService.getMessage("language.not_found")).thenReturn("language.not_found");
 
-		assertThrows(RuntimeException.class, () -> languageService.saveLanguageForPerson(10L, "user@example.com"));
+		assertThrows(EntityNotFoundException.class, () -> languageService.saveLanguageForPerson(10L, "user@example.com"));
 	}
 
 	@Test

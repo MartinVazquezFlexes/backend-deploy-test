@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +17,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -27,7 +28,7 @@ public class SecurityConfig {
 	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.
 				authorizeHttpRequests(request -> request
 						.requestMatchers("/swagger-ui/**",
@@ -41,35 +42,48 @@ public class SecurityConfig {
 						.requestMatchers(new RegexRequestMatcher(".*/(auth|public)/.*", null)).permitAll()
 						.requestMatchers(new RegexRequestMatcher(".*/role/self-assign", HttpMethod.POST.name())).hasRole("DEFAULT")
 						.requestMatchers(new RegexRequestMatcher(".*/role-functional/.*", HttpMethod.GET.name())).hasRole("APPLICANT")
-//                 .requestMatchers(new RegexRequestMatcher("./dev/.", null)).hasRole("DEVELOPER")
-//                 .requestMatchers(new RegexRequestMatcher("./admin/.", null)).hasAnyRole("ADMIN", "DEVELOPER")
 						.anyRequest().authenticated())
-				.csrf(AbstractHttpConfigurer::disable)
+				// NOSONAR - CSRF protection intentionally disabled for stateless JWT API
+				.csrf(csrf -> csrf.disable())
+
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-				.sessionManagement(sessionManager -> sessionManager
-						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+				// Stateless session management required for JWT-based authentication
+				.sessionManagement(sessionManager ->
+						sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				)
+
 				.authenticationManager(authenticationManager)
-				.exceptionHandling(exceptions -> exceptions
-						.authenticationEntryPoint(customAuthenticationEntryPoint))
+
+				.exceptionHandling(exceptions ->
+						exceptions.authenticationEntryPoint(customAuthenticationEntryPoint)
+				)
+
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
 		return http.build();
 	}
+
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
-		
-		// Configuración para desarrollo
+
+		//explicitly allowed origins
 		config.setAllowCredentials(false);
-		config.addAllowedOrigin("*");
-		config.addAllowedHeader("*");
-		config.addAllowedMethod("*");
+		config.setAllowedOrigins(List.of(
+				"http://localhost:4200",
+				"https://backend-deploy-test-production.up.railway.app"
+		));
+
+		config.setAllowedHeaders(List.of("*"));
+		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
-
 		return source;
 	}
+
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {

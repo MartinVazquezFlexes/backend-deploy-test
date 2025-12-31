@@ -19,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.UUID;
 
@@ -33,7 +36,9 @@ public class UserController {
         private final JwtService jwtService;
         private final LocalizedMessageService localizedMessageService;
         @Value("${front.end-url}")
-        private String FRONTEND_URL;
+        private String frontEndUrl;
+
+        private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
         @Operation(summary = "Registro de usuario por email", description = "Registra un usuario con email y contraseña mediante Firebase Authentication.", responses = {
                         @ApiResponse(responseCode = "201", description = "Usuario registrado exitosamente"),
@@ -41,7 +46,7 @@ public class UserController {
                         @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
         })
         @PostMapping("/auth/email-register")
-        public ResponseEntity<?> emailRegister(@RequestBody @Valid EmailLoginRequestDTO userRequest)
+        public ResponseEntity<Void> emailRegister(@RequestBody @Valid EmailLoginRequestDTO userRequest)
                         throws FirebaseAuthException {
                 authenticationContext.register("EMAIL", userRequest);
                 return ResponseEntity.status(201).build();
@@ -79,7 +84,9 @@ public class UserController {
         public ResponseEntity<String> getLinkedInAuthorizationUrl() {
                 String state = UUID.randomUUID().toString();
                 String authUrl = linkedInService.getAuthorizationUrl(state);
-                System.out.println("Generated LinkedIn Auth URL: " + authUrl);
+
+                log.debug("Generated LinkedIn Auth URL: {}", authUrl);
+
                 return ResponseEntity.status(200).body(authUrl);
         }
 
@@ -107,7 +114,7 @@ public class UserController {
                                         loginResponse.getUser().getEmail(),
                                         loginResponse.getUser().getId());
 
-                        String redirectUrl = FRONTEND_URL + "/#" + encodedData;
+                        String redirectUrl = frontEndUrl + "/#" + encodedData;
 
                         response.sendRedirect(redirectUrl);
 
@@ -123,7 +130,7 @@ public class UserController {
                         @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
         })
         @PostMapping("/change-password")
-        public ResponseEntity<?> emailChangePassword(
+        public ResponseEntity<String> emailChangePassword(
                         @RequestBody @Valid EmailChangePasswordRequestDTO emailChangePasswordRequestDTO)
                         throws FirebaseAuthException {
                 userService.changePassword(emailChangePasswordRequestDTO);
@@ -136,7 +143,7 @@ public class UserController {
                         @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = @Content)
         })
         @PatchMapping("/user-disable/{id}")
-        public ResponseEntity<?> disableUser(@PathVariable Long id) {
+        public ResponseEntity<Boolean> disableUser(@PathVariable Long id) {
                 return ResponseEntity.status(200).body(userService.disableUser(id));
         }
 }

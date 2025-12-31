@@ -10,7 +10,6 @@ import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.dto.SavedV
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class SavedVacancyMapper {
@@ -42,11 +41,13 @@ public class SavedVacancyMapper {
     }
 
     public List<ResponseDetailSkillWithoutPriorityDTO> mapToResponseDetailSkillWithoutPriorityDTOList(List<DetailSkill> detailSkills) {
-        if (detailSkills == null) return null;
+        if (detailSkills == null) {
+            return List.of();
+        }
         
         return detailSkills.stream()
                 .map(this::mapToResponseDetailSkillWithoutPriorityDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ResponseDetailSkillWithoutPriorityDTO mapToResponseDetailSkillWithoutPriorityDTO(DetailSkill detailSkill) {
@@ -81,17 +82,21 @@ public class SavedVacancyMapper {
         
         if (direction.getCity() != null && direction.getCity().getProvince() != null
             && direction.getCity().getProvince().getName() != null) {
-            if (fullDirection.length() > 0) fullDirection.append(", ");
+            if (!fullDirection.isEmpty()) {
+                fullDirection.append(", ");
+            }
             fullDirection.append(direction.getCity().getProvince().getName());
         }
         
         if (direction.getCity() != null && direction.getCity().getProvince() != null
             && direction.getCity().getProvince().getCountry() != null
             && direction.getCity().getProvince().getCountry().getName() != null) {
-            if (fullDirection.length() > 0) fullDirection.append(", ");
+            if (!fullDirection.isEmpty()) {
+                fullDirection.append(", ");
+            }
             fullDirection.append(direction.getCity().getProvince().getCountry().getName());
         }
-        
-        return fullDirection.length() > 0 ? fullDirection.toString() : null;
+
+            return !fullDirection.isEmpty() ? fullDirection.toString() : null;
     }
 } 

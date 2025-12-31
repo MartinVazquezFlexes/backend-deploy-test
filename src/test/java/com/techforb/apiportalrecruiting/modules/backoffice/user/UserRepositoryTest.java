@@ -12,13 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
 
     @Test
-    public void whenFindByEmailThenReturnUser() {
+    void whenFindByEmailThenReturnUser() {
         UserEntity user = new UserEntity();
         user.setEmail("test@email.com");
         userRepository.save(user);
@@ -30,7 +30,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void whenFindByNonExistentEmailThenReturnEmpty() {
+    void whenFindByNonExistentEmailThenReturnEmpty() {
         Optional<UserEntity> dbUser = userRepository.findByEmail("nonexistent@email.com");
 
         assertThat(dbUser).isEmpty();

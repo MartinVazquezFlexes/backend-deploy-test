@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
   @ExtendWith(MockitoExtension.class)
-    public class JwtServiceImplTest {
+    class JwtServiceImplTest {
 
         @InjectMocks
         private JwtServiceImpl jwtServiceImpl;
@@ -35,7 +35,7 @@ import java.util.Map;
       }
 
     @Test
-    public void testEncodeAuthData_Success() throws Exception {
+    void testEncodeAuthData_Success() throws Exception {
         String jwt="jwt-token";
         String email="test@email.com";
         Long userId=1L;
@@ -74,7 +74,7 @@ import java.util.Map;
     }
 
     @Test
-    public void testExtractUsername_Success() {
+    void testExtractUsername_Success() {
         UserDetails userDetails = Mockito.mock(UserDetails.class);
 
         Mockito.when(userDetails.getUsername())
@@ -90,7 +90,7 @@ import java.util.Map;
     }
 
     @Test
-    public void testGenerateToken_Success() {
+    void testGenerateToken_Success() {
          UserDetails userDetails = Mockito.mock(UserDetails.class);
 
         Mockito.when(userDetails.getUsername())
@@ -107,7 +107,7 @@ import java.util.Map;
     }
 
     @Test
-    public void testValidateToken() {
+   void testValidateToken() {
          UserDetails userDetails = Mockito.mock(UserDetails.class);
 
         Mockito.when(userDetails.getUsername())

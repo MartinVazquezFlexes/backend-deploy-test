@@ -38,19 +38,19 @@ public class CvServiceImpl implements CvService {
 	private final ApplicationRepository applicationRepository;
 
 	@Override
-	public Cv uploadCv(MultipartFile cvFile, Person person, String paramFolder, Boolean fromProfile) {
+	public Cv uploadCv(MultipartFile cvFile, Person person, String paramFolder, boolean fromProfile) {
 		if (cvFile.isEmpty() || !cvFile.getContentType().equals(MediaType.APPLICATION_PDF_VALUE)) {
-			throw new RuntimeException(localizedMessageService.getMessage("cv.pdf_file"));
+			throw new IllegalArgumentException(localizedMessageService.getMessage("cv.pdf_file"));
 		}
 
 		if (cvFile.getSize() > 2 * 1024 * 1024) {
-			throw new RuntimeException(localizedMessageService.getMessage("cv.size"));
+			throw new IllegalArgumentException(localizedMessageService.getMessage("cv.size"));
 		}
 
-		Map uploadResult = cloudinaryService.uploadCv(cvFile, paramFolder);
+        Map<String, Object> uploadResult = cloudinaryService.uploadCv(cvFile, paramFolder);
 
 		if (uploadResult == null) {
-			throw new RuntimeException(localizedMessageService.getMessage("cv.not_be_null"));
+			throw new IllegalArgumentException(localizedMessageService.getMessage("cv.not_be_null"));
 		}
 		String publicId = (String) uploadResult.get("public_id");
 		String version = uploadResult.get("version").toString();

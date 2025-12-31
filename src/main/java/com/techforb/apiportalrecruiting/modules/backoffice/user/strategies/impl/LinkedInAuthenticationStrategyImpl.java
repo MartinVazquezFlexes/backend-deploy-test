@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import com.techforb.apiportalrecruiting.core.config.mapper.ModelMapperUtils;
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
+import com.techforb.apiportalrecruiting.core.exceptions.LinkedInAuthenticationException;
 import com.techforb.apiportalrecruiting.core.security.jwt.Jwt;
 import com.techforb.apiportalrecruiting.core.security.jwt.JwtService;
 import com.techforb.apiportalrecruiting.core.security.linkedin.LinkedInService;
@@ -56,7 +57,10 @@ public class LinkedInAuthenticationStrategyImpl implements LinkedInAuthenticatio
 
         } catch (Exception e) {
             log.error("Error en LinkedIn authentication: {}", e.getMessage(), e);
-            throw new RuntimeException(localizedMessageService.getMessage("auth.linkedin.error", e.getMessage()));
+            throw new LinkedInAuthenticationException(
+                    localizedMessageService.getMessage("auth.linkedin.error", e.getMessage()),
+                    e
+            );
         }
     }
 

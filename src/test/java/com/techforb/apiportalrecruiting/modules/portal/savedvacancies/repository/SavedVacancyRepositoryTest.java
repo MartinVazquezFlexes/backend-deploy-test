@@ -85,7 +85,7 @@ class SavedVacancyRepositoryTest {
     void existsByPersonAndVacancy() {
         assertNotNull(testPerson, "La entidad Person no debería ser null");
         assertNotNull(testVacancy, "La entidad Vacancy no debería ser null");
-        assertEquals(testPerson.getFirstName(), "Fede");
+        assertEquals("Fede", testPerson.getFirstName());
 
         boolean exists = this.savedVacancyRepository.existsByPersonAndVacancy(testPerson, testVacancy);
         assertTrue(exists, "Se esperaba que SavedVacancy existiera para la persona y vacante dadas, pero no fue así");

@@ -1,4 +1,4 @@
-package com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill;
+package com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

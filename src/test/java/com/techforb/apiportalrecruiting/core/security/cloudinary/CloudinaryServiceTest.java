@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,14 +80,18 @@ class CloudinaryServiceTest {
 	}
 
 	@Test
-	void uploadCv_ShouldThrowRuntimeException_WhenExceptionOccurs() throws Exception {
-		when(multipartFile.getBytes()).thenThrow(new RuntimeException("Error uploading PDF to Cloudinary"));
+	void uploadCv_ShouldThrowIllegalStateException_WhenIOExceptionOccurs() throws Exception {
+		when(multipartFile.getBytes()).thenThrow(new IOException("File read error"));
+		when(localizedMessageService.getMessage("cloudinary.error_uploading")).thenReturn("Error al subir el archivo.");
 
-		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+		IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
 			cloudinaryService.uploadCv(multipartFile, folder);
 		});
 
-		assertEquals("Error uploading PDF to Cloudinary", exception.getMessage());
+		assertEquals("Error al subir el archivo.", exception.getMessage());
+		assertNotNull(exception.getCause());
+		assertTrue(exception.getCause() instanceof IOException);
+		assertEquals("File read error", exception.getCause().getMessage());
 	}
 
 	@Test
@@ -147,6 +152,23 @@ class CloudinaryServiceTest {
 
 		assertTrue(exception.getMessage().contains("No se pudo eliminar el archivo."));
 		assertTrue(exception.getMessage().contains("not_found"));
+	}
+
+	@Test
+	void deleteAuthenticatedFile_ShouldThrowIllegalStateException_WhenIOExceptionOccurs() throws Exception {
+		String publicId = "cvs/person_test/cv_abc123";
+
+		when(uploaderMock.destroy(any(), anyMap())).thenThrow(new IOException("Connection error"));
+		when(localizedMessageService.getMessage("cloudinary.error_delete")).thenReturn("Error al eliminar el archivo.");
+
+		IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+			cloudinaryService.deleteAuthenticatedFile(publicId);
+		});
+
+		assertEquals("Error al eliminar el archivo.", exception.getMessage());
+		assertNotNull(exception.getCause());
+        assertInstanceOf(IOException.class, exception.getCause());
+		assertEquals("Connection error", exception.getCause().getMessage());
 	}
 
 

@@ -135,9 +135,9 @@ class CvServiceImplTest {
 		newCv.setName("CV - Juan Pérez");
 		newCv.setPublicId("cvs/person_1/cv_abc123");
 
-		String paramFolder = "/person_1";
+		String paramFolderr = "/person_1";
 
-		Map<String, String> cloudinaryResponse = Map.of(
+		Map<String, Object> cloudinaryResponsee = Map.of(
 				"public_id", "cvs/person_1/cv_abc123.pdf",
 				"version", "123456"
 		);
@@ -146,10 +146,10 @@ class CvServiceImplTest {
 		when(cvFile.getContentType()).thenReturn("application/pdf");
 		when(cvFile.getSize()).thenReturn(2 * 1024 * 1024L);
 
-		when(cloudinaryService.uploadCv(cvFile, paramFolder)).thenReturn(cloudinaryResponse);
+		when(cloudinaryService.uploadCv(cvFile, paramFolderr)).thenReturn(cloudinaryResponsee);
 		when(cvRepository.save(any(Cv.class))).thenReturn(newCv);
 
-		Cv result = cvService.uploadCv(cvFile, person, paramFolder, true);
+		Cv result = cvService.uploadCv(cvFile, person, paramFolderr, true);
 		cv.setIsLast(false);
 
 		assertEquals(newCv.getPublicId(), result.getPublicId());
@@ -212,20 +212,24 @@ class CvServiceImplTest {
 		verifyNoInteractions(cvRepository);
 	}
 
-	@Test
-	void uploadCv_Fails_WhenCloudinaryReturnsNull() {
-		when(cvFile.isEmpty()).thenReturn(false);
-		when(cvFile.getContentType()).thenReturn("application/pdf");
-		when(cvFile.getSize()).thenReturn(1024 * 1024L);
+    @Test
+    void uploadCv_Fails_WhenCloudinaryReturnsNull() {
+        when(cvFile.isEmpty()).thenReturn(false);
+        when(cvFile.getContentType()).thenReturn("application/pdf");
+        when(cvFile.getSize()).thenReturn(1024L);
 
-		when(cloudinaryService.uploadCv(cvFile, paramFolder)).thenReturn(null);
+        when(cloudinaryService.uploadCv(cvFile, paramFolder)).thenReturn(null);
+        when(localizedMessageService.getMessage("cv.not_be_null")).thenReturn("no puede ser null");
 
-		Exception exception = assertThrows(RuntimeException.class, () -> cvService.uploadCv(cvFile, person, paramFolder, false));
-		assertEquals(null, exception.getMessage());
-		verifyNoInteractions(cvRepository);
-	}
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> cvService.uploadCv(cvFile, person, paramFolder, false));
 
-	@Test
+        assertEquals("no puede ser null", ex.getMessage());
+        verifyNoInteractions(cvRepository);
+    }
+
+
+    @Test
 	void getFilteredCvs_ShouldReturnEmptyPage_WhenNoResultsFound() {
 		UserEntity userEntity = new UserEntity();
 		userEntity.setEmail("test@example.com");
@@ -338,7 +342,7 @@ class CvServiceImplTest {
 
 
 		assertEquals(1, result.getContent().size());
-		assertTrue(result.getContent().get(0).getIsLast().equals(true));
+		assertEquals(true, (boolean) result.getContent().get(0).getIsLast());
 	}
 
 	@Test
@@ -356,11 +360,17 @@ class CvServiceImplTest {
 		when(localizedMessageService.getMessage("user.without_permissions"))
 				.thenReturn("El usuario que intenta ejecutar la accion no tiene permiso necesario.");
 
-		UnauthorizedActionException ex = assertThrows(UnauthorizedActionException.class,
-				() -> cvService.getCvsById(requestId, null, PageRequest.of(0, 10)));
+		PageRequest pageRequest = PageRequest.of(0, 10);
 
-		assertEquals("El usuario que intenta ejecutar la accion no tiene permiso necesario.",
-				ex.getMessage());
+		UnauthorizedActionException ex = assertThrows(
+				UnauthorizedActionException.class,
+				() -> cvService.getCvsById(requestId, null, pageRequest)
+		);
+
+		assertEquals(
+				"El usuario que intenta ejecutar la accion no tiene permiso necesario.",
+				ex.getMessage()
+		);
   }
 
 @Test
@@ -380,13 +390,82 @@ void deleteCvByIdAndPersonId() throws IOException {
     verify(this.cvRepository).delete(any(Cv.class));
 }
 
-	@Test
+    @Test
+    void deleteCv_shouldThrow_WhenPersonMismatch(){
+        when(cvRepository.findById(1L)).thenReturn(Optional.of(cv));
+        when(localizedMessageService.getMessage("cv.unauthorized_deletion")).thenReturn("nope");
+
+        assertThrows(org.springframework.security.access.AccessDeniedException.class,
+                () -> cvService.deleteCvByIdAndPersonId(1L, 999L));
+    }
+
+    @Test
+    void deleteCv_shouldSkipLastLogic_WhenCvIsNotLast() throws Exception {
+        cv.setIsLast(false);
+        when(cvRepository.findById(1L)).thenReturn(Optional.of(cv));
+        when(applicationRepository.findByCvId(1L)).thenReturn(List.of());
+
+        boolean ok = cvService.deleteCvByIdAndPersonId(1L, 1L);
+
+        assertTrue(ok);
+        verify(cvRepository, never()).findAllByPersonIdOrderByIdDesc(anyLong());
+    }
+
+    @Test
+    void deleteCv_shouldSetNextLatestAsLast_WhenDeletingLastCv() throws Exception {
+        cv.setIsLast(true);
+        Cv next = new Cv();
+        next.setId(2L);
+        next.setIsLast(false);
+
+        when(cvRepository.findById(1L)).thenReturn(Optional.of(cv));
+        when(cvRepository.findAllByPersonIdOrderByIdDesc(1L)).thenReturn(List.of(cv, next));
+        when(applicationRepository.findByCvId(1L)).thenReturn(List.of());
+
+        when(cvRepository.save(any(Cv.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        cvService.deleteCvByIdAndPersonId(1L, 1L);
+
+        assertTrue(next.getIsLast());
+        verify(cvRepository).save(next);
+    }
+
+    @Test
+    void deleteCv_shouldDetachCvFromApplications_WhenApplicationsExist() throws Exception {
+        when(cvRepository.findById(1L)).thenReturn(Optional.of(cv));
+
+        Application a1 = new Application(); a1.setCv(cv);
+        Application a2 = new Application(); a2.setCv(cv);
+        when(applicationRepository.findByCvId(1L)).thenReturn(List.of(a1, a2));
+        when(applicationRepository.save(any(Application.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        cvService.deleteCvByIdAndPersonId(1L, 1L);
+
+        assertNull(a1.getCv());
+        assertNull(a2.getCv());
+        verify(applicationRepository, times(2)).save(any(Application.class));
+    }
+
+    @Test
+    void deleteCv_shouldNotCallCloudinary_WhenPublicIdIsNull() throws Exception {
+        cv.setPublicId(null);
+        when(cvRepository.findById(1L)).thenReturn(Optional.of(cv));
+        when(applicationRepository.findByCvId(1L)).thenReturn(List.of());
+
+        cvService.deleteCvByIdAndPersonId(1L, 1L);
+
+        verify(cloudinaryService, never()).deleteAuthenticatedFile(anyString());
+    }
+
+
+    @Test
 	void findCvById_withOutThrow() {
 		Long cvId=1L;
 		UserEntity userEntity=new UserEntity();
-		Person person=new Person();
-		person.setUser(userEntity);
-		Cv cvToSearh=new Cv(1L,"v1","publicId","cv.pdf",true, LocalDateTime.now(),person);
+
+		Person personTest=new Person();
+		personTest.setUser(userEntity);
+		Cv cvToSearh=new Cv(1L,"v1","publicId","cv.pdf",true, LocalDateTime.now(),personTest);
 		when(this.cvRepository.findById(1L)).thenReturn(Optional.of(cvToSearh));
 		Cv resposne=this.cvService.findCvById(cvId);
 		assertNotNull(resposne);
@@ -400,12 +479,119 @@ void deleteCvByIdAndPersonId() throws IOException {
 	void findCvById_withThrow() {
 		Long cvId=1L;
 		UserEntity userEntity=new UserEntity();
-		Person person=new Person();
-		person.setUser(userEntity);
+		Person personTested=new Person();
+		personTested.setUser(userEntity);
 
 		when(this.localizedMessageService.getMessage("cv.not_found")).thenReturn("El CV no fue encontrado.");
 		Exception exception = assertThrows(EntityNotFoundException.class, () -> cvService.findCvById(cvId));
 		assertEquals("El CV no fue encontrado.",exception.getMessage());
 		verify(localizedMessageService).getMessage("cv.not_found");
 	}
+
+    @Test
+    void uploadCv_fromProfileTrue_shouldUnsetExistingLastCv() {
+        when(cvFile.isEmpty()).thenReturn(false);
+        when(cvFile.getContentType()).thenReturn("application/pdf");
+        when(cvFile.getSize()).thenReturn(1024L);
+
+        when(cloudinaryService.uploadCv(cvFile, paramFolder)).thenReturn(cloudinaryResponse);
+
+        Cv existingLast = new Cv();
+        existingLast.setId(99L);
+        existingLast.setIsLast(true);
+
+        when(cvRepository.findByPersonIdAndIsLastTrue(person.getId()))
+                .thenReturn(Optional.of(existingLast));
+
+
+        when(cvRepository.save(any(Cv.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        Cv result = cvService.uploadCv(cvFile, person, paramFolder, true);
+
+        assertTrue(result.getIsLast());
+        assertFalse(existingLast.getIsLast());
+        verify(cvRepository).save(existingLast);
+    }
+
+    @Test
+    void getFilteredCvs_shouldThrow_WhenUserIsNotRecruiter() {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setRoles(List.of(new Role(1L, "APPLICANT", List.of())));
+
+        when(userService.getUserFromContext()).thenReturn(userEntity);
+        when(localizedMessageService.getMessage("user.without_permissions"))
+                .thenReturn("nope");
+
+        Pageable pageable = PageRequest.of(0, 10); // ← fuera del lambda
+
+        UnauthorizedActionException ex = assertThrows(
+                UnauthorizedActionException.class,
+                () -> cvService.getFilteredCvs("AR", "Java", pageable)
+        );
+
+        assertEquals("nope", ex.getMessage());
+        verifyNoInteractions(cvRepository);
+    }
+
+
+    @Test
+    void getFilteredCvs_shouldMapToDto_andIncludeCountryAndSkills() {
+        when(userService.getUserFromContext()).thenReturn(user);
+
+        Skill s1 = new Skill();
+        s1.setDescription("Java");
+        person.setSkills(List.of(s1));
+
+        Cv cvWithData = new Cv();
+        cvWithData.setId(1L);
+        cvWithData.setPublicId("pid");
+        cvWithData.setVersion("v1");
+        cvWithData.setName("CV1");
+        cvWithData.setPerson(person);
+
+        when(cloudinaryService.generateSignedUrl("pid", "v1")).thenReturn("signed-url");
+
+        Pageable pageable = PageRequest.of(0, 10);
+        when(cvRepository.findAll(any(Specification.class), eq(pageable)))
+                .thenReturn(new PageImpl<>(List.of(cvWithData), pageable, 1));
+
+        Page<ResponsePagCvDTO> result = cvService.getFilteredCvs("Argentina", "Java", pageable);
+
+        assertEquals(1, result.getTotalElements());
+        ResponsePagCvDTO dto = result.getContent().get(0);
+
+        assertEquals("signed-url", dto.getCvUrl());
+        assertEquals("CV1", dto.getCvName());
+        assertEquals("test@example.com", dto.getPersonEmail());
+        assertEquals("Argentina", dto.getPersonCountry());
+        assertEquals(List.of("Java"), dto.getPersonSkills());
+    }
+
+    @Test
+    void getFilteredCvs_shouldReturnNullCountry_whenDirectionIsNull() {
+        when(userService.getUserFromContext()).thenReturn(user);
+
+        Person p = new Person();
+        p.setUser(user);
+        p.setDirection(null);
+        p.setSkills(List.of());
+
+        Cv cv2 = new Cv();
+        cv2.setPublicId("pid2");
+        cv2.setVersion("v2");
+        cv2.setName("CV2");
+        cv2.setPerson(p);
+
+        when(cloudinaryService.generateSignedUrl("pid2", "v2")).thenReturn("signed-url-2");
+
+        Pageable pageable = PageRequest.of(0, 10);
+        when(cvRepository.findAll(any(Specification.class), eq(pageable)))
+                .thenReturn(new PageImpl<>(List.of(cv2), pageable, 1));
+
+        Page<ResponsePagCvDTO> result = cvService.getFilteredCvs("X", "Y", pageable);
+
+        ResponsePagCvDTO dto = result.getContent().get(0);
+        assertNull(dto.getPersonCountry());
+    }
+
 }

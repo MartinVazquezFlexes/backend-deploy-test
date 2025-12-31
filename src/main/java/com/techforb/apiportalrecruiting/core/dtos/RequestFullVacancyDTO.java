@@ -1,6 +1,6 @@
 package com.techforb.apiportalrecruiting.core.dtos;
 
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.RequestDetailSkillDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill.RequestDetailSkillDTO;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

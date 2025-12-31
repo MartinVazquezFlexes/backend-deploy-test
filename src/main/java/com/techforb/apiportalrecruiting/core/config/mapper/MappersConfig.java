@@ -43,29 +43,38 @@ public class MappersConfig {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
 		//Mapeo Language -> LanguageDetailDTO
-		modelMapper.typeMap(Language.class, LanguageDetailDTO.class)
-				.addMappings(mapper -> {
-					mapper.map(src -> src.getLanguageLevel(),LanguageDetailDTO::setLanguageLevel);
-					mapper.map(src -> src.getName(),LanguageDetailDTO::setName);
-				});
+        modelMapper.typeMap(Language.class, LanguageDetailDTO.class)
+                .addMappings(mapper -> {
+                    mapper.map(Language::getLanguageLevel,
+                            LanguageDetailDTO::setLanguageLevel);
+                    mapper.map(Language::getName,
+                            LanguageDetailDTO::setName);
+                });
+
 
 		// Mapeo DetailSkill -> DetailSkillDTO
-		modelMapper.typeMap(DetailSkill.class, ResponseDetailSkillDTO.class)
-				.addMappings(mapper->{
-					mapper.map(src->src.getSkill().getDescription(), ResponseDetailSkillDTO::setDescriptionSkill);
-					mapper.map(src->src.getIsObligatory(), ResponseDetailSkillDTO::setIsObligatory);
-					mapper.map(src->src.getPriority(), ResponseDetailSkillDTO::setPriority);
-					mapper.map(src->src.getYearsExperience(), ResponseDetailSkillDTO::setYearsExperience);
-				});
+        modelMapper.typeMap(DetailSkill.class, ResponseDetailSkillDTO.class)
+                .addMappings(mapper -> {
+                    mapper.map(src -> src.getSkill().getDescription(),
+                            ResponseDetailSkillDTO::setDescriptionSkill);
+                    mapper.map(DetailSkill::getIsObligatory,
+                            ResponseDetailSkillDTO::setIsObligatory);
+                    mapper.map(DetailSkill::getPriority,
+                            ResponseDetailSkillDTO::setPriority);
+                    mapper.map(DetailSkill::getYearsExperience,
+                            ResponseDetailSkillDTO::setYearsExperience);
+                });
 
 		// Mapeo  Vacancy -> VacancyDetailsDTO
-		modelMapper.typeMap(Vacancy.class, VacancyDetailsDTO.class)
-				.addMappings(mapper->{
-					mapper.map(src->src.getCompany().getName(),VacancyDetailsDTO::setNameCompany);
-					mapper.map(src->src.getRole(),VacancyDetailsDTO::setRole);
-					mapper.map(src->src.getDescription(),VacancyDetailsDTO::setDescription);
-				});
-
-		return new ModelMapperUtils(modelMapper);
+        modelMapper.typeMap(Vacancy.class, VacancyDetailsDTO.class)
+                .addMappings(mapper -> {
+                    mapper.map(src -> src.getCompany().getName(),
+                            VacancyDetailsDTO::setNameCompany);
+                    mapper.map(Vacancy::getRole,
+                            VacancyDetailsDTO::setRole);
+                    mapper.map(Vacancy::getDescription,
+                            VacancyDetailsDTO::setDescription);
+                });
+        return new ModelMapperUtils(modelMapper);
 	}
 }

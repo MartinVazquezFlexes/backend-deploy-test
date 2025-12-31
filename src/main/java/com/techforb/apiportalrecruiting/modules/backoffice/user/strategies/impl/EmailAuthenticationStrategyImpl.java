@@ -55,7 +55,7 @@ public class EmailAuthenticationStrategyImpl implements EmailAuthenticationStrat
         String email = newUser.getEmail();
         String password = newUser.getPassword();
         
-        String uid = firebaseAuthService.registerUser(email, password);
+        firebaseAuthService.registerUser(email, password);
         
         if (userRepository.findByEmail(email).isEmpty()) {
             this.userService.addUserToDb(email, "DEFAULT", password);

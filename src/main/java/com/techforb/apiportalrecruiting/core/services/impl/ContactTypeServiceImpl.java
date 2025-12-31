@@ -1,8 +1,8 @@
 package com.techforb.apiportalrecruiting.core.services.impl;
 
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
-import com.techforb.apiportalrecruiting.core.dtos.contactTypes.RequestContactTypeDTO;
-import com.techforb.apiportalrecruiting.core.dtos.contactTypes.ResponseContactTypeDTO;
+import com.techforb.apiportalrecruiting.core.dtos.contacttypes.RequestContactTypeDTO;
+import com.techforb.apiportalrecruiting.core.dtos.contacttypes.ResponseContactTypeDTO;
 import com.techforb.apiportalrecruiting.core.entities.ContactType;
 import com.techforb.apiportalrecruiting.core.repositories.ContactTypeRepository;
 import com.techforb.apiportalrecruiting.core.services.ContactTypeService;
@@ -12,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,33 +20,39 @@ public class ContactTypeServiceImpl implements ContactTypeService {
 	private final ContactTypeRepository contactTypeRepository;
 	private final LocalizedMessageService localizedMessageService;
 	private final ModelMapper modelMapper;
+    private static final String NOT_FOUND_BY_NAME_CODE = "contact_type.not_found_by_name";
+    private static final String NOT_FOUND_BY_ID_CODE = "contact_type.not_found_by_id";
 
 	@Override
 	public ContactType getContactTypeByName(String name) {
 		ContactType contactType = contactTypeRepository.findByName(name);
 		if (contactType == null) {
-			throw new EntityNotFoundException(localizedMessageService.getMessage("contact_type.not_found_by_name", name));
+			throw new EntityNotFoundException(localizedMessageService.getMessage(NOT_FOUND_BY_NAME_CODE, name));
 		}
 		return contactType;
 	}
 
-	@Override
-	public List<ResponseContactTypeDTO> getAllContactTypes() {
-		return contactTypeRepository.findAll().stream().map(
-				contactType -> modelMapper.map(contactType, ResponseContactTypeDTO.class)
-		).collect(Collectors.toList());
-	}
+    @Override
+    public List<ResponseContactTypeDTO> getAllContactTypes() {
+        return contactTypeRepository.findAll()
+                .stream()
+                .map(contactType ->
+                        modelMapper.map(contactType, ResponseContactTypeDTO.class)
+                )
+                .toList();
+    }
 
-	@Override
+
+    @Override
 	public ResponseContactTypeDTO getContactTypeById(Long id) {
 		return modelMapper.map(contactTypeRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage("contact_type.not_found_by_id", id))),ResponseContactTypeDTO.class);
+				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(NOT_FOUND_BY_ID_CODE, id))),ResponseContactTypeDTO.class);
 	}
 
 	@Override
 	public ContactType getContactTypeEntityById(Long id) {
 		return contactTypeRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage("contact_type.not_found_by_id", id)));
+				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(NOT_FOUND_BY_ID_CODE, id)));
 	}
 
 	@Override
@@ -66,7 +71,7 @@ public class ContactTypeServiceImpl implements ContactTypeService {
 	@Override
 	public void deleteContactType(Long id) {
 		if (!contactTypeRepository.existsById(id)) {
-			throw new EntityNotFoundException(localizedMessageService.getMessage("contact_type.not_found_by_id", id));
+			throw new EntityNotFoundException(localizedMessageService.getMessage(NOT_FOUND_BY_ID_CODE, id));
 		}
 		contactTypeRepository.deleteById(id);
 	}
@@ -74,7 +79,7 @@ public class ContactTypeServiceImpl implements ContactTypeService {
 	private ContactType findByIdOrThrow(Long id) {
 		return contactTypeRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException(
-						localizedMessageService.getMessage("contact_type.not_found_by_id", id)
+						localizedMessageService.getMessage(NOT_FOUND_BY_ID_CODE, id)
 				));
 	}
 }

@@ -10,7 +10,7 @@ import com.techforb.apiportalrecruiting.core.entities.Vacancy;
 import com.techforb.apiportalrecruiting.core.repositories.DetailSkillRepository;
 import com.techforb.apiportalrecruiting.core.services.DetailSkillService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.ApplicationMapper;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.RequestDetailSkillDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill.RequestDetailSkillDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.LanguageService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.SkillService;
 import lombok.RequiredArgsConstructor;
@@ -94,26 +94,29 @@ public class DetailSkillServiceImpl implements DetailSkillService {
 		return ApplicationMapper.mapToListResponseDetailSkillDTO(detailSkills);
 	}
 
-	@Override
-	public List<DetailSkill> createListDetails(Vacancy newVacancy, List<RequestDetailSkillDTO> detailSkillDTOList) {
-		List<DetailSkill> reponse= new ArrayList();
-		for (RequestDetailSkillDTO detaildto : detailSkillDTOList){
-			DetailSkill detailEntity= new DetailSkill();
-			detailEntity.setVacancy(newVacancy);
-			detailEntity.setIsObligatory(detaildto.getIsObligatory());
-			detailEntity.setPriority(detaildto.getPriority());
-			detailEntity.setYearsExperience(detaildto.getYearsExperience());
-			if(detaildto.getSkillId()!=null){
-				Skill skill=this.skillService.findById(detaildto.getSkillId());
-				detailEntity.setSkill(skill);
-			} else if (detaildto.getLanguageId()!=null) {
-				Language language=this.languageService.findById(detaildto.getLanguageId());
-				detailEntity.setLanguage(language);
-			}
-			reponse.add(detailEntity);
-		}
-		return reponse;
-	}
+    @Override
+    public List<DetailSkill> createListDetails(Vacancy newVacancy, List<RequestDetailSkillDTO> detailSkillDTOList) {
+        List<DetailSkill> response = new ArrayList<>();
+
+        for (RequestDetailSkillDTO detaildto : detailSkillDTOList) {
+            DetailSkill detailEntity = new DetailSkill();
+            detailEntity.setVacancy(newVacancy);
+            detailEntity.setIsObligatory(detaildto.getIsObligatory());
+            detailEntity.setPriority(detaildto.getPriority());
+            detailEntity.setYearsExperience(detaildto.getYearsExperience());
+
+            if (detaildto.getSkillId() != null) {
+                Skill skill = this.skillService.findById(detaildto.getSkillId());
+                detailEntity.setSkill(skill);
+            } else if (detaildto.getLanguageId() != null) {
+                Language language = this.languageService.findById(detaildto.getLanguageId());
+                detailEntity.setLanguage(language);
+            }
+            response.add(detailEntity);
+        }
+        return response;
+    }
+
 
 
 

@@ -159,10 +159,10 @@ class EmailAuthenticationStrategyImplTest {
         Mockito.verify(userService).createUser(requestDTO.getEmail(),"DEFAULT",requestDTO.getPassword(),null);
     }
     @Test
-    void login_Firebase_Failed() throws FirebaseAuthException{
+    void login_Firebase_Failed(){
         Mockito.when(restTemplate.postForObject(Mockito.anyString(),Mockito.any(),Mockito.eq(Map.class)))
                 .thenThrow(new RestClientException("firebase error"));
-        Mockito.when(localizedMessageService.getMessage(Mockito.eq("firebase.auth.error"),Mockito.eq("firebase error")))
+        Mockito.when(localizedMessageService.getMessage("firebase.auth.error","firebase error"))
                 .thenReturn("firebase.auth.error");
         AuthenticationServiceException ex=Assertions.assertThrows(AuthenticationServiceException.class,
                 ()->emailAuthenticationStrategy.login(requestDTO));
@@ -170,10 +170,10 @@ class EmailAuthenticationStrategyImplTest {
         Assertions.assertEquals("firebase.auth.error",ex.getMessage());
     }
     @Test
-    void login_Failed_Token_null()throws FirebaseAuthException{
+    void login_Failed_Token_null(){
         Mockito.when(restTemplate.postForObject(Mockito.anyString(),Mockito.any(),Mockito.eq(Map.class)))
                 .thenReturn(null);
-        Mockito.when(localizedMessageService.getMessage(Mockito.eq("firebase.invalid_id_token")))
+        Mockito.when(localizedMessageService.getMessage("firebase.invalid_id_token"))
                 .thenReturn("firebase.invalid_id_token");
         AuthenticationServiceException ex=Assertions.assertThrows(AuthenticationServiceException.class,
                 ()->emailAuthenticationStrategy.login(requestDTO));

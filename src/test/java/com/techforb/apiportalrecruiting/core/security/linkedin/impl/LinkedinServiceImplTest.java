@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -110,21 +111,23 @@ class LinkedinServiceImplTest {
         responseBody.put("access_token", TEST_TOKEN);
         responseBody.put("token_type", "Bearer");
 
-        ResponseEntity<Map> responseEntity = ResponseEntity.ok(responseBody);
+        ResponseEntity<Map<String, Object>> responseEntity = ResponseEntity.ok(responseBody);
 
-        when(restTemplate.postForEntity(
+        when(restTemplate.exchange(
                 eq("https://www.linkedin.com/oauth/v2/accessToken"),
+                any(HttpMethod.class),
                 any(HttpEntity.class),
-                eq(Map.class)
+                any(ParameterizedTypeReference.class)
         )).thenReturn(responseEntity);
 
         String result = linkedinService.getAccessToken(TEST_CODE);
 
         assertEquals(TEST_TOKEN, result);
-        verify(restTemplate).postForEntity(
+        verify(restTemplate).exchange(
                 eq("https://www.linkedin.com/oauth/v2/accessToken"),
+                any(HttpMethod.class),
                 any(HttpEntity.class),
-                eq(Map.class)
+                any(ParameterizedTypeReference.class)
         );
     }
 
@@ -163,19 +166,19 @@ class LinkedinServiceImplTest {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("error", "invalid_grant");
 
-        ResponseEntity<Map> responseEntity = ResponseEntity.ok(responseBody);
+        ResponseEntity<Map<String, Object>> responseEntity = ResponseEntity.ok(responseBody);
 
-        when(restTemplate.postForEntity(
+        when(restTemplate.exchange(
                 eq("https://www.linkedin.com/oauth/v2/accessToken"),
+                any(HttpMethod.class),
                 any(HttpEntity.class),
-                eq(Map.class)
+                any(ParameterizedTypeReference.class)
         )).thenReturn(responseEntity);
-
         when(localizedMessageService.getMessage(eq("auth.linkedin.token_error"), any(Object.class)))
                 .thenReturn("Token error occurred");
 
-        RuntimeException exception = assertThrows(
-                RuntimeException.class,
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
                 () -> linkedinService.getAccessToken(TEST_CODE)
         );
 
@@ -188,17 +191,18 @@ class LinkedinServiceImplTest {
         when(linkedInConfig.getClientId()).thenReturn(CLIENT_ID);
         when(linkedInConfig.getClientSecret()).thenReturn(CLIENT_SECRET);
 
-        when(restTemplate.postForEntity(
+        when(restTemplate.exchange(
                 eq("https://www.linkedin.com/oauth/v2/accessToken"),
+                any(HttpMethod.class),
                 any(HttpEntity.class),
-                eq(Map.class)
+                any(ParameterizedTypeReference.class)
         )).thenThrow(new RestClientException("Connection error"));
 
         when(localizedMessageService.getMessage(eq("auth.linkedin.token_fetch_error"), any(Object.class)))
                 .thenReturn("Error fetching token");
 
-        RuntimeException exception = assertThrows(
-                RuntimeException.class,
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
                 () -> linkedinService.getAccessToken(TEST_CODE)
         );
 
@@ -212,13 +216,13 @@ class LinkedinServiceImplTest {
         userInfo.put("name", "John Doe");
         userInfo.put("email", "john.doe@example.com");
 
-        ResponseEntity<Map> responseEntity = ResponseEntity.ok(userInfo);
+        ResponseEntity<Map<String, Object>> responseEntity = ResponseEntity.ok(userInfo);
 
         when(restTemplate.exchange(
                 eq("https://api.linkedin.com/v2/userinfo"),
                 eq(HttpMethod.GET),
                 any(HttpEntity.class),
-                eq(Map.class)
+                any(ParameterizedTypeReference.class)
         )).thenReturn(responseEntity);
 
         Map<String, Object> result = linkedinService.getUserProfile(TEST_TOKEN);
@@ -231,7 +235,7 @@ class LinkedinServiceImplTest {
                 eq("https://api.linkedin.com/v2/userinfo"),
                 eq(HttpMethod.GET),
                 any(HttpEntity.class),
-                eq(Map.class)
+                any(ParameterizedTypeReference.class)
         );
     }
 
@@ -287,13 +291,13 @@ class LinkedinServiceImplTest {
         userInfo.put("email", "john.doe@example.com");
         userInfo.put("name", "John Doe");
 
-        ResponseEntity<Map> responseEntity = ResponseEntity.ok(userInfo);
+        ResponseEntity<Map<String, Object>> responseEntity = ResponseEntity.ok(userInfo);
 
         when(restTemplate.exchange(
                 eq("https://api.linkedin.com/v2/userinfo"),
                 eq(HttpMethod.GET),
                 any(HttpEntity.class),
-                eq(Map.class)
+                any(ParameterizedTypeReference.class)
         )).thenReturn(responseEntity);
 
         String result = linkedinService.getUserEmail(TEST_TOKEN);
@@ -303,7 +307,7 @@ class LinkedinServiceImplTest {
                 eq("https://api.linkedin.com/v2/userinfo"),
                 eq(HttpMethod.GET),
                 any(HttpEntity.class),
-                eq(Map.class)
+                any(ParameterizedTypeReference.class)
         );
     }
 
@@ -325,13 +329,13 @@ class LinkedinServiceImplTest {
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("name", "John Doe");
 
-        ResponseEntity<Map> responseEntity = ResponseEntity.ok(userInfo);
+        ResponseEntity<Map<String, Object>> responseEntity = ResponseEntity.ok(userInfo);
 
         when(restTemplate.exchange(
                 eq("https://api.linkedin.com/v2/userinfo"),
                 eq(HttpMethod.GET),
                 any(HttpEntity.class),
-                eq(Map.class)
+                any(ParameterizedTypeReference.class)
         )).thenReturn(responseEntity);
 
         when(localizedMessageService.getMessage("auth.linkedin.email_not_found"))
@@ -350,7 +354,7 @@ class LinkedinServiceImplTest {
                 eq("https://api.linkedin.com/v2/userinfo"),
                 eq(HttpMethod.GET),
                 any(HttpEntity.class),
-                eq(Map.class)
+                any(ParameterizedTypeReference.class)
         )).thenThrow(new RestClientException("API error"));
 
         when(localizedMessageService.getMessage("auth.linkedin.profile_error", "API error"))

@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,29 +55,44 @@ class RoleServiceImplTest {
 
     @Test
     void assignRoleToUserWithThrows() {
-        when(userRepository.findByEmail(userEntity.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userEntity.getEmail()))
+                .thenReturn(Optional.empty());
         when(localizedMessageService.getMessage("user.not_found"))
                 .thenReturn("User not found");
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            roleService.assignRoleToUser(roleAdmin, userEntity.getEmail());
-        });
+
+        String email = userEntity.getEmail();
+
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () -> roleService.assignRoleToUser(roleAdmin, email)
+        );
+
         assertEquals("User not found", exception.getMessage());
-        verify(userRepository).findByEmail(userEntity.getEmail());
+        verify(userRepository).findByEmail(email);
     }
+
 
     @Test
     void assignRoleToUserWithRoleNotFoundThrows() {
-        when(userRepository.findByEmail(userEntity.getEmail())).thenReturn(Optional.of(userEntity));
-        when(roleRepository.findByName(roleAdmin)).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userEntity.getEmail()))
+                .thenReturn(Optional.of(userEntity));
+        when(roleRepository.findByName(roleAdmin))
+                .thenReturn(Optional.empty());
         when(localizedMessageService.getMessage("role.not_found"))
                 .thenReturn("Role not found");
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            roleService.assignRoleToUser(roleAdmin, userEntity.getEmail());
-        });
+
+        String email = userEntity.getEmail();
+
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () -> roleService.assignRoleToUser(roleAdmin, email)
+        );
+
         assertEquals("Role not found", exception.getMessage());
-        verify(userRepository).findByEmail(userEntity.getEmail());
+        verify(userRepository).findByEmail(email);
         verify(roleRepository).findByName(roleAdmin);
     }
+
 
     @Test
     void assignRoleToUserWithoutThrows() {
@@ -95,10 +111,10 @@ class RoleServiceImplTest {
 
     @Test
     void findByNameWithOutThrow() {
-        Role role = new Role();
-        role.setName(roleDefault);
+        Role roleTest = new Role();
+        roleTest.setName(roleDefault);
 
-        when(roleRepository.findByName(roleDefault)).thenReturn(Optional.of(role));
+        when(roleRepository.findByName(roleDefault)).thenReturn(Optional.of(roleTest));
 
         Role foundRole = roleService.findByName(roleDefault);
 
@@ -111,7 +127,7 @@ class RoleServiceImplTest {
         when(roleRepository.findByName(roleAdmin)).thenReturn(Optional.empty());
         when(localizedMessageService.getMessage("role.not_found"))
                 .thenReturn("Role not found");
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
             roleService.findByName(roleAdmin);
         });
         assertEquals("Role not found", exception.getMessage());

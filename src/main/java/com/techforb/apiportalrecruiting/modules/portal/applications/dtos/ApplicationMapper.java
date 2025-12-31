@@ -54,7 +54,9 @@ public class ApplicationMapper {
 	}
 
 	public static List<ResponseDetailSkillDTO> mapToListResponseDetailSkillDTO(List<DetailSkill> detailSkills) {
-		if (detailSkills == null) return null;
+        if (detailSkills == null || detailSkills.isEmpty()) {
+            return List.of();
+        }
 		return detailSkills.stream()
 				.map(detailSkill -> ResponseDetailSkillDTO.builder()
 						.id(detailSkill.getId())
@@ -68,19 +70,24 @@ public class ApplicationMapper {
 				.collect(Collectors.toList());
 	}
 
-	public static List<LanguageDTO> mapToListLanguageDTO(List<DetailSkill> detailSkills) {
-		if (detailSkills == null) return null;
-		return detailSkills.stream()
-				.filter(detailSkill -> detailSkill.getLanguage() != null)
-				.map(detailSkill -> new LanguageDTO(
-						detailSkill.getLanguage().getId(),
-						detailSkill.getLanguage().getName(),
-						detailSkill.getLanguage().getLanguageLevel()
-				))
-				.collect(Collectors.toList());
-	}
+    public static List<LanguageDTO> mapToListLanguageDTO(List<DetailSkill> detailSkills) {
 
-	public static LanguageDetailDTO mapToLanguageDTO(DetailSkill detailSkill) {
+        if (detailSkills == null || detailSkills.isEmpty()) {
+            return List.of();
+        }
+
+        return detailSkills.stream()
+                .filter(detailSkill -> detailSkill.getLanguage() != null)
+                .map(detailSkill -> new LanguageDTO(
+                        detailSkill.getLanguage().getId(),
+                        detailSkill.getLanguage().getName(),
+                        detailSkill.getLanguage().getLanguageLevel()
+                ))
+                .toList();
+    }
+
+
+    public static LanguageDetailDTO mapToLanguageDTO(DetailSkill detailSkill) {
 		return new LanguageDetailDTO(
 				detailSkill.getLanguage().getName(),
 				detailSkill.getLanguage().getLanguageLevel()

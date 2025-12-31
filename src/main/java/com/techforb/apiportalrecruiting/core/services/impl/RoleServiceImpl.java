@@ -9,6 +9,7 @@ import com.techforb.apiportalrecruiting.modules.backoffice.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -22,7 +23,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findByName(String roleName) {
         return roleRepository.findByName(roleName)
-                .orElseThrow(() -> new RuntimeException(this.localizedMessageService.getMessage("role.not_found")));
+                .orElseThrow(() -> new NoSuchElementException(this.localizedMessageService.getMessage("role.not_found")));
     }
 
     @Override
@@ -31,7 +32,7 @@ public class RoleServiceImpl implements RoleService {
         if (user.isPresent()) {
             Role role = this.findByName(roleName);
             if (role == null) {
-                throw new RuntimeException(this.localizedMessageService.getMessage("role.not_found"));
+                throw new NoSuchElementException(this.localizedMessageService.getMessage("role.not_found"));
             }
 
             // limpio roles existentes y asigno el nuevo
@@ -40,8 +41,7 @@ public class RoleServiceImpl implements RoleService {
 
             userRepository.save(user.get());
         } else {
-            throw new RuntimeException(this.localizedMessageService.getMessage("user.not_found"));
+            throw new NoSuchElementException(this.localizedMessageService.getMessage("user.not_found"));
         }
     }
-
 }

@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,26 +65,31 @@ public class PersonServiceImpl implements PersonService {
 	private final LocalizedMessageService localizedMessageService;
 	private final ContactTypeService contactTypeService;
 
-	private static final String CODE_NOT_FOUND = "person.not_found";
+	private static final String PERSON_CODE_NOT_FOUND = "person.not_found";
+    private static  final String USER_CODE_NOT_FOUND = "user.not_found";
+    private static  final String DIRECTION_BY_ID_NOT_FOUND = "direction.not_found_by_id";
 
 	@Override
 	public Person getPersonById(Long id) {
-		return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(CODE_NOT_FOUND)));
+		return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(PERSON_CODE_NOT_FOUND)));
 	}
 
 	@Override
 	public PersonResponseDTO getPersonByIdDTO(Long id) {
-		Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(CODE_NOT_FOUND)));
+		Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(PERSON_CODE_NOT_FOUND)));
 		return personMapper.mapToPersonDTO(person);
 	}
 
 	@Override
 	@Transactional
 	public PersonResponseDTO updatePerson(Long id, PersonRequestDTO dto) {
-		Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(CODE_NOT_FOUND)));
-		UserEntity user = userRepository.findByEmail(dto.getEmail())
-				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage("user.not_found")));
+		Person person = personRepository.findById(id).
+                orElseThrow(()-> new EntityNotFoundException(localizedMessageService.getMessage(PERSON_CODE_NOT_FOUND)));
 
+		Optional<UserEntity> user= userRepository.findByEmail(dto.getEmail());
+        if(user.isEmpty()){
+            throw new EntityNotFoundException(localizedMessageService.getMessage(USER_CODE_NOT_FOUND));
+        }
 		person.setFirstName(dto.getFirstName());
 		person.setLastName(dto.getLastName());
 
@@ -109,7 +115,7 @@ public class PersonServiceImpl implements PersonService {
 
 	private Direction updateDirection(PersonRequestDTO dto) {
 		Direction direction = directionRepository.findById(dto.getDirectionId())
-				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage("direction.not_found_by_id", dto.getDirectionId())));
+				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(DIRECTION_BY_ID_NOT_FOUND, dto.getDirectionId())));
 
 		Country country = countryRepository.findByNameIgnoreCase(dto.getCountry())
 				.orElseGet(() -> countryRepository.save(Country.builder().name(dto.getCountry()).build()));

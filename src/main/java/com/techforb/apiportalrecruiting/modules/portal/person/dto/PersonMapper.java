@@ -46,7 +46,9 @@ public class PersonMapper {
     }
 
     public List<CvDTO> mapToListCvDTO(List<Cv> cvList) {
-        if (cvList == null) return null;
+        if (cvList == null) {
+            return List.of();
+        }
         return cvList.stream()
                 .map(cv -> CvDTO.builder()
                         .id(cv.getId())
@@ -57,7 +59,9 @@ public class PersonMapper {
     }
 
     public List<ReqResContactDTO> mapToContactListDTO(List<Contact> contactDTOList) {
-        if (contactDTOList == null) return null;
+        if (contactDTOList == null) {
+            return List.of();
+        }
         return contactDTOList.stream()
                 .map(contact -> ReqResContactDTO.builder()
                         .id(contact.getId())
@@ -69,7 +73,9 @@ public class PersonMapper {
     }
 
     public List<IdentificationDTO> mapToIdentificationListDTO(List<Identification> identificationList) {
-        if (identificationList == null) return null;
+        if (identificationList == null) {
+            return List.of();
+        }
         return identificationList.stream()
                 .map(identification -> IdentificationDTO.builder()
                         .id(identification.getId())
@@ -88,7 +94,9 @@ public class PersonMapper {
     }
 
     public List<SkillDTO> mapToSkillListDTO(List<Skill> skillList) {
-        if (skillList == null) return null;
+        if (skillList == null) {
+            return List.of();
+        }
         return skillList.stream()
                 .map(skill -> SkillDTO.builder()
                         .id(skill.getId())

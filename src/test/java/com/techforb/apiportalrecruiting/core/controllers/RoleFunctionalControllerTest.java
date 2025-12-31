@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -40,7 +42,7 @@ class RoleFunctionalControllerTest {
         ResponseEntity<List<RoleFunctional>> response = roleFunctionalController.getAllRolesFunctional();
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertNotNull(response.getBody());
         assertEquals(1, response.getBody().size());
         assertEquals("Backend Developer", response.getBody().get(0).getName());

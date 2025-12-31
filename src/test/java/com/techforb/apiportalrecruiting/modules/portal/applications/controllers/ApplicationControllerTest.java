@@ -40,7 +40,7 @@ class ApplicationControllerTest {
     private MockMultipartFile cvFile;
     private MockMultipartFile applicationJson;
 
-    private final String API_URL = "/api/portal/applications/";
+    private final String apiUrl = "/api/portal/applications/";
 
 	private ResponseApplicationDTO responseApplicationDTO;
 
@@ -62,7 +62,7 @@ class ApplicationControllerTest {
     void testApplyVacancy_Success() throws Exception {
 		when(applicationService.applyVacancy(any(RequestApplicationDTO.class), any(MockMultipartFile.class)))
 				.thenReturn(responseApplicationDTO);
-        mockMvc.perform(MockMvcRequestBuilders.multipart(API_URL + "apply-vacancy")
+        mockMvc.perform(MockMvcRequestBuilders.multipart(apiUrl + "apply-vacancy")
                         .file(applicationJson)
                         .file(cvFile)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
@@ -73,7 +73,7 @@ class ApplicationControllerTest {
     void testApplyVacancy_InvalidRequest_ShouldReturnInternalServerError() throws Exception {
 		when(applicationService.applyVacancy(any(RequestApplicationDTO.class), any(MockMultipartFile.class)))
 				.thenReturn(responseApplicationDTO);
-        mockMvc.perform(MockMvcRequestBuilders.multipart(API_URL + "apply-vacancy")
+        mockMvc.perform(MockMvcRequestBuilders.multipart(apiUrl + "apply-vacancy")
                         .file(cvFile)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isInternalServerError());
@@ -83,7 +83,7 @@ class ApplicationControllerTest {
     void testApplyVacancy_NotFile_ShouldReturnInternalServer() throws Exception {
 		when(applicationService.applyVacancy(any(RequestApplicationDTO.class), any(MockMultipartFile.class)))
 				.thenReturn(responseApplicationDTO);
-        mockMvc.perform(MockMvcRequestBuilders.multipart(API_URL + "apply-vacancy")
+        mockMvc.perform(MockMvcRequestBuilders.multipart(apiUrl + "apply-vacancy")
                         .file(applicationJson))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message").value("Required part 'cv' is not present."));
@@ -93,23 +93,13 @@ class ApplicationControllerTest {
     void testApplyVacancy_NotJson_ShouldReturnInternalServer() throws Exception {
 		when(applicationService.applyVacancy(any(RequestApplicationDTO.class), any(MockMultipartFile.class)))
 				.thenReturn(responseApplicationDTO);
-        mockMvc.perform(MockMvcRequestBuilders.multipart(API_URL + "apply-vacancy")
+        mockMvc.perform(MockMvcRequestBuilders.multipart(apiUrl + "apply-vacancy")
                         .file(cvFile))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message").value("Required part 'application' is not present."));
     }
 
 
-    @Test
-    void testApplyVacancy_ShouldCallServiceWithCorrectParameters() throws Exception {
-		when(applicationService.applyVacancy(any(RequestApplicationDTO.class), any(MockMultipartFile.class)))
-				.thenReturn(responseApplicationDTO);
-        mockMvc.perform(MockMvcRequestBuilders.multipart(API_URL + "apply-vacancy")
-                        .file(applicationJson)
-                        .file(cvFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk());
-    }
 
 	@Test
 	void testChangeCvApplication_Success() throws Exception {
@@ -120,7 +110,7 @@ class ApplicationControllerTest {
 		when(applicationService.changeCvApplication(any(RequestChangeCvApplicationDTO.class)))
 				.thenReturn(responseApplicationDTO);
 
-		mockMvc.perform(put(API_URL + "modify-application-vacancy")
+		mockMvc.perform(put(apiUrl + "modify-application-vacancy")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isOk());
@@ -135,7 +125,7 @@ class ApplicationControllerTest {
 		when(applicationService.changeCvApplication(any(RequestChangeCvApplicationDTO.class)))
 				.thenThrow(new RuntimeException("Unexpected error"));
 
-		mockMvc.perform(put(API_URL + "modify-application-vacancy")
+		mockMvc.perform(put(apiUrl + "modify-application-vacancy")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isInternalServerError());

@@ -1,8 +1,8 @@
 package com.techforb.apiportalrecruiting.core.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techforb.apiportalrecruiting.core.dtos.contactTypes.RequestContactTypeDTO;
-import com.techforb.apiportalrecruiting.core.dtos.contactTypes.ResponseContactTypeDTO;
+import com.techforb.apiportalrecruiting.core.dtos.contacttypes.RequestContactTypeDTO;
+import com.techforb.apiportalrecruiting.core.dtos.contacttypes.ResponseContactTypeDTO;
 import com.techforb.apiportalrecruiting.core.security.jwt.JwtFilter;
 import com.techforb.apiportalrecruiting.core.security.jwt.JwtService;
 import com.techforb.apiportalrecruiting.core.services.ContactTypeService;

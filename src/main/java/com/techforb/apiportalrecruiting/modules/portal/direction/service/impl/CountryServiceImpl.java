@@ -10,6 +10,7 @@ import com.techforb.apiportalrecruiting.modules.portal.applications.repositories
 import com.techforb.apiportalrecruiting.modules.portal.direction.dto.CountryItemDTO;
 import com.techforb.apiportalrecruiting.modules.portal.direction.repository.CountryRepository;
 import com.techforb.apiportalrecruiting.modules.portal.direction.service.CountryService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -34,34 +35,34 @@ public class CountryServiceImpl implements CountryService {
 		List<Country> countries = countryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
 		return countries.stream()
 				.map(c -> CountryItemDTO.builder().id(c.getId()).name(c.getName()).build())
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	@Override
 	public CountrySavedDTO saveCountry(Long countryId, String email) {
 			UserEntity user = userRepository.findByEmail(email)
-					.orElseThrow(() -> new RuntimeException(localizedMessageService.getMessage("user.not_found")));
+					.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage("user.not_found")));
 
 			Person person = user.getPerson();
 			if (person == null) {
-				throw new RuntimeException(localizedMessageService.getMessage("person.not_found"));
+				throw new EntityNotFoundException(localizedMessageService.getMessage("person.not_found"));
 			}
 
 			Country country = countryRepository.findById(countryId)
-					.orElseThrow(() -> new RuntimeException(localizedMessageService.getMessage("country.not_found", countryId)));
+					.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage("country.not_found", countryId)));
 
 			try {
 
 				person.setCountryResidence(country);
 				personRepository.save(person);
-				CountrySavedDTO countrySavedDTO = CountrySavedDTO.builder()
-						.id(country.getId())
-						.name(country.getName())
-						.build();
-				return countrySavedDTO;
+
+				return CountrySavedDTO.builder()
+                        .id(country.getId())
+                        .name(country.getName())
+                        .build();
 			} catch (DataAccessException e) {
 				log.error("Error saving country  for person", e);
-				throw new RuntimeException(localizedMessageService.getMessage("error.saving.country"), e);
+                throw new IllegalStateException(localizedMessageService.getMessage("error.saving.country"),e);
 			}
 	}
 }

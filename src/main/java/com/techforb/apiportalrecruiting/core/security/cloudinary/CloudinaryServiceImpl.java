@@ -24,11 +24,11 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 	private  static final String RESOURCE_TYPE="resource_type";
 	private  static  final String AUTHENTICATED="authenticated";
 
-	public Map uploadCv(MultipartFile multipartFile, String paramFolder) {
+	public Map<String, Object>  uploadCv(MultipartFile multipartFile, String paramFolder) {
 		try {
 			String uniqueName = "cv_" + UUID.randomUUID();
 
-			Map uploadParams = ObjectUtils.asMap(
+			Map<String,Object> uploadParams = ObjectUtils.asMap(
 					"folder", cloudinaryFolderName + paramFolder,
 					RESOURCE_TYPE, "raw",
 					"type", AUTHENTICATED,
@@ -36,23 +36,14 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 					"public_id", uniqueName + ".pdf"
 			);
 
-			Map result = cloudinary.uploader().upload(multipartFile.getBytes(), uploadParams);
-
-			return result;
+			return  cloudinary.uploader().upload(multipartFile.getBytes(), uploadParams);
 
 		} catch (IOException e) {
-			throw new RuntimeException(localizedMessageService.getMessage("cloudinary.error_uploading"), e);
+			throw new IllegalStateException(localizedMessageService.getMessage("cloudinary.error_uploading"), e);
 		}
 	}
 
 	public String generateSignedUrl(String publicId, String version) {
-		Map<String, Object> options = ObjectUtils.asMap(
-				RESOURCE_TYPE, "raw",
-				"type", AUTHENTICATED,
-				"version", version,
-				"sign_url", true
-		);
-
 		return cloudinary.url().resourceType("raw")
 				.type(AUTHENTICATED)
 				.publicId(publicId)
@@ -71,14 +62,14 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 			);
 
 
-			Map result = cloudinary.uploader().destroy(publicId, options);
+			Map<String, Object> result = cloudinary.uploader().destroy(publicId, options);
 
 			if (!"ok".equals(result.get("result"))) {
-				throw new RuntimeException(localizedMessageService.getMessage("cloudinary.error_delete_failure")
+					throw new IllegalStateException(localizedMessageService.getMessage("cloudinary.error_delete_failure")
 						+ " Response: " + result);
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(localizedMessageService.getMessage("cloudinary.error_delete"), e);
+			throw new IllegalStateException(localizedMessageService.getMessage("cloudinary.error_delete"), e);
 		}
 	}
 }

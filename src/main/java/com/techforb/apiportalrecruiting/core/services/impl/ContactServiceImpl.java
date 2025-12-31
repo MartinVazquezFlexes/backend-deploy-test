@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,16 +29,17 @@ public class ContactServiceImpl implements ContactService {
 	private final ContactTypeService contactTypeService;
 
 	@Override
-	public List<ResponseContactDTO> getContactsByPersonId() {
-		return contactRepository.findByPerson_Id(getPersonId()).stream().map(
-				contact -> {
-					ResponseContactDTO responseContactDTO = modelMapper.map(contact, ResponseContactDTO.class);
-					responseContactDTO.setContactType(contact.getContactType().getName());
-					responseContactDTO.setFullName(contact.getPerson().getFirstName() + " " + contact.getPerson().getLastName());
-					return responseContactDTO;
-				}
-		).collect(Collectors.toList());
-	}
+    public List<ResponseContactDTO> getContactsByPersonId() {
+        return contactRepository.findByPerson_Id(getPersonId())
+                .stream()
+                .map(contact -> {
+                    ResponseContactDTO dto = modelMapper.map(contact, ResponseContactDTO.class);
+                    dto.setContactType(contact.getContactType().getName());
+                    dto.setFullName(contact.getPerson().getFirstName() + " " + contact.getPerson().getLastName());
+                    return dto;
+                })
+                .toList();
+    }
 
 	@Override
 	public ResponseContactDTO getContactById(Long id) {

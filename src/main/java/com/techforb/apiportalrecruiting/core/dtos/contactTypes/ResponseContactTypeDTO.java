@@ -1,4 +1,4 @@
-package com.techforb.apiportalrecruiting.core.dtos.contactTypes;
+package com.techforb.apiportalrecruiting.core.dtos.contacttypes;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

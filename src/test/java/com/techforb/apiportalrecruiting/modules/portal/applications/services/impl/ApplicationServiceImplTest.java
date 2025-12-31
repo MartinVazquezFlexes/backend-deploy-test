@@ -14,7 +14,7 @@ import com.techforb.apiportalrecruiting.modules.backoffice.user.UserService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application.RequestApplicationDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application.RequestChangeCvApplicationDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application.ResponseApplicationDTO;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.RequestDetailSkillDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill.RequestDetailSkillDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.ApplicationRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.CvRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.LanguageRepository;

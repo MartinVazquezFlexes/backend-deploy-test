@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -34,7 +35,7 @@ public class FirebaseAuthenticationProvider implements AuthenticationProvider {
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
         } catch (FirebaseAuthException e) {
-            throw new RuntimeException(localizedMessageService.getMessage("firebase.invalid_id_token"), e);
+            throw new BadCredentialsException(localizedMessageService.getMessage("firebase.invalid_id_token"), e);
         }
     }
 

@@ -38,7 +38,7 @@ class ApplicationEditorControllerTest {
     @MockitoBean
     private ApplicationEditorService applicationService;
 
-    private final String API_URL = "/api/portal/applications/";
+    private final String apiUrl = "/api/portal/applications/";
 
     @Test
     void getApplicationsByUserId_ShouldReturnApplications() throws Exception {
@@ -50,7 +50,7 @@ class ApplicationEditorControllerTest {
         when(applicationService.getApplicationByApplicantId(anyLong()))
                 .thenReturn(List.of(applicationDTO));
 
-        mockMvc.perform(get(API_URL + "1"))
+        mockMvc.perform(get(apiUrl + "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].applicationState").value("IN_PROCESS"));
@@ -71,7 +71,7 @@ class ApplicationEditorControllerTest {
         when(applicationService.modifyApplication(anyLong(), any(ApplicationModified.class)))
                 .thenReturn(expectedResponse);
 
-        mockMvc.perform(put(API_URL + "1")
+        mockMvc.perform(put(apiUrl + "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(modified)))
                 .andExpect(status().isOk())
@@ -93,35 +93,11 @@ class ApplicationEditorControllerTest {
 		when(applicationService.modifyStateApplication(1L, ApplicationState.CANCELED))
 				.thenReturn(expectedResponse);
 
-		mockMvc.perform(put(API_URL+"1/modify")
+		mockMvc.perform(put(apiUrl +"1/modify")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(stateUpdate)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(1))
 				.andExpect(jsonPath("$.applicationState").value("CANCELED"));
 	}
-	/*@Test
-	void updateState_ShouldReturnUpdatedApplication() throws Exception {
-		ApplicationStateUpdateDTO stateUpdate = new ApplicationStateUpdateDTO();
-		stateUpdate.setApplicationState(ApplicationState.CANCELED);
-
-		ApplicationDTO expectedResponse = ApplicationDTO.builder()
-				.id(1L)
-				.applicationState(ApplicationState.CANCELED)
-				.build();
-
-		// Verifica que el servicio se llame con los parámetros correctos
-		when(applicationService.modifyStateApplication(eq(1L), eq(ApplicationState.CANCELED)))
-				.thenReturn(expectedResponse);
-
-		mockMvc.perform(put(API_URL + "/1/modify")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(stateUpdate)))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.id").value(1))
-				.andExpect(jsonPath("$.applicationState").value("CANCELED"));
-
-		// Verifica que el método del servicio se haya llamado correctamente
-		verify(applicationService).modifyStateApplication(1L, ApplicationState.CANCELED);
-	}*/
 }

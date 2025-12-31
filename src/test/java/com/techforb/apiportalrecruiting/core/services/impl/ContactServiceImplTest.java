@@ -99,12 +99,12 @@ class ContactServiceImplTest {
 		when(userService.getUserFromContext()).thenReturn(user);
 		when(contactRepository.findById(1L)).thenReturn(Optional.of(contact));
 
-		ResponseContactDTO responseContactDTO = contactService.getContactById(1L);
+		ResponseContactDTO responseContactDTOO = contactService.getContactById(1L);
 
-		assertEquals("Trabajo", responseContactDTO.getLabel());
-		assertEquals("tobias@techforb.com", responseContactDTO.getValue());
-		assertEquals("EMAIL", responseContactDTO.getContactType());
-		assertEquals("Tobias Moreno", responseContactDTO.getFullName());
+		assertEquals("Trabajo", responseContactDTOO.getLabel());
+		assertEquals("tobias@techforb.com", responseContactDTOO.getValue());
+		assertEquals("EMAIL", responseContactDTOO.getContactType());
+		assertEquals("Tobias Moreno", responseContactDTOO.getFullName());
 
 	}
 
@@ -210,9 +210,10 @@ class ContactServiceImplTest {
 		when(contactRepository.findById(1L)).thenReturn(Optional.of(contact));
 		when(localizedMessageService.getMessage("user.without_permissions")).thenReturn("Sin permisos");
 
-		assertThrows(UnauthorizedActionException.class, () -> {
-			contactService.updateContact(1L, new RequestContactDTO());
-		});
+		RequestContactDTO request = new RequestContactDTO();
+
+		assertThrows(UnauthorizedActionException.class,
+				() -> contactService.updateContact(1L, request));
 	}
 
 	@Test

@@ -48,6 +48,6 @@ class CompanyServiceImplTest {
         Mockito.when(localizedMessageService.getMessage("company.not_found_by_id")).thenReturn("company.not_found_by_id");
         EntityNotFoundException ex=assertThrows(EntityNotFoundException.class,
                 ()->this.companyServiceImp.findById(1L));
-        Assertions.assertEquals(ex.getMessage(),"company.not_found_by_id");
+        Assertions.assertEquals("company.not_found_by_id", ex.getMessage());
     }
 }

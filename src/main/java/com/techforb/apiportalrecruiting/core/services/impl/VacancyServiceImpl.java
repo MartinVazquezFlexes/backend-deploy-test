@@ -66,7 +66,7 @@ public class VacancyServiceImpl implements VacancyService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (!vacancy.getActive()) {
+        if (Boolean.FALSE.equals(vacancy.getActive())) {
             boolean allowAccess = false;
 
             if (authentication != null && authentication.isAuthenticated()) {
@@ -101,8 +101,7 @@ public class VacancyServiceImpl implements VacancyService {
                 .anyMatch(a -> a.getName().equals("RECRUITER"))){
             Vacancy newVacancy=this.createVacancyEntity(newVacancyDto);
             Vacancy vacancyResponse=this.vacancyRepository.save(newVacancy);
-            VacancyDetailsDTO response= this.getDetailsVacancyById(vacancyResponse.getId());
-            return response;
+            return this.getDetailsVacancyById(vacancyResponse.getId());
         }
         throw new UnauthorizedActionException(localizedMessageService.getMessage("user.without_permissions"));
     }
@@ -197,7 +196,7 @@ public class VacancyServiceImpl implements VacancyService {
         VacancyNotActiveDTO vacancyAlreadyDisabled=new VacancyNotActiveDTO();
         Vacancy vacancyToDisable=this.findById(vacancyId);
         vacancyAlreadyDisabled.setId(vacancyId);
-        if (vacancyToDisable.getActive()){
+        if (Boolean.TRUE.equals(vacancyToDisable.getActive())){
             vacancyToDisable.setActive(false);
             this.vacancyRepository.save(vacancyToDisable);
             vacancyAlreadyDisabled.setActive(vacancyToDisable.getActive());

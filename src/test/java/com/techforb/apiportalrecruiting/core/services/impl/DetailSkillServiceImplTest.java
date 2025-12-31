@@ -4,7 +4,7 @@ import com.techforb.apiportalrecruiting.core.dtos.LanguageDetailDTO;
 import com.techforb.apiportalrecruiting.core.dtos.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.core.entities.*;
 import com.techforb.apiportalrecruiting.core.repositories.DetailSkillRepository;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.RequestDetailSkillDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill.RequestDetailSkillDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.ApplicationService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.LanguageService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.SkillService;
@@ -44,7 +44,6 @@ class DetailSkillServiceImplTest {
 
 	private Application mockApplication;
 	private RequestDetailSkillDTO requestDetailSkillDTO;
-	private ResponseDetailSkillDTO responseDetailSkillDTO;
 
 	@BeforeEach
 	void setUp() {
@@ -76,8 +75,6 @@ class DetailSkillServiceImplTest {
 		detailSkill.setApplication(mockApplication);
 		detailSkills.add(detailSkill);
 		requestDetailSkillDTO = new RequestDetailSkillDTO(1L, 1L, 1L, 1L, true, 2, 3);
-
-		responseDetailSkillDTO = new ResponseDetailSkillDTO(1L, "Skill1", new LanguageDetailDTO("English", "B1"), true, 2, 3);
 	}
 
 	@Test

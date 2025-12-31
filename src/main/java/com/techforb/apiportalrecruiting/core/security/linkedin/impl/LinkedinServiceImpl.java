@@ -5,6 +5,7 @@ import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import com.techforb.apiportalrecruiting.core.security.linkedin.LinkedInService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
 @Service
@@ -74,14 +76,14 @@ public class LinkedinServiceImpl implements LinkedInService {
 
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body, formHeaders);
 
-            ResponseEntity<Map> response = restTemplate.postForEntity(LINKEDIN_TOKEN_URL, entity, Map.class);
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(LINKEDIN_TOKEN_URL,HttpMethod.POST, entity,   new ParameterizedTypeReference<Map<String, Object>>() {});
             Map<String, Object> responseBody = response.getBody();
 
             log.info("Response de LinkedIn: {}", responseBody);
 
             if (responseBody == null || !responseBody.containsKey("access_token")) {
                 log.error("Response de LinkedIn no contiene access_token: {}", responseBody);
-                throw new RuntimeException(localizedMessageService.getMessage("auth.linkedin.token_error", responseBody));
+                throw new IllegalStateException(localizedMessageService.getMessage("auth.linkedin.token_error", responseBody));
             }
 
             String accessToken = (String) responseBody.get("access_token");
@@ -90,12 +92,12 @@ public class LinkedinServiceImpl implements LinkedInService {
 
         } catch (RestClientException e) {
             log.error("Error de conectividad obteniendo token de LinkedIn: {}", e.getMessage(), e);
-            throw new RuntimeException(localizedMessageService.getMessage("auth.linkedin.token_fetch_error", e.getMessage()));
+            throw new IllegalStateException(localizedMessageService.getMessage("auth.linkedin.token_fetch_error", e.getMessage()));
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
             log.error("Error inesperado obteniendo token de LinkedIn: {}", e.getMessage(), e);
-            throw new RuntimeException(localizedMessageService.getMessage("auth.linkedin.token_fetch_error", e.getMessage()));
+            throw new IllegalStateException(localizedMessageService.getMessage("auth.linkedin.token_fetch_error", e.getMessage()));
         }
     }
 
@@ -112,11 +114,11 @@ public class LinkedinServiceImpl implements LinkedInService {
 
             HttpEntity<String> entity = new HttpEntity<>(bearerHeaders);
 
-            ResponseEntity<Map> response = restTemplate.exchange(
+            ResponseEntity<Map<String,Object>> response = restTemplate.exchange(
                     LINKEDIN_USERINFO_URL,
                     HttpMethod.GET,
                     entity,
-                    Map.class
+                    new ParameterizedTypeReference<Map<String, Object>>() {}
             );
 
             Map<String, Object> userInfo = response.getBody();
@@ -125,10 +127,10 @@ public class LinkedinServiceImpl implements LinkedInService {
             return userInfo;
         } catch (RestClientException e) {
             log.error("Error de conectividad obteniendo perfil de LinkedIn: {}", e.getMessage(), e);
-            throw new RuntimeException(localizedMessageService.getMessage("auth.linkedin.profile_error", e.getMessage()));
+            throw new IllegalStateException(localizedMessageService.getMessage("auth.linkedin.profile_error", e.getMessage()));
         } catch (Exception e) {
             log.error("Error inesperado obteniendo perfil de LinkedIn: {}", e.getMessage(), e);
-            throw new RuntimeException(localizedMessageService.getMessage("auth.linkedin.profile_error", e.getMessage()));
+            throw new IllegalStateException(localizedMessageService.getMessage("auth.linkedin.profile_error", e.getMessage()));
         }
     }
 
@@ -143,7 +145,7 @@ public class LinkedinServiceImpl implements LinkedInService {
 
             if (userInfo == null || !userInfo.containsKey("email")) {
                 log.error("No se encontró email en userInfo: {}", userInfo);
-                throw new RuntimeException(localizedMessageService.getMessage("auth.linkedin.email_not_found"));
+                throw new IllegalStateException(localizedMessageService.getMessage("auth.linkedin.email_not_found"));
             }
 
             String email = (String) userInfo.get("email");
@@ -156,10 +158,10 @@ public class LinkedinServiceImpl implements LinkedInService {
                 throw e;
             }
             log.error("Error obteniendo email de LinkedIn: {}", e.getMessage(), e);
-            throw new RuntimeException(localizedMessageService.getMessage("auth.linkedin.email_fetch_error", e.getMessage()));
+            throw new IllegalStateException(localizedMessageService.getMessage("auth.linkedin.email_fetch_error", e.getMessage()));
         } catch (Exception e) {
             log.error("Error inesperado obteniendo email de LinkedIn: {}", e.getMessage(), e);
-            throw new RuntimeException(localizedMessageService.getMessage("auth.linkedin.email_fetch_error", e.getMessage()));
+            throw new IllegalStateException(localizedMessageService.getMessage("auth.linkedin.email_fetch_error", e.getMessage()));
         }
     }
 }

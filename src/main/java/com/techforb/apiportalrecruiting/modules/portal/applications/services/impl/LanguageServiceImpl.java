@@ -8,12 +8,12 @@ import com.techforb.apiportalrecruiting.modules.backoffice.user.UserRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.LanguageDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.LanguageRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.LanguageService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +23,13 @@ public class LanguageServiceImpl implements LanguageService {
 	private final UserRepository userRepository;
 	private final LocalizedMessageService localizedMessageService;
 
+    private static final String NOT_FOUND_LENGUAGE = "language.not_found";
+    private static final String NOT_FOUND_USER = "user.not_found";
+    private static final String NOT_FOUND_PERSON = "person.not_found";
+
 	@Override
 	public Language findById(Long id) {
-		return languageRepository.findById(id).orElseThrow(() -> new RuntimeException("Lenguaje no encontrado"));
+		return languageRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(NOT_FOUND_LENGUAGE)));
 	}
 
 	@Override
@@ -38,19 +42,19 @@ public class LanguageServiceImpl implements LanguageService {
 		return languageRepository.findByNameOrderByCustomLevel("Ingles")
 				.stream()
 				.map(l -> new LanguageDTO(l.getId(), l.getLanguageLevel(), l.getName()))
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	@Override
 	public void saveLanguageForPerson(Long languageId, String email) {
 		Language language = languageRepository.findById(languageId)
-				.orElseThrow(() -> new RuntimeException(localizedMessageService.getMessage("language.not_found")));
+				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(NOT_FOUND_LENGUAGE)));
 
 		UserEntity user = userRepository.findByEmail(email)
-				.orElseThrow(() -> new RuntimeException(localizedMessageService.getMessage("user.not_found")));
+				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(NOT_FOUND_USER)));
 		Person person = user.getPerson();
 		if (person == null) {
-			throw new RuntimeException(localizedMessageService.getMessage("person.not_found"));
+			throw new EntityNotFoundException(localizedMessageService.getMessage(NOT_FOUND_PERSON));
 		}
 
 		List<Language> personLanguages = person.getLanguages();

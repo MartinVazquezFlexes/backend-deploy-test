@@ -53,6 +53,8 @@ class ApplicationEditorServiceImplTest {
     private Vacancy vacancy;
     private DetailSkill detailSkill;
     private Language language;
+    @Autowired
+    private ApplicationEditorServiceImpl applicationEditorServiceImpl;
 
     @BeforeEach
     void setUp(){
@@ -168,14 +170,17 @@ class ApplicationEditorServiceImplTest {
         ApplicationModified modified = new ApplicationModified();
         modified.setDetailSkills(List.of(skillUpdate));
 
-        when(applicationRepository.findById(1L)).thenReturn(Optional.of(mockApplication));
-        when(applicationRepository.save(any(Application.class))).thenReturn(mockApplication);
+        when(applicationRepository.findById(1L))
+                .thenReturn(Optional.of(mockApplication));
+        when(applicationRepository.save(any(Application.class)))
+                .thenReturn(mockApplication);
 
-        ApplicationDTO result = applicationService.modifyApplication(1L, modified);
+        applicationEditorServiceImpl.modifyApplication(1L, modified);
 
         assertEquals(5, mockApplication.getDetailSkills().get(0).getYearsExperience());
         verify(applicationRepository).save(mockApplication);
     }
+
 
     @Test
     void modifyApplication_Language() {
@@ -210,7 +215,6 @@ class ApplicationEditorServiceImplTest {
 
         assertEquals("Nuevo comentario", result.getComments());
         assertEquals(ApplicationState.MODIFIED, result.getApplicationState());
-        //assertEquals(5, mockApplication.getDetailSkills().get(0).getYearsExperience());
     }
 
     //no se puede modificar el estado de una aplicacion cancelada

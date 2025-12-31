@@ -4,7 +4,7 @@ import com.techforb.apiportalrecruiting.core.dtos.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.core.entities.DetailSkill;
 import com.techforb.apiportalrecruiting.core.entities.Language;
 import com.techforb.apiportalrecruiting.core.entities.Vacancy;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.RequestDetailSkillDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill.RequestDetailSkillDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

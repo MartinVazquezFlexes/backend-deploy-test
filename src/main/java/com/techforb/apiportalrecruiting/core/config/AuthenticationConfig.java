@@ -1,5 +1,6 @@
 package com.techforb.apiportalrecruiting.core.config;
 
+import com.techforb.apiportalrecruiting.core.exceptions.UnauthorizedActionException;
 import com.techforb.apiportalrecruiting.core.security.firebase.FirebaseAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,7 @@ public class AuthenticationConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws UnauthorizedActionException {
         return new ProviderManager(firebaseAuthenticationProvider());
     }
 }
