@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
   private final LocalizedMessageService localizedMessageService;
   private final RestTemplate restTemplate;
 
-    private static final String ROLE_NAME = "DEFAULT";
+    private static final String ROLE_NAME = "APPLICANT";
     private static final String EMAIL = "email";
     private static final String ID_TOKEN = "idToken";
 

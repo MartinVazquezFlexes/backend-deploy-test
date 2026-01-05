@@ -36,7 +36,7 @@ public class RoleController {
     }
     )
     @PostMapping("/self-assign")
-    @PreAuthorize("hasRole('DEFAULT')") 
+    @PreAuthorize("hasRole('APPLICANT')")
     public ResponseEntity<String> selfAssignRole(@RequestParam String roleName) {
         String userEmail = userService.getUserFromContext().getEmail();
         roleService.assignRoleToUser(roleName, userEmail);

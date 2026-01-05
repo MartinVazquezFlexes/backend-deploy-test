@@ -128,7 +128,7 @@ class UserServiceImplCoverageTest {
 
         service.emailLogin(new EmailLoginRequestDTO("user@mail.com", "pass"));
 
-        verify(service).addUserToDb("user@mail.com", "DEFAULT", "pass");
+        verify(service).addUserToDb("user@mail.com", "APPLICANT", "pass");
     }
 
 
@@ -234,7 +234,7 @@ class UserServiceImplCoverageTest {
 
         service.googleLogin(new GoogleLoginRequestDTO("access-token"));
 
-        verify(service).addUserToDb(eq("user@mail.com"), eq("DEFAULT"), isNull());
+        verify(service).addUserToDb(eq("user@mail.com"), eq("APPLICANT"), isNull());
     }
 
     @Test
@@ -267,7 +267,7 @@ class UserServiceImplCoverageTest {
 
         service.googleLogin(new GoogleLoginRequestDTO("access-token"));
 
-        verify(service).addUserToDb(eq("user@mail.com"), eq("DEFAULT"), isNull());
+        verify(service).addUserToDb(eq("user@mail.com"), eq("APPLICANT"), isNull());
     }
 
     @Test
@@ -296,17 +296,17 @@ class UserServiceImplCoverageTest {
         when(passwordEncoder.encode("pass")).thenReturn("ENC(pass)");
 
         Role role = new Role();
-        role.setName("DEFAULT");
-        when(roleService.findByName("DEFAULT")).thenReturn(role);
+        role.setName("APPLICANT");
+        when(roleService.findByName("APPLICANT")).thenReturn(role);
 
         // save devuelve el mismo objeto (o uno “persistido”)
         ArgumentCaptor<UserEntity> captor = ArgumentCaptor.forClass(UserEntity.class);
         when(userRepository.save(any(UserEntity.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        UserEntity saved = service.createUser("user@mail.com", "default", "pass", null);
+        UserEntity saved = service.createUser("user@mail.com", "APPLICANT", "pass", null);
 
         verify(passwordEncoder).encode("pass");
-        verify(roleService).findByName("DEFAULT");
+        verify(roleService).findByName("APPLICANT");
         verify(userRepository).save(captor.capture());
         verify(personService).createPerson(any(UserEntity.class));
 

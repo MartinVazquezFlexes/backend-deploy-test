@@ -44,7 +44,7 @@ public class LinkedInAuthenticationStrategyImpl implements LinkedInAuthenticatio
             UserEntity user = userService.findByEmail(email).orElse(null);
             
             if (user == null) {
-                user = userService.createUser(email, "DEFAULT", null, profile);
+                user = userService.createUser(email, "APPLICANT", null, profile);
             }
             
             CustomUserDetails userDetails = new CustomUserDetails(user);

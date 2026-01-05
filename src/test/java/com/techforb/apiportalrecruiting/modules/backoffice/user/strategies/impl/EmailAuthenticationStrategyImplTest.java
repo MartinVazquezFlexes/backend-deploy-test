@@ -86,7 +86,7 @@ class EmailAuthenticationStrategyImplTest {
         Mockito.when(userRepository.findByEmail(requestDTO.getEmail())).thenReturn(Optional.empty());
         emailAuthenticationStrategy.register(requestDTO);
         Mockito.verify(firebaseAuthService).registerUser(requestDTO.getEmail(),requestDTO.getPassword());
-        Mockito.verify(userService).addUserToDb(requestDTO.getEmail(),"DEFAULT",requestDTO.getPassword());
+        Mockito.verify(userService).addUserToDb(requestDTO.getEmail(),"APPLICANT",requestDTO.getPassword());
     }
 
     @Test
@@ -140,7 +140,7 @@ class EmailAuthenticationStrategyImplTest {
                 .thenReturn(firebaseResponse);
         Mockito.doNothing().when(firebaseAuthService).verifyToken("firebase-token");
         Mockito.when(userRepository.findByEmail(requestDTO.getEmail())).thenReturn(Optional.empty());
-        Mockito.when(userService.createUser(requestDTO.getEmail(),"DEFAULT",requestDTO.getPassword(),null)).thenReturn(new UserEntity());
+        Mockito.when(userService.createUser(requestDTO.getEmail(),"APPLICANT",requestDTO.getPassword(),null)).thenReturn(new UserEntity());
         Mockito.when(userDetails.getUserEntity()).thenReturn(user);
         Mockito.when(authentication.getPrincipal()).thenReturn(userDetails);
         Mockito.when(jwtService.generateToken(userDetails)).thenReturn("jwt-token");
@@ -156,7 +156,7 @@ class EmailAuthenticationStrategyImplTest {
 
         Mockito.verify(firebaseAuthService).verifyToken("firebase-token");
         Mockito.verify(authenticationManager).authenticate(Mockito.any());
-        Mockito.verify(userService).createUser(requestDTO.getEmail(),"DEFAULT",requestDTO.getPassword(),null);
+        Mockito.verify(userService).createUser(requestDTO.getEmail(),"APPLICANT",requestDTO.getPassword(),null);
     }
     @Test
     void login_Firebase_Failed(){

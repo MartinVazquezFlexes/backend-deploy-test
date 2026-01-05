@@ -42,9 +42,8 @@ public class SecurityConfig {
 								"/webjars/**").permitAll()
 						.requestMatchers(new RegexRequestMatcher(".*/auth/.*", null)).permitAll()
 						.requestMatchers(new RegexRequestMatcher(".*/(auth|public)/.*", null)).permitAll()
-						.requestMatchers(new RegexRequestMatcher(".*/role/self-assign", HttpMethod.POST.name())).hasRole("DEFAULT")
-						//TODO: todos los usuarios son default, "APPLICANT"
-						.requestMatchers(new RegexRequestMatcher(".*/role-functional/.*", HttpMethod.GET.name())).hasRole("DEFAULT")
+						.requestMatchers(new RegexRequestMatcher(".*/role/self-assign", HttpMethod.POST.name())).hasRole("APPLICANT")
+						.requestMatchers(new RegexRequestMatcher(".*/role-functional/.*", HttpMethod.GET.name())).hasRole("APPLICANT")
 						.anyRequest().authenticated())
 				// NOSONAR - CSRF protection intentionally disabled for stateless JWT API
 				.csrf(csrf -> csrf.disable())

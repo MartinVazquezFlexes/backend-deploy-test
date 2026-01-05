@@ -83,11 +83,11 @@ public class GoogleAuthenticationStrategyImpl implements GoogleAuthenticationStr
         
         // Si es un usuario nuevo o no existe en la BD, lo agregamos
         if (response.containsKey("isNewUser") && userService.findByEmail(email).isEmpty()) {
-            userService.createUser(email, "DEFAULT", null, null);
+            userService.createUser(email, "APPLICANT", null, null);
         }
         
         if (!response.containsKey("isNewUser") && userService.findByEmail(email).isEmpty()) {
-            userService.createUser(email, "DEFAULT", null, null);
+            userService.createUser(email, "APPLICANT", null, null);
         }
         
         Authentication auth = authenticationManager.authenticate(

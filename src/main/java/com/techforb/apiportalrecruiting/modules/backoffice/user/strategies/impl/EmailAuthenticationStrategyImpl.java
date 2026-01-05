@@ -58,7 +58,7 @@ public class EmailAuthenticationStrategyImpl implements EmailAuthenticationStrat
         firebaseAuthService.registerUser(email, password);
         
         if (userRepository.findByEmail(email).isEmpty()) {
-            this.userService.addUserToDb(email, "DEFAULT", password);
+            this.userService.addUserToDb(email, "APPLICANT", password);
         }
     }
     
@@ -88,7 +88,7 @@ public class EmailAuthenticationStrategyImpl implements EmailAuthenticationStrat
         firebaseAuthService.verifyToken(idToken);
         
         if (userRepository.findByEmail(email).isEmpty()) {
-            this.userService.createUser(email,"DEFAULT", password,null);
+            this.userService.createUser(email,"APPLICANT", password,null);
         }
         
         Authentication auth = authenticationManager.authenticate(

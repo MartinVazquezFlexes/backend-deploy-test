@@ -40,7 +40,7 @@ public class RoleFunctionalController {
     }
     )
     @GetMapping("/all")
-    //TODO: Problemas con los roles(todos se crean como DEFAULT) @PreAuthorize("hasRole('APPLICANT')")
+    @PreAuthorize("hasRole('APPLICANT')")
     public ResponseEntity<List<RoleFunctional>> getAllRolesFunctional() {
         List<RoleFunctional> roles = roleFunctionalService.getAllRolesFunctional();
         return ResponseEntity.ok(roles);

@@ -126,7 +126,7 @@ class GoogleAuthenticationStrategyImplTest {
 
         Mockito.verify(firebaseAuthService).verifyToken("firebase-token");
         Mockito.verify(authenticationManager).authenticate(Mockito.any());
-        Mockito.verify(userService).createUser("test@email.com", "DEFAULT", null, null);
+        Mockito.verify(userService).createUser("test@email.com", "APPLICANT", null, null);
     }
     @Test
     void login_Success_NotNewUser_ButNotInDatabase() throws FirebaseAuthException {
@@ -173,7 +173,7 @@ class GoogleAuthenticationStrategyImplTest {
         Mockito.verify(firebaseAuthService).verifyToken("firebase-token");
         Mockito.verify(authenticationManager).authenticate(Mockito.any());
 
-        Mockito.verify(userService).createUser("test@email.com", "DEFAULT", null, null);
+        Mockito.verify(userService).createUser("test@email.com", "APPLICANT", null, null);
     }
 
     @Test

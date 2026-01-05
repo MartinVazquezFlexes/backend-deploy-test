@@ -117,7 +117,7 @@ class LinkedInAuthenticationStrategyImplTest {
         when(linkedinService.getUserProfile(accessToken)).thenReturn(profile);
         when(linkedinService.getUserEmail(accessToken)).thenReturn(email);
         when(userService.findByEmail(email)).thenReturn(Optional.empty());
-        when(userService.createUser(email, "DEFAULT", null, profile)).thenReturn(newUser);
+        when(userService.createUser(email, "APPLICANT", null, profile)).thenReturn(newUser);
         when(jwtService.generateToken(any(CustomUserDetails.class))).thenReturn("jwt_token");
         when(modelMapperUtils.map(newUser, UserLoginResponseDTO.class)).thenReturn(userLoginResponseDTO);
 
@@ -131,7 +131,7 @@ class LinkedInAuthenticationStrategyImplTest {
         verify(linkedinService).getUserProfile(accessToken);
         verify(linkedinService).getUserEmail(accessToken);
         verify(userService).findByEmail(email);
-        verify(userService).createUser(email, "DEFAULT", null, profile);
+        verify(userService).createUser(email, "APPLICANT", null, profile);
         verify(jwtService).generateToken(any(CustomUserDetails.class));
         verify(modelMapperUtils).map(newUser, UserLoginResponseDTO.class);
         verifyNoMoreInteractions(linkedinService, userService, jwtService, modelMapperUtils);
