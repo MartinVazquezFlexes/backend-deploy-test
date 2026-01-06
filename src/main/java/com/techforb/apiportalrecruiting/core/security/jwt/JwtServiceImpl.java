@@ -70,6 +70,25 @@ public class JwtServiceImpl implements JwtService{
             throw new IllegalStateException(localizedMessageService.getMessage("jwt.encode.error"), e);
         }
     }
+
+    public String encodeAuthData(String jwt, String email, Long userId, String profileImageUrl) {
+        try {
+            Map<String, Object> authData = new HashMap<>();
+            authData.put("jwt", jwt);
+            authData.put("email", email);
+            authData.put("userId", userId);
+            if (profileImageUrl != null) {
+                authData.put("profileImageUrl", profileImageUrl);
+            }
+            authData.put("timestamp", System.currentTimeMillis());
+            authData.put("expiresAt", System.currentTimeMillis() + TEMP_TOKEN_TIME);
+
+            String jsonData = objectMapper.writeValueAsString(authData);
+            return Base64.getEncoder().encodeToString(jsonData.getBytes());
+        } catch (Exception e) {
+            throw new RuntimeException(localizedMessageService.getMessage("jwt.encode.error"), e);
+        }
+    }
     
 
 

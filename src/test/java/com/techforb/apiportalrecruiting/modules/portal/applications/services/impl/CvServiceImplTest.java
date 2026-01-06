@@ -4,8 +4,8 @@ import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import com.techforb.apiportalrecruiting.core.entities.*;
 import com.techforb.apiportalrecruiting.core.exceptions.UnauthorizedActionException;
 import com.techforb.apiportalrecruiting.core.security.cloudinary.CloudinaryService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserService;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.CvWithCreationDateDTO;
+import com.techforb.apiportalrecruiting.core.services.UserService;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.cv.CvWithCreationDateDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.cv.ResponsePagCvDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.ApplicationRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.CvRepository;
@@ -85,7 +85,6 @@ class CvServiceImplTest {
 		person = new Person();
 		person.setId(1L);
 		person.setUser(user);
-		person.setDirection(direction);
 		person.setSkills(List.of());
 
 		user.setPerson(person);

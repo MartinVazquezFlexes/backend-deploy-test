@@ -4,7 +4,7 @@ import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import com.techforb.apiportalrecruiting.core.entities.Role;
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 import com.techforb.apiportalrecruiting.core.repositories.RoleRepository;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserRepository;
+import com.techforb.apiportalrecruiting.core.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

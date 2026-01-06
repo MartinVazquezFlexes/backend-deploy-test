@@ -12,6 +12,7 @@ import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.dto.SavedV
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.dto.SavedVacancyDetailsDTO;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.mapper.SavedVacancyMapper;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.repository.SavedVacancyRepository;
+import com.techforb.apiportalrecruiting.core.security.CustomUserDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

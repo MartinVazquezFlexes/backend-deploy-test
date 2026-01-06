@@ -6,9 +6,9 @@ import com.techforb.apiportalrecruiting.core.exceptions.AlreadyAssignedCvExcepti
 import com.techforb.apiportalrecruiting.core.exceptions.ApplicationClosedException;
 import com.techforb.apiportalrecruiting.core.exceptions.CvNotOwnedException;
 import com.techforb.apiportalrecruiting.core.exceptions.UnauthorizedActionException;
-import com.techforb.apiportalrecruiting.core.services.VacancyService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserService;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.ApplicationMapper;
+import com.techforb.apiportalrecruiting.modules.portal.services.VacancyService;
+import com.techforb.apiportalrecruiting.core.services.UserService;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application.ApplicationMapper;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application.RequestApplicationDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application.RequestChangeCvApplicationDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application.ResponseApplicationDTO;

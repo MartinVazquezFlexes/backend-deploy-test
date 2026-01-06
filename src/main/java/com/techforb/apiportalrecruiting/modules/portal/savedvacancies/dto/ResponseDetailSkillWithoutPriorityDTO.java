@@ -1,6 +1,6 @@
 package com.techforb.apiportalrecruiting.modules.portal.savedvacancies.dto;
 
-import com.techforb.apiportalrecruiting.core.dtos.LanguageDetailDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.LanguageDetailDTO;
 import lombok.*;
 
 @Getter

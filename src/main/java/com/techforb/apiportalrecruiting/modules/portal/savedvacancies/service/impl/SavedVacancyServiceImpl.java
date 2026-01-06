@@ -10,11 +10,12 @@ import com.techforb.apiportalrecruiting.core.exceptions.SavedVacancyAuthenticati
 import com.techforb.apiportalrecruiting.core.exceptions.SavedVacancyInactiveException;
 import com.techforb.apiportalrecruiting.core.exceptions.SavedVacancyNotFoundException;
 import com.techforb.apiportalrecruiting.core.repositories.VacancyRepository;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.CustomUserDetails;
+import com.techforb.apiportalrecruiting.core.security.CustomUserDetails;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.dto.SavedVacancyDTO;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.mapper.SavedVacancyMapper;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.repository.SavedVacancyRepository;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.service.SavedVacancyService;
+import com.techforb.apiportalrecruiting.core.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

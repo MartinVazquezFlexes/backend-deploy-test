@@ -30,20 +30,16 @@ public class Person {
 	@JoinColumn(name = "user_id", nullable = false, unique = true)
 	private UserEntity user;
 
-	@JoinColumn(name = "direction_id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Direction direction;
-
 	@Column(name = "date_birth")
 	private LocalDateTime dateBirth;
 
 	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Application> applications;
 
-	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER)
 	private List<Cv> cvs;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "person_skill",
 			joinColumns = @JoinColumn(name = "person_id"),
@@ -51,16 +47,16 @@ public class Person {
 	)
 	private List<Skill> skills;
 
-	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Contact> contacts;
 
-	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Identification> identifications;
 
-	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<SavedVacancy> savedVacancies;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "person_language",
 			joinColumns = @JoinColumn(name = "person_id"),
@@ -68,7 +64,7 @@ public class Person {
 	)
 	private List<Language> languages;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "person_role_functional",
 			joinColumns = @JoinColumn(name = "person_id"),
@@ -77,7 +73,7 @@ public class Person {
 	private List<RoleFunctional> roleFunctionals;
 
 	@JoinColumn(name = "country_residence_id")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Country countryResidence;
 
 }

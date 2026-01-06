@@ -7,4 +7,7 @@ public interface JwtService {
     Boolean validateToken(String token, UserDetails userDetails);
     String extractUsername(String token);
     String encodeAuthData(String jwt, String email, Long userId);
+    default String encodeAuthData(String jwt, String email, Long userId, String profileImageUrl) {
+        return encodeAuthData(jwt, email, userId);
+    }
 }

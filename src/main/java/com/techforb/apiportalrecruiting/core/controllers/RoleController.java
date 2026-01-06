@@ -1,7 +1,8 @@
 package com.techforb.apiportalrecruiting.core.controllers;
 
 import com.techforb.apiportalrecruiting.core.services.RoleService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserService;
+import com.techforb.apiportalrecruiting.core.services.UserService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -36,7 +37,7 @@ public class RoleController {
     }
     )
     @PostMapping("/self-assign")
-    @PreAuthorize("hasRole('APPLICANT')")
+    @PreAuthorize("hasRole('DEFAULT')") 
     public ResponseEntity<String> selfAssignRole(@RequestParam String roleName) {
         String userEmail = userService.getUserFromContext().getEmail();
         roleService.assignRoleToUser(roleName, userEmail);

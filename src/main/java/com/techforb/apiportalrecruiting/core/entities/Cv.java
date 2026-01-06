@@ -35,7 +35,7 @@ public class Cv {
 	@CreationTimestamp
 	private LocalDateTime creationDate;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "person_id")
 	private Person person;
 

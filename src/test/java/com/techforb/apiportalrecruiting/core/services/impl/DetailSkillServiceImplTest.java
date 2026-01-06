@@ -1,13 +1,14 @@
 package com.techforb.apiportalrecruiting.core.services.impl;
 
-import com.techforb.apiportalrecruiting.core.dtos.LanguageDetailDTO;
-import com.techforb.apiportalrecruiting.core.dtos.ResponseDetailSkillDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.LanguageDetailDTO;
 import com.techforb.apiportalrecruiting.core.entities.*;
 import com.techforb.apiportalrecruiting.core.repositories.DetailSkillRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill.RequestDetailSkillDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.ApplicationService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.LanguageService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.SkillService;
+import com.techforb.apiportalrecruiting.modules.portal.services.impl.DetailSkillServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

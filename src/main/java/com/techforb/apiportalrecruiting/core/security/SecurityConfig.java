@@ -31,9 +31,7 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.
 				authorizeHttpRequests(request -> request
-						.requestMatchers(
-								"/health",
-								"/swagger-ui/**",
+						.requestMatchers("/swagger-ui/**",
 								"/swagger-ui.html",
 								"/v3/api-docs/**",
 								"/v3/api-docs.yaml",
@@ -75,7 +73,7 @@ public class SecurityConfig {
 		config.setAllowCredentials(false);
 		config.setAllowedOrigins(List.of(
 				"http://localhost:4200",
-				"https://frontend-deploy-test-gilt.vercel.app/"
+				"https://backend-deploy-test-production.up.railway.app"
 		));
 
 		config.setAllowedHeaders(List.of("*"));

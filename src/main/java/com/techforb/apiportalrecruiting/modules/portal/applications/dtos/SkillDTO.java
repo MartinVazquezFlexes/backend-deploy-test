@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class SkillDTO {
     private Long id;
     private String description;
-    private CategoryDTO categoryDTO;
+    private String category;
 }

@@ -1,0 +1,80 @@
+package com.techforb.apiportalrecruiting.core.services.strategies.impl;
+
+import com.google.firebase.auth.FirebaseAuthException;
+import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
+import com.techforb.apiportalrecruiting.core.dtos.users.LoginResponseDTO;
+import com.techforb.apiportalrecruiting.core.dtos.users.EmailLoginRequestDTO;
+import com.techforb.apiportalrecruiting.core.dtos.users.GoogleLoginRequestDTO;
+import com.techforb.apiportalrecruiting.core.dtos.users.LinkedInCallbackRequestDTO;
+import com.techforb.apiportalrecruiting.core.services.strategies.AuthenticationContextService;
+import com.techforb.apiportalrecruiting.core.services.strategies.EmailAuthenticationStrategy;
+import com.techforb.apiportalrecruiting.core.services.strategies.GoogleAuthenticationStrategy;
+import com.techforb.apiportalrecruiting.core.services.strategies.LinkedInAuthenticationStrategy;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+
+@Component
+@RequiredArgsConstructor
+public class AuthenticationContextImpl implements AuthenticationContextService {
+    
+    private final EmailAuthenticationStrategy emailStrategy;
+    private final GoogleAuthenticationStrategy googleStrategy;
+    private final LinkedInAuthenticationStrategy linkedInStrategy;
+    private final LocalizedMessageService localizedMessageService;
+
+    @Override
+    public void register(String strategyType, Object request) throws FirebaseAuthException {
+        switch (strategyType.toUpperCase()) {
+            case "EMAIL":
+                if (request instanceof EmailLoginRequestDTO emailLoginRequestDTO) {
+                    emailStrategy.register(emailLoginRequestDTO);
+                } else {
+                    throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.email.invalid_request"));
+                }
+                break;
+            case "GOOGLE":
+                if (request instanceof GoogleLoginRequestDTO googleLoginRequestDTO) {
+                    googleStrategy.register(googleLoginRequestDTO);
+                } else {
+                    throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.google.invalid_request"));
+                }
+                break;
+            case "LINKEDIN":
+                if (request instanceof LinkedInCallbackRequestDTO linkedInCallbackRequestDTO) {
+                    linkedInStrategy.register(linkedInCallbackRequestDTO);
+                } else {
+                    throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.linkedin.invalid_request"));
+                }
+                break;
+            default:
+                throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.unsupported", strategyType));
+        }
+    }
+    
+    @Override
+    public LoginResponseDTO login(String strategyType, Object request) throws FirebaseAuthException {
+        switch (strategyType.toUpperCase()) {
+            case "EMAIL":
+                if (request instanceof EmailLoginRequestDTO emailLoginRequestDTO) {
+                    return emailStrategy.login(emailLoginRequestDTO);
+                } else {
+                    throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.email.invalid_request"));
+                }
+            case "GOOGLE":
+                if (request instanceof GoogleLoginRequestDTO googleLoginRequestDTO) {
+                    return googleStrategy.login(googleLoginRequestDTO);
+                } else {
+                    throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.google.invalid_request"));
+                }
+            case "LINKEDIN":
+                if (request instanceof LinkedInCallbackRequestDTO linkedInCallbackRequestDTO) {
+                    return linkedInStrategy.login(linkedInCallbackRequestDTO);
+                } else {
+                    throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.linkedin.invalid_request"));
+                }
+            default:
+                throw new IllegalArgumentException(localizedMessageService.getMessage("auth.strategy.unsupported", strategyType));
+        }
+    }
+} 

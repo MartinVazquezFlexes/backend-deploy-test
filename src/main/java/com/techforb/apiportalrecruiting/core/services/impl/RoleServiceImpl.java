@@ -5,7 +5,7 @@ import com.techforb.apiportalrecruiting.core.entities.Role;
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 import com.techforb.apiportalrecruiting.core.repositories.RoleRepository;
 import com.techforb.apiportalrecruiting.core.services.RoleService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserRepository;
+import com.techforb.apiportalrecruiting.core.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

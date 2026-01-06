@@ -1,11 +1,11 @@
 package com.techforb.apiportalrecruiting.core.services.impl;
 
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
-import com.techforb.apiportalrecruiting.core.dtos.contacttypes.RequestContactTypeDTO;
-import com.techforb.apiportalrecruiting.core.dtos.contacttypes.ResponseContactTypeDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.contactTypes.*;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.contactTypes.ResponseContactTypeDTO;
 import com.techforb.apiportalrecruiting.core.entities.ContactType;
 import com.techforb.apiportalrecruiting.core.repositories.ContactTypeRepository;
-import com.techforb.apiportalrecruiting.core.services.ContactTypeService;
+import com.techforb.apiportalrecruiting.modules.portal.services.ContactTypeService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

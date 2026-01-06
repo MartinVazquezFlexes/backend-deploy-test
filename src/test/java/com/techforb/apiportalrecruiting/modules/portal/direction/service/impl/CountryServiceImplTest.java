@@ -5,7 +5,7 @@ import com.techforb.apiportalrecruiting.core.dtos.CountrySavedDTO;
 import com.techforb.apiportalrecruiting.core.entities.Country;
 import com.techforb.apiportalrecruiting.core.entities.Person;
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserRepository;
+import com.techforb.apiportalrecruiting.core.repositories.UserRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.PersonRepository;
 import com.techforb.apiportalrecruiting.modules.portal.direction.dto.CountryItemDTO;
 import com.techforb.apiportalrecruiting.modules.portal.direction.repository.CountryRepository;

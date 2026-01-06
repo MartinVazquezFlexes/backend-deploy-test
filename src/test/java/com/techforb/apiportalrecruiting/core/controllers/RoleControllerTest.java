@@ -2,7 +2,7 @@ package com.techforb.apiportalrecruiting.core.controllers;
 
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 import com.techforb.apiportalrecruiting.core.services.RoleService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserService;
+import com.techforb.apiportalrecruiting.core.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

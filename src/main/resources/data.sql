@@ -11,34 +11,6 @@ VALUES ('Argentina'),
        ('Brasil'),
        ('Chile');
 
-INSERT INTO provinces (name, country_id)
-VALUES ('Buenos Aires', 1),
-       ('Córdoba', 1),
-       ('Mendoza', 1),
-       ('São Paulo', 2),
-       ('Rio de Janeiro', 2);
-
-INSERT INTO cities (name, province_id)
-VALUES ('La Plata', 1),
-       ('Córdoba', 2),
-       ('Mendoza', 3),
-       ('São Paulo', 4),
-       ('Rio de Janeiro', 5);
-
-INSERT INTO zip_codes (name)
-VALUES ('1900'),
-       ('5000'),
-       ('5500'),
-       ('01000'),
-       ('20000');
-
-INSERT INTO directions (description, city_id, zip_code_id)
-VALUES ('Calle 1 #123', 1, 1),
-       ('Av. Siempre Viva 742', 2, 2),
-       ('San Martín 456', 3, 3),
-       ('Rua Augusta 1500', 4, 4),
-       ('Copacabana 999', 5, 5);
-
 INSERT INTO users (email, password, is_enabled, is_account_not_expired, is_account_not_locked,
                    is_credential_not_expired)
 VALUES ('user1@example.com', 'hashedpassword1', true, true, true, true),

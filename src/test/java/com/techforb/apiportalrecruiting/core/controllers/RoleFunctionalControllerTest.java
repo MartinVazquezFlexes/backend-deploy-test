@@ -1,7 +1,8 @@
 package com.techforb.apiportalrecruiting.core.controllers;
 
 import com.techforb.apiportalrecruiting.core.entities.RoleFunctional;
-import com.techforb.apiportalrecruiting.core.services.RoleFunctionalService;
+import com.techforb.apiportalrecruiting.modules.portal.applications.controllers.RoleFunctionalController;
+import com.techforb.apiportalrecruiting.modules.portal.services.RoleFunctionalService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

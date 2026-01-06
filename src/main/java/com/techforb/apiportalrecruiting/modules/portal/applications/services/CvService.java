@@ -2,7 +2,7 @@ package com.techforb.apiportalrecruiting.modules.portal.applications.services;
 
 import com.techforb.apiportalrecruiting.core.entities.Cv;
 import com.techforb.apiportalrecruiting.core.entities.Person;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.CvWithCreationDateDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.cv.CvWithCreationDateDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.cv.ResponsePagCvDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

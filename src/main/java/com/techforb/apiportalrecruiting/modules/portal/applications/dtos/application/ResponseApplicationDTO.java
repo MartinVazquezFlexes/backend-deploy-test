@@ -1,7 +1,7 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.techforb.apiportalrecruiting.core.dtos.ResponseDetailSkillDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.core.entities.ApplicationState;
 import lombok.AllArgsConstructor;
 import lombok.Data;

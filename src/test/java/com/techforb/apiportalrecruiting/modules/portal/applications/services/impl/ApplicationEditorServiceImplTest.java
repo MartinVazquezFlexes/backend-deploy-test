@@ -1,9 +1,9 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.services.impl;
 
 import com.techforb.apiportalrecruiting.core.entities.*;
-import com.techforb.apiportalrecruiting.core.services.DetailSkillService;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.ApplicationDTO;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.ApplicationModified;
+import com.techforb.apiportalrecruiting.modules.portal.services.DetailSkillService;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application.ApplicationDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.application.ApplicationModified;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.DetailSkillUpdateDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.ApplicationRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.CvRepository;
