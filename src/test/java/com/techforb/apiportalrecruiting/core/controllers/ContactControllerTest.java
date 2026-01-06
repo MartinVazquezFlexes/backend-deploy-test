@@ -1,9 +1,9 @@
 package com.techforb.apiportalrecruiting.core.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techforb.apiportalrecruiting.core.dtos.contacts.RequestContactDTO;
-import com.techforb.apiportalrecruiting.core.dtos.contacts.ResponseContactDTO;
-import com.techforb.apiportalrecruiting.core.services.ContactService;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.contacts.RequestContactDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.contacts.ResponseContactDTO;
+import com.techforb.apiportalrecruiting.modules.portal.services.ContactService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

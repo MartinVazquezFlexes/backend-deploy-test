@@ -62,7 +62,6 @@ class CvSpecificationTest {
         person.setUser(user);
         user.setPerson(person);
 
-        person.setDirection(direction);
         person.setSkills(List.of(skill));
 
         user.setEmail("juan@example.com");

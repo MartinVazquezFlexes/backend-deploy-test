@@ -572,7 +572,6 @@ void deleteCvByIdAndPersonId() throws IOException {
 
         Person p = new Person();
         p.setUser(user);
-        p.setDirection(null);
         p.setSkills(List.of());
 
         Cv cv2 = new Cv();

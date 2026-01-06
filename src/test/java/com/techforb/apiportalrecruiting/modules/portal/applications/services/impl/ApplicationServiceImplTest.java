@@ -2,12 +2,12 @@ package com.techforb.apiportalrecruiting.modules.portal.applications.services.im
 
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.LanguageDetailDTO;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.core.entities.*;
 import com.techforb.apiportalrecruiting.core.exceptions.AlreadyAssignedCvException;
 import com.techforb.apiportalrecruiting.core.exceptions.ApplicationClosedException;
 import com.techforb.apiportalrecruiting.core.exceptions.CvNotOwnedException;
 import com.techforb.apiportalrecruiting.core.exceptions.UnauthorizedActionException;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.modules.portal.services.DetailSkillService;
 import com.techforb.apiportalrecruiting.modules.portal.services.VacancyService;
 import com.techforb.apiportalrecruiting.core.services.UserService;

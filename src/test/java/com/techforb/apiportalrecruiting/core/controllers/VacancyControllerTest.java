@@ -2,6 +2,7 @@ package com.techforb.apiportalrecruiting.core.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.LanguageDetailDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailskill.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.vacancies.RequestFullVacancyDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.vacancies.VacancyDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.vacancies.VacancyRequestUpdateDTO;
@@ -11,7 +12,6 @@ import com.techforb.apiportalrecruiting.core.entities.Vacancy;
 import com.techforb.apiportalrecruiting.modules.portal.services.VacancyService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.vacancies.VacancyDetailsDTO;
 import com.techforb.apiportalrecruiting.core.exceptions.VacancyNotActiveException;
 import org.junit.jupiter.api.Test;

@@ -3,6 +3,7 @@ package com.techforb.apiportalrecruiting.core.services.impl;
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import com.techforb.apiportalrecruiting.core.entities.Company;
 import com.techforb.apiportalrecruiting.core.repositories.CompanyRepository;
+import com.techforb.apiportalrecruiting.modules.portal.services.impl.CompanyServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

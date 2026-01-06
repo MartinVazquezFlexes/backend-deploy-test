@@ -1,7 +1,7 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.controllers;
 
 import com.techforb.apiportalrecruiting.core.entities.Person;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.CvWithCreationDateDTO;
+import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.cv.CvWithCreationDateDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.cv.ResponsePagCvDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.CvService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.PersonService;

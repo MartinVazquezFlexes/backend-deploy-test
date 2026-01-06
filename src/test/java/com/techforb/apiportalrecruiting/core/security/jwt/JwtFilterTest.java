@@ -1,8 +1,8 @@
 package com.techforb.apiportalrecruiting.core.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.CustomUserDetails;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.impl.UserDetailsServiceImpl;
+import com.techforb.apiportalrecruiting.core.security.CustomUserDetails;
+import com.techforb.apiportalrecruiting.core.services.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.*;
