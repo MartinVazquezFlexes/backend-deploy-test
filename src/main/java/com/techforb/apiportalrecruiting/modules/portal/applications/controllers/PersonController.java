@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("api/portal/person/")
+@RequestMapping("api/portal/person")
 @AllArgsConstructor
 public class PersonController {
     private final PersonService personService;

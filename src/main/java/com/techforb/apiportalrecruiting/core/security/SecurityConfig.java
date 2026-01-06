@@ -73,7 +73,7 @@ public class SecurityConfig {
 		config.setAllowCredentials(false);
 		config.setAllowedOrigins(List.of(
 				"http://localhost:4200",
-				"https://backend-deploy-test-production.up.railway.app"
+				"https://frontend-deploy-test-gilt.vercel.app/"
 		));
 
 		config.setAllowedHeaders(List.of("*"));
