@@ -76,7 +76,7 @@ public class SecurityConfig {
 		config.setAllowCredentials(false);
 		config.setAllowedOrigins(List.of(
 				"http://localhost:4200",
-				"https://frontend-deploy-test-gilt.vercel.app/"
+				"https://frontend-deploy-test-gilt.vercel.app"
 		));
 
 		config.setAllowedHeaders(List.of("*"));
