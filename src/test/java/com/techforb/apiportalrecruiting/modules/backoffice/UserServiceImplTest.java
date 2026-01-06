@@ -3,15 +3,17 @@ package com.techforb.apiportalrecruiting.modules.backoffice;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import com.techforb.apiportalrecruiting.core.config.mapper.ModelMapperUtils;
+import com.techforb.apiportalrecruiting.core.dtos.users.*;
+import com.techforb.apiportalrecruiting.core.entities.Role;
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
 import com.techforb.apiportalrecruiting.core.exceptions.UnauthorizedActionException;
 import com.techforb.apiportalrecruiting.core.repositories.UserRepository;
+import com.techforb.apiportalrecruiting.core.security.CustomUserDetails;
 import com.techforb.apiportalrecruiting.core.security.firebase.FirebaseAuthService;
 import com.techforb.apiportalrecruiting.core.security.jwt.JwtService;
 import com.techforb.apiportalrecruiting.core.services.RoleService;
-import com.techforb.apiportalrecruiting.core.dtos.users.EmailChangePasswordRequestDTO;
-import com.techforb.apiportalrecruiting.core.dtos.users.EmailLoginRequestDTO;
 import com.techforb.apiportalrecruiting.core.services.impl.UserServiceImpl;
+import com.techforb.apiportalrecruiting.modules.portal.applications.repositories.PersonRepository;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.PersonService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
@@ -29,8 +31,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,6 +49,9 @@ class UserServiceImplTest {
 
 	@Mock
 	private UserRepository userRepository;
+
+	@Mock
+	private PersonRepository personRepository;
 
 	@Mock
 	private PersonService personService;
@@ -133,7 +141,7 @@ class UserServiceImplTest {
 		when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
 
-		userService = new UserServiceImpl(userRepository, personService, roleService,
+		userService = new UserServiceImpl(userRepository, personRepository, roleService,
 				firebaseAuthService, authenticationManager, jwtService, modelMapperUtils,
 				passwordEncoder, localizedMessageService, restTemplate) {
 			@Override
@@ -155,7 +163,7 @@ class UserServiceImplTest {
 	void emailLoginShouldThrowExceptionWhenFirebaseFails() {
 		EmailLoginRequestDTO request = new EmailLoginRequestDTO("test@email.com", "wrong-password");
 
-		userService = new UserServiceImpl(userRepository, personService, roleService, firebaseAuthService,
+		userService = new UserServiceImpl(userRepository, personRepository, roleService, firebaseAuthService,
 				authenticationManager, jwtService, modelMapperUtils, passwordEncoder, localizedMessageService, restTemplate) {
 
 			@Override
@@ -196,7 +204,7 @@ class UserServiceImplTest {
 		when(jwtService.generateToken(any())).thenReturn("jwt-token");
 		when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
-		userService = new UserServiceImpl(userRepository, personService, roleService,
+		userService = new UserServiceImpl(userRepository, personRepository, roleService,
 				firebaseAuthService, authenticationManager, jwtService, modelMapperUtils,
 				passwordEncoder, localizedMessageService, restTemplate) {
 
@@ -301,7 +309,7 @@ class UserServiceImplTest {
 		UserEntity user = new UserEntity();
 		when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
-		userService = new UserServiceImpl(userRepository, personService, null, firebaseAuthService, null,
+		userService = new UserServiceImpl(userRepository, personRepository, null, firebaseAuthService, null,
 				null, null, passwordEncoder, localizedMessageService, restTemplate) {
 			@Override
 			protected Map<String, Object> callFirebaseAuth(String url, Map<String, Object> request) {
@@ -320,7 +328,7 @@ class UserServiceImplTest {
 		when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 		when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-		userService = new UserServiceImpl(userRepository, personService, null, firebaseAuthService,
+		userService = new UserServiceImpl(userRepository, personRepository, null, firebaseAuthService,
 				null, null, null, passwordEncoder, localizedMessageService, restTemplate) {
 			@Override
 			protected Map<String, Object> callFirebaseAuth(String url, Map<String, Object> request) {
