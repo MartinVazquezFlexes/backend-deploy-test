@@ -31,7 +31,10 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.
 				authorizeHttpRequests(request -> request
-						.requestMatchers("/swagger-ui/**",
+						.requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+						.requestMatchers(
+								"/health",
+								"/swagger-ui/**",
 								"/swagger-ui.html",
 								"/v3/api-docs/**",
 								"/v3/api-docs.yaml",
