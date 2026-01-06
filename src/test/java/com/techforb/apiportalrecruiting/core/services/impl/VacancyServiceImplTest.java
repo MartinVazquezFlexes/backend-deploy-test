@@ -41,9 +41,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.detailSkill.ResponseDetailSkillDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.vacancies.VacancyDetailsDTO;
-import com.techforb.apiportalrecruiting.core.exceptions.VacancyNotActiveException;
 import com.techforb.apiportalrecruiting.modules.portal.services.DetailSkillService;
 
 import java.util.Collections;

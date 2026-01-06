@@ -1,6 +1,7 @@
-package com.techforb.apiportalrecruiting.modules.backoffice.user;
+package com.techforb.apiportalrecruiting.modules.backoffice;
 
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
+import com.techforb.apiportalrecruiting.core.security.CustomUserDetails;
 import org.junit.jupiter.api.Test;
 
 import com.techforb.apiportalrecruiting.core.entities.Role;

@@ -7,7 +7,6 @@ import com.techforb.apiportalrecruiting.core.exceptions.SavedVacancyAuthenticati
 import com.techforb.apiportalrecruiting.core.exceptions.SavedVacancyInactiveException;
 import com.techforb.apiportalrecruiting.core.exceptions.SavedVacancyNotFoundException;
 import com.techforb.apiportalrecruiting.core.repositories.VacancyRepository;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.CustomUserDetails;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.dto.SavedVacancyDTO;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.dto.SavedVacancyDetailsDTO;
 import com.techforb.apiportalrecruiting.modules.portal.savedvacancies.mapper.SavedVacancyMapper;

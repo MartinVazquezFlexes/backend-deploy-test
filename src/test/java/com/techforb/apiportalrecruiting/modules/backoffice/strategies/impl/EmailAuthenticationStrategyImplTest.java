@@ -1,17 +1,18 @@
-package com.techforb.apiportalrecruiting.modules.backoffice.user.strategies.impl;
+package com.techforb.apiportalrecruiting.modules.backoffice.strategies.impl;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
 import com.techforb.apiportalrecruiting.core.config.mapper.ModelMapperUtils;
+import com.techforb.apiportalrecruiting.core.dtos.users.EmailLoginRequestDTO;
+import com.techforb.apiportalrecruiting.core.dtos.users.LoginResponseDTO;
+import com.techforb.apiportalrecruiting.core.dtos.users.UserLoginResponseDTO;
 import com.techforb.apiportalrecruiting.core.entities.UserEntity;
+import com.techforb.apiportalrecruiting.core.repositories.UserRepository;
+import com.techforb.apiportalrecruiting.core.security.CustomUserDetails;
 import com.techforb.apiportalrecruiting.core.security.firebase.FirebaseAuthService;
 import com.techforb.apiportalrecruiting.core.security.jwt.JwtService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.CustomUserDetails;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserRepository;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.UserService;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.EmailLoginRequestDTO;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.LoginResponseDTO;
-import com.techforb.apiportalrecruiting.modules.backoffice.user.dtos.UserLoginResponseDTO;
+import com.techforb.apiportalrecruiting.core.services.UserService;
+import com.techforb.apiportalrecruiting.core.services.strategies.impl.EmailAuthenticationStrategyImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
