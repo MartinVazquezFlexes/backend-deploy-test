@@ -72,17 +72,17 @@ public class LanguageServiceImpl implements LanguageService {
 	@Override
 	public void assignLanguageToPerson(Person person, Long languageId) {
 		Language language = languageRepository.findById(languageId)
-				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(NOT_FOUND_LENGUAGE)));
+				.orElseThrow(() -> new EntityNotFoundException(
+						localizedMessageService.getMessage(NOT_FOUND_LENGUAGE)
+				));
 
-		List<Language> personLanguages = person.getLanguages();
-		if (personLanguages == null) {
-			personLanguages = new ArrayList<>();
+		if (person.getLanguages() == null) {
+			person.setLanguages(new ArrayList<>());
 		}
 
-		personLanguages.removeIf(l ->
+		person.getLanguages().removeIf(l ->
 				l != null && "Ingles".equalsIgnoreCase(l.getName())
 		);
-		personLanguages.add(language);
-		person.setLanguages(personLanguages);
+		person.getLanguages().add(language);
 	}
 }

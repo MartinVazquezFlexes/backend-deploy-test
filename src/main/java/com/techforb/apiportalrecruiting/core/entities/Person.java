@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Getter
 @Setter
 @Entity
@@ -39,7 +38,7 @@ public class Person {
 	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER)
 	private List<Cv> cvs;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 			name = "person_skill",
 			joinColumns = @JoinColumn(name = "person_id"),
@@ -56,7 +55,7 @@ public class Person {
 	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<SavedVacancy> savedVacancies;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 			name = "person_language",
 			joinColumns = @JoinColumn(name = "person_id"),
@@ -64,7 +63,7 @@ public class Person {
 	)
 	private List<Language> languages;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 			name = "person_role_functional",
 			joinColumns = @JoinColumn(name = "person_id"),
@@ -75,5 +74,4 @@ public class Person {
 	@JoinColumn(name = "country_residence_id")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Country countryResidence;
-
 }

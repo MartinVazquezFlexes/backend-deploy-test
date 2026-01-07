@@ -90,6 +90,11 @@ public class RoleFunctionalServiceImpl implements RoleFunctionalService {
                         localizedMessageService.getMessage("functional.role.not_found", roleFunctionalId)
                 ));
 
-        person.setRoleFunctionals(new ArrayList<>(List.of(roleFunctional)));
+        if (person.getRoleFunctionals() == null) {
+            person.setRoleFunctionals(new ArrayList<>());
+        }
+
+        person.getRoleFunctionals().clear();
+        person.getRoleFunctionals().add(roleFunctional);
     }
 }
