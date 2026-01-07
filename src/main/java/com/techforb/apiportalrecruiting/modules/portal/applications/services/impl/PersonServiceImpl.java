@@ -81,7 +81,7 @@ public class PersonServiceImpl implements PersonService {
 
         // Actualizar skills
         if (updateDTO.getSkillIds() != null) {
-            skillService.updatePersonSkills(person.getUser().getEmail(), updateDTO.getSkillIds());
+            skillService.assignPersonSkills(person, updateDTO.getSkillIds());
         }
 
         // Actualizar contactos (redes sociales)

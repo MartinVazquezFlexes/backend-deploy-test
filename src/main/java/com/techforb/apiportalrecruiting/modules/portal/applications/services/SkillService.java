@@ -1,5 +1,6 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.services;
 
+import com.techforb.apiportalrecruiting.core.entities.Person;
 import com.techforb.apiportalrecruiting.core.entities.Skill;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.SkillItemDTO;
 import org.springframework.stereotype.Service;
@@ -14,4 +15,6 @@ public interface SkillService {
 	void updatePersonSkills(String email, List<Long> skillIds);
 	
 	List<SkillItemDTO> getAll();
+
+	void assignPersonSkills(Person person, List<Long> skillIds);
 }

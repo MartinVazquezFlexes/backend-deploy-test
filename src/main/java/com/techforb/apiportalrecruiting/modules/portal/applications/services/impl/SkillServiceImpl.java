@@ -79,4 +79,14 @@ public class SkillServiceImpl implements SkillService {
 			throw new RuntimeException(localizedMessageService.getMessage("error.updating.skills"), e);
 		}
 	}
+
+	@Override
+	public void assignPersonSkills(Person person, List<Long> skillIds) {
+		List<Skill> skills = skillIds.stream()
+				.map(this::findById)
+				.collect(Collectors.toList());
+
+		person.setSkills(skills);
+	}
+
 }
