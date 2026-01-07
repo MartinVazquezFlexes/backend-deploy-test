@@ -82,4 +82,14 @@ public class RoleFunctionalServiceImpl implements RoleFunctionalService {
         return roleFunctionalRepository.findById(id)
             .orElseThrow(() -> new RuntimeException(localizedMessageService.getMessage("functional.role.not_found", id)));
     }
+
+    @Override
+    public void assignRoleFunctional(Person person, Long roleFunctionalId) {
+        RoleFunctional roleFunctional = roleFunctionalRepository.findById(roleFunctionalId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        localizedMessageService.getMessage("functional.role.not_found", roleFunctionalId)
+                ));
+
+        person.setRoleFunctionals(new ArrayList<>(List.of(roleFunctional)));
+    }
 }

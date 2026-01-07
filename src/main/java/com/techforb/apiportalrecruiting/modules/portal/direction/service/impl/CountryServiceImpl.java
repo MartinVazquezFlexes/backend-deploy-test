@@ -65,6 +65,16 @@ public class CountryServiceImpl implements CountryService {
                 throw new IllegalStateException(localizedMessageService.getMessage("error.saving.country"),e);
 			}
 	}
+
+	public void assignCountry(Person person, Long countryId) {
+
+		Country country = countryRepository.findById(countryId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						localizedMessageService.getMessage("country.not_found", countryId)
+				));
+
+		person.setCountryResidence(country);
+	}
 }
 
 

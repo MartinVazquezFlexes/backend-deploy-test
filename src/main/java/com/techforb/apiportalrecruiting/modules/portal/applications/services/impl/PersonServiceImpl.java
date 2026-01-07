@@ -66,17 +66,17 @@ public class PersonServiceImpl implements PersonService {
 
         // Actualizar país de residencia
         if (updateDTO.getCountryId() != null) {
-            countryService.saveCountry(updateDTO.getCountryId(), person.getUser().getEmail());
+            countryService.assignCountry(person, updateDTO.getCountryId());
         }
 
         // Actualizar roles funcionales
         if (updateDTO.getFunctionalRoleId() != null) {
-            roleFunctionalService.saveRoleFunctional(updateDTO.getFunctionalRoleId(),person.getUser().getEmail());
+            roleFunctionalService.assignRoleFunctional(person, updateDTO.getFunctionalRoleId());
         }
 
         // Actualizar idiomas con nivel
         if (updateDTO.getLanguageId() != null) {
-            languageService.saveLanguageForPerson(updateDTO.getLanguageId(),person.getUser().getEmail());
+            languageService.assignLanguageToPerson(person, updateDTO.getLanguageId());
         }
 
         // Actualizar skills

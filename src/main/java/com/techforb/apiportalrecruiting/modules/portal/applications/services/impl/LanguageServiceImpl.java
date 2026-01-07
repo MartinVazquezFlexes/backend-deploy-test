@@ -62,7 +62,26 @@ public class LanguageServiceImpl implements LanguageService {
 			personLanguages = new ArrayList<>();
 		}
 
-		personLanguages.removeIf(l -> l.getName() != null && l.getName().equalsIgnoreCase("Ingles"));
+		personLanguages.removeIf(l ->
+				l != null && "Ingles".equalsIgnoreCase(l.getName())
+		);
+		personLanguages.add(language);
+		person.setLanguages(personLanguages);
+	}
+
+	@Override
+	public void assignLanguageToPerson(Person person, Long languageId) {
+		Language language = languageRepository.findById(languageId)
+				.orElseThrow(() -> new EntityNotFoundException(localizedMessageService.getMessage(NOT_FOUND_LENGUAGE)));
+
+		List<Language> personLanguages = person.getLanguages();
+		if (personLanguages == null) {
+			personLanguages = new ArrayList<>();
+		}
+
+		personLanguages.removeIf(l ->
+				l != null && "Ingles".equalsIgnoreCase(l.getName())
+		);
 		personLanguages.add(language);
 		person.setLanguages(personLanguages);
 	}
