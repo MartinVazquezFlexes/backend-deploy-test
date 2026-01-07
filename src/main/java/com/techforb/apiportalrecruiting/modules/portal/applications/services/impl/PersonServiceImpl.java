@@ -48,49 +48,43 @@ public class PersonServiceImpl implements PersonService {
     @Override
     @Transactional
     public PersonResponseDTO updatePersonProfile(PersonUpdateDTO updateDTO) {
-        // Obtener el usuario autenticado del contexto de seguridad
+        // Obtener solo el ID del usuario autenticado
         UserEntity currentUser = userService.getUserFromContext();
-        Person person = currentUser.getPerson();
+        Long userId = currentUser.getId();
 
-        if (person == null) {
-            throw new EntityNotFoundException(localizedMessageService.getMessage("person.not_found"));
-        }
+        //cargar directamente desde la db
+        Person person = personRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        localizedMessageService.getMessage("person.not_found")
+                ));
 
-        // Actualizar datos básicos
         updateBasicPersonData(person, updateDTO);
 
-        // Actualizar número de teléfono
-        if (updateDTO.getPhoneNumber() != null) {
-            phoneService.updatePhoneForPerson(person.getId(), updateDTO.getPhoneNumber());
-        }
-
-        // Actualizar país de residencia
         if (updateDTO.getCountryId() != null) {
             countryService.assignCountry(person, updateDTO.getCountryId());
         }
 
-        // Actualizar roles funcionales
         if (updateDTO.getFunctionalRoleId() != null) {
             roleFunctionalService.assignRoleFunctional(person, updateDTO.getFunctionalRoleId());
         }
 
-        // Actualizar idiomas con nivel
         if (updateDTO.getLanguageId() != null) {
             languageService.assignLanguageToPerson(person, updateDTO.getLanguageId());
         }
 
-        // Actualizar skills
         if (updateDTO.getSkillIds() != null) {
             skillService.assignPersonSkills(person, updateDTO.getSkillIds());
         }
 
-        // Actualizar contactos (redes sociales)
+        if (updateDTO.getPhoneNumber() != null) {
+            phoneService.updatePhoneForPerson(person.getId(), updateDTO.getPhoneNumber());
+        }
+
         if (updateDTO.getContacts() != null) {
             contactService.updatePersonContacts(updateDTO.getContacts());
         }
 
-        // Guardar cambios
-        personRepository.save(person);
+        personRepository.saveAndFlush(person);
 
         return personMapper.mapToPersonDTO(person);
     }
