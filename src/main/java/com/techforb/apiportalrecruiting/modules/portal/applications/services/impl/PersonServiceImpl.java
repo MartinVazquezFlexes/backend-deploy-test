@@ -52,7 +52,6 @@ public class PersonServiceImpl implements PersonService {
         UserEntity currentUser = userService.getUserFromContext();
         Long userId = currentUser.getId();
 
-        //cargar directamente desde la db
         Person person = personRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         localizedMessageService.getMessage("person.not_found")

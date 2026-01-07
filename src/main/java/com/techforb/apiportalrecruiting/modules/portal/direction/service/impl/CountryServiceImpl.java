@@ -67,14 +67,28 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	public void assignCountry(Person person, Long countryId) {
+	public CountrySavedDTO assignCountry(Person person, Long countryId) {
+		if (person == null) {
+			throw new EntityNotFoundException(localizedMessageService.getMessage("person.not_found"));
+		}
 
 		Country country = countryRepository.findById(countryId)
 				.orElseThrow(() -> new EntityNotFoundException(
 						localizedMessageService.getMessage("country.not_found", countryId)
 				));
 
-		person.setCountryResidence(country);
+		try {
+			person.setCountryResidence(country);
+			personRepository.save(person);
+
+			return CountrySavedDTO.builder()
+					.id(country.getId())
+					.name(country.getName())
+					.build();
+		} catch (DataAccessException e) {
+			log.error("Error saving country for person", e);
+			throw new IllegalStateException(localizedMessageService.getMessage("error.saving.country"), e);
+		}
 	}
 }
 

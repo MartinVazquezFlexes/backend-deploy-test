@@ -85,16 +85,29 @@ public class RoleFunctionalServiceImpl implements RoleFunctionalService {
 
     @Override
     public void assignRoleFunctional(Person person, Long roleFunctionalId) {
+        if (person == null) {
+            throw new ResourceNotFoundException(
+                    localizedMessageService.getMessage("person.not_found")
+            );
+        }
+
         RoleFunctional roleFunctional = roleFunctionalRepository.findById(roleFunctionalId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         localizedMessageService.getMessage("functional.role.not_found", roleFunctionalId)
                 ));
 
-        if (person.getRoleFunctionals() == null) {
-            person.setRoleFunctionals(new ArrayList<>());
-        }
+        try {
+            // La UI maneja 1 solo rol funcional: reemplazamos todo
+            person.setRoleFunctionals(new ArrayList<>(List.of(roleFunctional)));
+            personRepository.save(person);
 
-        person.getRoleFunctionals().clear();
-        person.getRoleFunctionals().add(roleFunctional);
+        } catch (DataAccessException e) {
+            log.error("Error assigning functional role for person", e);
+            throw new IllegalStateException(
+                    localizedMessageService.getMessage("error.saving.functional.role"),
+                    e
+            );
+        }
     }
+
 }

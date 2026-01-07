@@ -9,7 +9,7 @@ import java.util.List;
 public interface CountryService {
 	List<CountryItemDTO> listAll();
 	CountrySavedDTO saveCountry(Long countryId, String email);
-	void assignCountry(Person person, Long countryId);
+	CountrySavedDTO assignCountry(Person person, Long countryId);
 }
 
 
