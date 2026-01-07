@@ -82,11 +82,21 @@ public class SkillServiceImpl implements SkillService {
 
 	@Override
 	public void assignPersonSkills(Person person, List<Long> skillIds) {
-		List<Skill> skills = skillIds.stream()
-				.map(this::findById)
-				.collect(Collectors.toList());
+		if (person == null) {
+			throw new EntityNotFoundException(localizedMessageService.getMessage("person.not_found"));
+		}
+		
+		try {
+			List<Skill> skills = skillIds.stream()
+					.map(this::findById)
+					.collect(Collectors.toList());
 
-		person.setSkills(skills);
+			person.setSkills(skills);
+			personRepository.save(person);
+		} catch (DataAccessException e) {
+			log.error("Error updating skills for person", e);
+			throw new RuntimeException(localizedMessageService.getMessage("error.updating.skills"), e);
+		}
 	}
 
 }
