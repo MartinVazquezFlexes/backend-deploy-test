@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/cv")
@@ -53,17 +54,23 @@ public class CvController {
 			@ApiResponse(responseCode = "400", description = "Invalid input or file missing", content = @Content)
 	})
 	@PostMapping("/upload/{idPerson}")
-	public ResponseEntity<String> saveCv(
+	public ResponseEntity<Map<String, String>> saveCv(
 			@Parameter(description = "ID of the person", required = true)
 			@PathVariable Long idPerson,
+
 			@Parameter(description = "Flag indicating if the upload is from the profile page", required = true)
 			@RequestParam("fromProfile") Boolean fromProfile,
+
 			@Parameter(description = "CV file to upload (multipart/form-data)", required = true)
-			@RequestPart("cv") MultipartFile cvFile){
+			@RequestPart("cv") MultipartFile cvFile
+	) {
 		Person person = personService.getPersonById(idPerson);
 		cvService.uploadCv(cvFile, person, "", fromProfile);
-		return ResponseEntity.status(201).body("Cv upload successful");
+
+		return ResponseEntity.status(201)
+				.body(Map.of("message", "Cv upload successful"));
 	}
+
 
 	@DeleteMapping("/delete")
 	public ResponseEntity<Boolean> deleteCv(@RequestParam Long personId, @RequestParam Long cvId) throws IOException  {

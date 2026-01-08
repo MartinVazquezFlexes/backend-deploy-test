@@ -92,11 +92,18 @@ public class ContactServiceImpl implements ContactService {
 	@Override
 	@Transactional
 	public void deleteContactById(Long id) {
-		Contact contact = getContactEntity(id);
-		contactRepository.delete(contact);
-		contactRepository.flush();
+		Long personId = getPersonId();
+
+		long deleted = contactRepository.deleteByIdAndPerson_Id(id, personId);
+
+		if (deleted == 0) {
+			throw new EntityNotFoundException(
+					localizedMessageService.getMessage("contact.not_found_by_id", id)
+			);
+		}
 	}
-	
+
+
 	@Override
 	@Transactional
 	public void updatePersonContacts(List<ContactUpdateDTO> contacts) {
