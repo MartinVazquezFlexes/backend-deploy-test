@@ -57,7 +57,7 @@ public class CvController {
 			@Parameter(description = "ID of the person", required = true)
 			@PathVariable Long idPerson,
 			@Parameter(description = "Flag indicating if the upload is from the profile page", required = true)
-			@RequestPart() Boolean fromProfile,
+			@RequestPart("fromProfile") Boolean fromProfile,
 			@Parameter(description = "CV file to upload (multipart/form-data)", required = true)
 			@RequestPart("cv") MultipartFile cvFile){
 		Person person = personService.getPersonById(idPerson);

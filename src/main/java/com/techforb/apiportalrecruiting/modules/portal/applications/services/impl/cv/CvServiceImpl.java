@@ -43,7 +43,7 @@ public class CvServiceImpl implements CvService {
 			throw new IllegalArgumentException(localizedMessageService.getMessage("cv.pdf_file"));
 		}
 
-		if (cvFile.getSize() > 2 * 1024 * 1024) {
+		if (cvFile.getSize() > 10 * 1024 * 1024) {
 			throw new IllegalArgumentException(localizedMessageService.getMessage("cv.size"));
 		}
 
