@@ -21,51 +21,54 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
 	@Value("${cloudinary.folder-name}")
 	private String cloudinaryFolderName;
-	private  static final String RESOURCE_TYPE="resource_type";
-	private  static  final String AUTHENTICATED="authenticated";
+	private static final String RESOURCE_TYPE = "resource_type";
+	// Cambiar de "authenticated" a "upload" para archivos públicos
+	private static final String UPLOAD_TYPE = "upload";
 
-	public Map<String, Object>  uploadCv(MultipartFile multipartFile, String paramFolder) {
+	public Map<String, Object> uploadCv(MultipartFile multipartFile, String paramFolder) {
 		try {
 			String uniqueName = "cv_" + UUID.randomUUID();
 
-			Map<String,Object> uploadParams = ObjectUtils.asMap(
+			Map<String, Object> uploadParams = ObjectUtils.asMap(
 					"folder", cloudinaryFolderName + paramFolder,
 					RESOURCE_TYPE, "raw",
-					"type", AUTHENTICATED,
-					"private_cdn", true,
+					"type", UPLOAD_TYPE,  //usar "upload" en lugar de "authenticated"
+					"access_mode", "public",  //hacer el archivo público
 					"public_id", uniqueName + ".pdf"
+					// Removido "private_cdn", true  //quitar CDN privado
 			);
 
-			return  cloudinary.uploader().upload(multipartFile.getBytes(), uploadParams);
+			return cloudinary.uploader().upload(multipartFile.getBytes(), uploadParams);
 
 		} catch (IOException e) {
 			throw new IllegalStateException(localizedMessageService.getMessage("cloudinary.error_uploading"), e);
 		}
 	}
 
+
+	// Para archivos públicos, la URL que viene en el response del upload es suficiente
 	public String generateSignedUrl(String publicId, String version) {
 		return cloudinary.url().resourceType("raw")
-				.type(AUTHENTICATED)
+				.type(UPLOAD_TYPE)  //usar "upload" en lugar de "authenticated"
 				.publicId(publicId)
 				.version(Long.parseLong(version))
-				.signed(true)
+				// .signed(true)  //los archivos públicos no necesitan firma
 				.generate();
 	}
+
 	@Override
 	public void deleteAuthenticatedFile(String publicId) {
 		try {
-
 			Map<String, Object> options = ObjectUtils.asMap(
 					"invalidate", true,
 					RESOURCE_TYPE, "raw",
-					"type",AUTHENTICATED
+					"type", UPLOAD_TYPE  // usar "upload" en lugar de "authenticated"
 			);
-
 
 			Map<String, Object> result = cloudinary.uploader().destroy(publicId, options);
 
 			if (!"ok".equals(result.get("result"))) {
-					throw new IllegalStateException(localizedMessageService.getMessage("cloudinary.error_delete_failure")
+				throw new IllegalStateException(localizedMessageService.getMessage("cloudinary.error_delete_failure")
 						+ " Response: " + result);
 			}
 		} catch (IOException e) {

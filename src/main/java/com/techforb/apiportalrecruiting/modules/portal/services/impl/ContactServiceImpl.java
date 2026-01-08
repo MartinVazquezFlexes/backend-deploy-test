@@ -94,14 +94,15 @@ public class ContactServiceImpl implements ContactService {
 	public void deleteContactById(Long id) {
 		Long personId = getPersonId();
 
-		long deleted = contactRepository.deleteByIdAndPerson_Id(id, personId);
+		Contact contact = contactRepository
+				.findByIdAndPerson_Id(id, personId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						localizedMessageService.getMessage("contact.not_found_by_id", id)
+				));
 
-		if (deleted == 0) {
-			throw new EntityNotFoundException(
-					localizedMessageService.getMessage("contact.not_found_by_id", id)
-			);
-		}
+		contactRepository.delete(contact);
 	}
+
 
 
 	@Override

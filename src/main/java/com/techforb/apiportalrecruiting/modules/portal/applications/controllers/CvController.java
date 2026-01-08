@@ -46,7 +46,7 @@ public class CvController {
 					direction = Sort.Direction.DESC) Pageable pageable)
 	{
 		return ResponseEntity.ok(this.cvService.getCvsById(idPerson, isLast, pageable));
-  }
+  	}
 
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "CV uploaded successfully"),
