@@ -90,9 +90,11 @@ public class ContactServiceImpl implements ContactService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteContactById(Long id) {
-		getContactEntity(id);
-		contactRepository.deleteById(id);
+		Contact contact = getContactEntity(id);
+		contactRepository.delete(contact);
+		contactRepository.flush();
 	}
 	
 	@Override
