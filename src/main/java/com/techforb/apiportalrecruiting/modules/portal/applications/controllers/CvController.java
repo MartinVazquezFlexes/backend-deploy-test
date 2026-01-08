@@ -1,6 +1,8 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.controllers;
 
+import com.techforb.apiportalrecruiting.core.entities.Cv;
 import com.techforb.apiportalrecruiting.core.entities.Person;
+import com.techforb.apiportalrecruiting.core.security.cloudinary.CloudinaryService;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.cv.CvWithCreationDateDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.cv.ResponsePagCvDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.services.CvService;
@@ -14,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +33,7 @@ public class CvController {
 
 	private final CvService cvService;
 	private final PersonService personService;
+	private final CloudinaryService cloudinaryService;
 
 	@GetMapping("/get-cvs-filtered")
 	public ResponseEntity<Page<ResponsePagCvDTO>> getFilteredCvs(
@@ -75,6 +81,42 @@ public class CvController {
 	@DeleteMapping("/delete")
 	public ResponseEntity<Boolean> deleteCv(@RequestParam Long personId, @RequestParam Long cvId) throws IOException  {
 		return ResponseEntity.ok(this.cvService.deleteCvByIdAndPersonId(cvId, personId));
+	}
+
+	// En tu CvController
+	@GetMapping("/view/{cvId}")
+	public ResponseEntity<byte[]> viewCv(
+			@PathVariable Long cvId,
+			@RequestParam Long personId) {
+		try {
+			// Obtener el CV de la base de datos
+			Cv cv = cvService.getCvByIdAndPersonId(cvId, personId);
+
+			if (cv == null) {
+				return ResponseEntity.notFound().build();
+			}
+
+			// Descargar el archivo desde Cloudinary usando el publicId
+			byte[] fileContent = cloudinaryService.downloadFile(cv.getPublicId());
+
+			// Determinar el content type basado en la extensión
+			String contentType = "application/pdf"; // Por defecto PDF
+			if (cv.getName() != null) {
+				if (cv.getName().toLowerCase().endsWith(".doc")) {
+					contentType = "application/msword";
+				} else if (cv.getName().toLowerCase().endsWith(".docx")) {
+					contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+				}
+			}
+
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + cv.getName() + "\"")
+					.contentType(MediaType.parseMediaType(contentType))
+					.body(fileContent);
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 }

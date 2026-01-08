@@ -79,6 +79,12 @@ public class CvServiceImpl implements CvService {
 	}
 
 	@Override
+	public Cv getCvByIdAndPersonId(Long cvId, Long personId) {
+		return cvRepository.findByIdAndPersonId(cvId, personId)
+				.orElseThrow(() -> new RuntimeException("CV no encontrado"));
+	}
+
+	@Override
 	public Page<ResponsePagCvDTO> getFilteredCvs(String country, String skill, Pageable pageable) {
 		UserEntity user = userService.getUserFromContext();
 		if (user.getRoles().stream().noneMatch(r -> r.getName().equals("RECRUITER"))) {

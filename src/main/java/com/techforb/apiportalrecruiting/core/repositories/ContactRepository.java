@@ -10,7 +10,4 @@ import java.util.Optional;
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Long> {
 	List<Contact> findByPerson_Id(Long id);
-
-	long deleteByIdAndPerson_Id(Long id, Long personId);
-	Optional<Contact> findByIdAndPerson_Id(Long id, Long personId);
 }

@@ -13,4 +13,5 @@ public interface CloudinaryService {
 
 	String generateSignedUrl(String publicId, String version);
 	void deleteAuthenticatedFile(String publicId)throws IOException;
+	byte[] downloadFile(String publicId) throws IOException;
 }
