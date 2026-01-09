@@ -1,7 +1,7 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.controllers;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.Transformation;
+import com.cloudinary.utils.ObjectUtils;
 import com.techforb.apiportalrecruiting.core.entities.Cv;
 import com.techforb.apiportalrecruiting.core.entities.Person;
 import com.techforb.apiportalrecruiting.core.security.cloudinary.CloudinaryService;
@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,12 +25,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/cv")
@@ -98,19 +101,18 @@ public class CvController {
 		Cv cv = cvRepository.findById(cvId)
 				.orElseThrow(() -> new EntityNotFoundException("CV no encontrado"));
 
-		String publicId = cv.getPublicId(); // ej: cvs/cv_xxx
-
-		String signedUrl = cloudinary.url()
+		String baseSignedUrl = cloudinary.url()
 				.resourceType("raw")
 				.secure(true)
 				.signed(true)
-				.transformation(
-						new Transformation().flags("attachment:cv_" + cvId + ".pdf")
-				)
-				.generate(publicId);
+				.generate(cv.getPublicId());
+
+		// 👉 agregar filename y attachment manualmente
+		String signedUrlWithFilename =
+				baseSignedUrl + "?attachment=true&filename=cv_" + cvId + ".pdf";
 
 		return ResponseEntity.status(HttpStatus.FOUND)
-				.header(HttpHeaders.LOCATION, signedUrl)
+				.header(HttpHeaders.LOCATION, signedUrlWithFilename)
 				.build();
 	}
 
