@@ -95,7 +95,7 @@ public class CvController {
 		return ResponseEntity.ok(this.cvService.deleteCvByIdAndPersonId(cvId, personId));
 	}
 
-	@GetMapping("/cv/download/{cvId}")
+	@GetMapping("/download/{cvId}")
 	public ResponseEntity<Void> downloadCv(@PathVariable Long cvId) {
 
 		Cv cv = cvRepository.findById(cvId)
