@@ -1,5 +1,7 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.controllers;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.techforb.apiportalrecruiting.core.entities.Cv;
 import com.techforb.apiportalrecruiting.core.entities.Person;
 import com.techforb.apiportalrecruiting.core.security.cloudinary.CloudinaryService;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -39,6 +42,7 @@ public class CvController {
 	private final CvService cvService;
 	private final PersonService personService;
 	private final CloudinaryService cloudinaryService;
+	private final Cloudinary cloudinary;
 	private final CvRepository cvRepository;
 	private static final Logger log = LoggerFactory.getLogger(CvController.class);
 
@@ -89,6 +93,25 @@ public class CvController {
 	@DeleteMapping("/delete")
 	public ResponseEntity<Boolean> deleteCv(@RequestParam Long personId, @RequestParam Long cvId) throws IOException  {
 		return ResponseEntity.ok(this.cvService.deleteCvByIdAndPersonId(cvId, personId));
+	}
+
+	@GetMapping("/cv/download/{cvId}")
+	public ResponseEntity<Void> downloadCv(@PathVariable Long cvId) {
+
+		Cv cv = cvRepository.findById(cvId)
+				.orElseThrow(() -> new EntityNotFoundException("CV no encontrado"));
+
+		String publicId = cv.getPublicId(); // ej: cvs/cv_xxx
+
+		String signedUrl = cloudinary.url()
+				.resourceType("raw")
+				.secure(true)
+				.signed(true)
+				.generate(publicId);
+
+		return ResponseEntity.status(HttpStatus.FOUND)
+				.header(HttpHeaders.LOCATION, signedUrl)
+				.build();
 	}
 
 }

@@ -32,7 +32,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
 	public Map<String, Object> uploadCv(MultipartFile multipartFile, String paramFolder) {
 		try {
-			String uniqueName = "cv_" + UUID.randomUUID() + ".pdf";
+			String uniqueName = "cv_" + UUID.randomUUID();
 
 			Map<String, Object> uploadParams = ObjectUtils.asMap(
 					"folder", cloudinaryFolderName + paramFolder,
