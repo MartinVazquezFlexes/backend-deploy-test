@@ -104,14 +104,12 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
 	@Override
 	public String generatePublicUrl(String publicId) {
-		String url = cloudinary.url()
+		return cloudinary.url()
 				.resourceType("raw")
 				.type(UPLOAD_TYPE)
 				.publicId(publicId)
+				.secure(true) // ← AGREGAR ESTO
 				.generate();
-
-		log.info("Generated URL for publicId '{}': {}", publicId, url);
-		return url;
 	}
 
 
