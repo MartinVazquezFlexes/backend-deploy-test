@@ -26,6 +26,9 @@ public class Cv {
 	@Column(name = "public_id", nullable = false)
 	private String publicId;
 
+	@Column(name = "cv_url")
+	private String cvUrl;
+
 	private String name;
 
 	@Column(name = "is_last")

@@ -1,6 +1,7 @@
 package com.techforb.apiportalrecruiting.modules.portal.services.impl;
 
 import com.techforb.apiportalrecruiting.core.config.LocalizedMessageService;
+import com.techforb.apiportalrecruiting.core.entities.Person;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.contacts.RequestContactDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.contacts.ResponseContactDTO;
 import com.techforb.apiportalrecruiting.modules.portal.applications.dtos.person.ContactUpdateDTO;
@@ -92,8 +93,21 @@ public class ContactServiceImpl implements ContactService {
 	@Override
 	@Transactional
 	public void deleteContactById(Long id) {
-		getContactEntity(id);
-		contactRepository.deleteById(id);
+		// 1. Recuperamos la entidad (y validamos permisos)
+		Contact contact = getContactEntity(id);
+
+		// 2. DESVINCULACIÓN (El paso clave que faltaba)
+		Person person = contact.getPerson();
+		if (person != null) {
+			// Removemos el contacto de la lista del padre para que Hibernate
+			// no intente "salvarlo" al hacer commit del padre.
+			person.getContacts().remove(contact);
+		}
+
+		// 3. Borramos la entidad usando el objeto, no el ID
+		contactRepository.delete(contact);
+
+		// El flush fuerza la sincronización inmediata, útil para debug
 		contactRepository.flush();
 	}
 

@@ -47,12 +47,14 @@ public class CvServiceImpl implements CvService {
 			throw new IllegalArgumentException(localizedMessageService.getMessage("cv.size"));
 		}
 
-        Map<String, Object> uploadResult = cloudinaryService.uploadCv(cvFile, paramFolder);
+		Map<String, Object> uploadResult = cloudinaryService.uploadCv(cvFile, paramFolder);
 
 		if (uploadResult == null) {
 			throw new IllegalArgumentException(localizedMessageService.getMessage("cv.not_be_null"));
 		}
+
 		String publicId = (String) uploadResult.get("public_id");
+		String secureUrl = (String) uploadResult.get("secure_url"); // ← OBTENER URL
 		String version = uploadResult.get("version").toString();
 
 		if(fromProfile){
@@ -66,10 +68,12 @@ public class CvServiceImpl implements CvService {
 
 		Cv cv = new Cv();
 		cv.setPublicId(publicId);
+		cv.setCvUrl(secureUrl); // ← GUARDAR URL DIRECTAMENTE
 		cv.setVersion(version);
 		cv.setPerson(person);
 		cv.setIsLast(fromProfile);
 		cv.setName(person.getFirstName() + "_" + person.getLastName());
+
 		return cvRepository.save(cv);
 	}
 
@@ -104,18 +108,13 @@ public class CvServiceImpl implements CvService {
 			cvPage = cvRepository.findByPersonId(personId, pageable);
 		}
 
-		return cvPage.map(cv -> {
-			// Generar la URL a partir del publicId
-			String url = cloudinaryService.generatePublicUrl(cv.getPublicId());
-
-			return new CvWithCreationDateDTO(
-					cv.getId(),
-					url, // ← URL generada dinámicamente
-					cv.getName(),
-					cv.getCreationDate(),
-					cv.getIsLast()
-			);
-		});
+		return cvPage.map(cv -> new CvWithCreationDateDTO(
+				cv.getId(),
+				cv.getCvUrl(),
+				cv.getName(),
+				cv.getCreationDate(),
+				cv.getIsLast()
+		));
 	}
 	private CvWithCreationDateDTO convertToDtoForMyCvs(Cv cv){
 		String signedUrl = cloudinaryService.generateSignedUrl(cv.getPublicId(), cv.getVersion());
