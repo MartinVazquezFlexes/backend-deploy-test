@@ -464,7 +464,7 @@ void deleteCvByIdAndPersonId() throws IOException {
 
 		Person personTest=new Person();
 		personTest.setUser(userEntity);
-		Cv cvToSearh=new Cv(1L,"v1","publicId","cv.pdf",true, LocalDateTime.now(),personTest);
+		Cv cvToSearh=new Cv(1L,"v1","publicId","https://url.com/cv.pdf","cv.pdf",true, LocalDateTime.now(),personTest);
 		when(this.cvRepository.findById(1L)).thenReturn(Optional.of(cvToSearh));
 		Cv resposne=this.cvService.findCvById(cvId);
 		assertNotNull(resposne);
