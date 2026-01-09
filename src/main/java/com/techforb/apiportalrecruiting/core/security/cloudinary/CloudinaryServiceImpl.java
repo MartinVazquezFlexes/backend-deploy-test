@@ -8,20 +8,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Map;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -47,10 +39,20 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 					RESOURCE_TYPE, "raw",
 					"type", UPLOAD_TYPE,
 					"access_mode", "public",
-					"public_id", uniqueName  // ← QUITAR EL ".pdf"
+					"public_id", uniqueName
 			);
 
-			return cloudinary.uploader().upload(multipartFile.getBytes(), uploadParams);
+			Map<String, Object> result = cloudinary.uploader().upload(multipartFile.getBytes(), uploadParams);
+
+			// DEBUG: Ver qué devuelve Cloudinary
+			log.info("=== CLOUDINARY UPLOAD RESULT ===");
+			log.info("secure_url: {}", result.get("secure_url"));
+			log.info("public_id: {}", result.get("public_id"));
+			log.info("url: {}", result.get("url"));
+			log.info("type: {}", result.get("type"));
+			log.info("================================");
+
+			return result;
 
 		} catch (IOException e) {
 			throw new IllegalStateException(localizedMessageService.getMessage("cloudinary.error_uploading"), e);
@@ -102,11 +104,14 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
 	@Override
 	public String generatePublicUrl(String publicId) {
-		return cloudinary.url()
+		String url = cloudinary.url()
 				.resourceType("raw")
 				.type(UPLOAD_TYPE)
 				.publicId(publicId)
 				.generate();
+
+		log.info("Generated URL for publicId '{}': {}", publicId, url);
+		return url;
 	}
 
 
