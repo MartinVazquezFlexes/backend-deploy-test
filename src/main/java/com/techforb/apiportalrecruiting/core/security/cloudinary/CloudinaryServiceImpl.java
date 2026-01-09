@@ -45,10 +45,9 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 			Map<String, Object> uploadParams = ObjectUtils.asMap(
 					"folder", cloudinaryFolderName + paramFolder,
 					RESOURCE_TYPE, "raw",
-					"type", UPLOAD_TYPE,  //usar "upload" en lugar de "authenticated"
-					"access_mode", "public",  //hacer el archivo público
-					"public_id", uniqueName + ".pdf"
-					// Removido "private_cdn", true  //quitar CDN privado
+					"type", UPLOAD_TYPE,
+					"access_mode", "public",
+					"public_id", uniqueName  // ← QUITAR EL ".pdf"
 			);
 
 			return cloudinary.uploader().upload(multipartFile.getBytes(), uploadParams);
@@ -101,86 +100,14 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 		}
 	}
 
-	//TODO NUEVO
 	@Override
-	public byte[] downloadFile(String publicId) throws IOException {
-		log.info("Intentando descargar archivo con publicId: {}", publicId);
-
-		if (publicId == null || publicId.isEmpty()) {
-			throw new IOException("PublicId no puede ser nulo o vacío");
-		}
-
-		try {
-			// Primero intentar con tipo "upload" (archivos públicos nuevos)
-			log.debug("Intentando descarga como archivo público (upload)");
-			String url = cloudinary.url()
-					.resourceType("raw")
-					.type(UPLOAD_TYPE)
-					.publicId(publicId)
-					.generate();
-
-			log.debug("URL generada (upload): {}", url);
-
-			try {
-				byte[] content = downloadFromUrl(url);
-				log.info("Descarga exitosa como archivo público - tamaño: {} bytes", content.length);
-				return content;
-			} catch (IOException e) {
-				log.warn("Fallo descarga como público, intentando como autenticado", e);
-
-				// Si falla, intentar con tipo "authenticated" (archivos viejos)
-				url = cloudinary.url()
-						.resourceType("raw")
-						.type("authenticated")
-						.publicId(publicId)
-						.signed(true)
-						.generate();
-
-				log.debug("URL generada (authenticated): {}", url);
-
-				byte[] content = downloadFromUrl(url);
-				log.info("Descarga exitosa como archivo autenticado - tamaño: {} bytes", content.length);
-				return content;
-			}
-		} catch (Exception e) {
-			log.error("Error al descargar archivo con publicId: {}", publicId, e);
-			throw new IOException(
-					localizedMessageService.getMessage("cloudinary.error_downloading") +
-							": " + e.getMessage(),
-					e
-			);
-		}
+	public String generatePublicUrl(String publicId) {
+		return cloudinary.url()
+				.resourceType("raw")
+				.type(UPLOAD_TYPE)
+				.publicId(publicId)
+				.generate();
 	}
 
-	//TODO NUEVO
-	private byte[] downloadFromUrl(String url) throws IOException {
-		log.debug("Descargando desde URL: {}", url);
 
-		URL fileUrl = new URL(url);
-		HttpURLConnection connection = (HttpURLConnection) fileUrl.openConnection();
-		connection.setRequestMethod("GET");
-		connection.setConnectTimeout(10000); // 10 segundos
-		connection.setReadTimeout(30000); // 30 segundos
-
-		int responseCode = connection.getResponseCode();
-		log.debug("Código de respuesta HTTP: {}", responseCode);
-
-		if (responseCode != HttpURLConnection.HTTP_OK) {
-			throw new IOException("Error HTTP: " + responseCode);
-		}
-
-		try (InputStream in = connection.getInputStream();
-			 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-
-			byte[] buffer = new byte[4096];
-			int bytesRead;
-			while ((bytesRead = in.read(buffer)) != -1) {
-				out.write(buffer, 0, bytesRead);
-			}
-
-			return out.toByteArray();
-		} finally {
-			connection.disconnect();
-		}
-	}
 }

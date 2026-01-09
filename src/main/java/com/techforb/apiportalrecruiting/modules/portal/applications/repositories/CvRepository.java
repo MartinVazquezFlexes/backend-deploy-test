@@ -1,6 +1,8 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.repositories;
 
 import com.techforb.apiportalrecruiting.core.entities.Cv;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -17,5 +19,7 @@ public interface CvRepository extends JpaRepository<Cv, Long> , JpaSpecification
     List<Cv> findAllByPersonIdOrderByIdDesc(@Param("personId") Long personId);
 
     Optional<Cv> findByPersonIdAndIsLastTrue(Long personId);
-    Optional<Cv> findByIdAndPersonId(Long id, Long personId);//TODO NUEVO
+    Page<Cv> findByPersonIdAndIsLast(Long personId, Boolean isLast, Pageable pageable);
+    Page<Cv> findByPersonId(Long personId, Pageable pageable);
+
 }

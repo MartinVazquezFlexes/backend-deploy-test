@@ -78,11 +78,7 @@ public class CvServiceImpl implements CvService {
 		return cvRepository.findById(id).orElseThrow(()->new EntityNotFoundException(localizedMessageService.getMessage("cv.not_found")));
 	}
 
-	@Override //TODO NUEVO
-	public Cv getCvByIdAndPersonId(Long cvId, Long personId) {
-		return cvRepository.findByIdAndPersonId(cvId, personId)
-				.orElseThrow(() -> new RuntimeException("CV no encontrado"));
-	}
+
 
 	@Override
 	public Page<ResponsePagCvDTO> getFilteredCvs(String country, String skill, Pageable pageable) {
@@ -99,14 +95,27 @@ public class CvServiceImpl implements CvService {
 	}
 
 	@Override
-	public Page<CvWithCreationDateDTO> getCvsById(Long idPerson, Boolean isLast, Pageable pageable) {
+	public Page<CvWithCreationDateDTO> getCvsById(Long personId, Boolean isLast, Pageable pageable) {
+		Page<Cv> cvPage;
 
-		UserEntity user = userService.getUserFromContext();
-		if(!user.getPerson().getId().equals(idPerson)){
-			throw new UnauthorizedActionException(localizedMessageService.getMessage("user.without_permissions"));
+		if (isLast != null) {
+			cvPage = cvRepository.findByPersonIdAndIsLast(personId, isLast, pageable);
+		} else {
+			cvPage = cvRepository.findByPersonId(personId, pageable);
 		}
-		Specification<Cv> spec = Specification.where(CvSpecification.hasIsLast(isLast)).and(CvSpecification.hasIdPerson(idPerson));
-		return cvRepository.findAll(spec,pageable).map(this::convertToDtoForMyCvs);
+
+		return cvPage.map(cv -> {
+			// Generar la URL a partir del publicId
+			String url = cloudinaryService.generatePublicUrl(cv.getPublicId());
+
+			return new CvWithCreationDateDTO(
+					cv.getId(),
+					url, // ← URL generada dinámicamente
+					cv.getName(),
+					cv.getCreationDate(),
+					cv.getIsLast()
+			);
+		});
 	}
 	private CvWithCreationDateDTO convertToDtoForMyCvs(Cv cv){
 		String signedUrl = cloudinaryService.generateSignedUrl(cv.getPublicId(), cv.getVersion());
