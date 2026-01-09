@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
 
@@ -96,24 +98,29 @@ public class CvController {
 	}
 
 	@GetMapping("/download/{cvId}")
-	public ResponseEntity<Void> downloadCv(@PathVariable Long cvId) {
+	public ResponseEntity<byte[]> downloadCv(@PathVariable Long cvId) throws IOException {
 
 		Cv cv = cvRepository.findById(cvId)
 				.orElseThrow(() -> new EntityNotFoundException("CV no encontrado"));
 
-		String baseSignedUrl = cloudinary.url()
+		String fileUrl = cloudinary.url()
 				.resourceType("raw")
 				.secure(true)
 				.signed(true)
 				.generate(cv.getPublicId());
 
-		// 👉 agregar filename y attachment manualmente
-		String signedUrlWithFilename =
-				baseSignedUrl + "?attachment=true&filename=cv_" + cvId + ".pdf";
+		// Descargar archivo desde Cloudinary
+		byte[] fileBytes;
+		try (InputStream in = new URL(fileUrl).openStream()) {
+			fileBytes = in.readAllBytes();
+		}
 
-		return ResponseEntity.status(HttpStatus.FOUND)
-				.header(HttpHeaders.LOCATION, signedUrlWithFilename)
-				.build();
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"cv_" + cvId + ".pdf\"")
+				.contentType(MediaType.APPLICATION_PDF)
+				.body(fileBytes);
 	}
+
 
 }
