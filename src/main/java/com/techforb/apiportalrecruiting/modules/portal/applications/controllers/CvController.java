@@ -1,7 +1,7 @@
 package com.techforb.apiportalrecruiting.modules.portal.applications.controllers;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
+import com.cloudinary.Transformation;
 import com.techforb.apiportalrecruiting.core.entities.Cv;
 import com.techforb.apiportalrecruiting.core.entities.Person;
 import com.techforb.apiportalrecruiting.core.security.cloudinary.CloudinaryService;
@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -25,14 +24,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/cv")
@@ -107,6 +104,9 @@ public class CvController {
 				.resourceType("raw")
 				.secure(true)
 				.signed(true)
+				.transformation(
+						new Transformation().flags("attachment:cv_" + cvId + ".pdf")
+				)
 				.generate(publicId);
 
 		return ResponseEntity.status(HttpStatus.FOUND)
