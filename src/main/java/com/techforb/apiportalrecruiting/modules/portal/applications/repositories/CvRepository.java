@@ -17,5 +17,5 @@ public interface CvRepository extends JpaRepository<Cv, Long> , JpaSpecification
     List<Cv> findAllByPersonIdOrderByIdDesc(@Param("personId") Long personId);
 
     Optional<Cv> findByPersonIdAndIsLastTrue(Long personId);
-    Optional<Cv> findByIdAndPersonId(Long id, Long personId);
+    Optional<Cv> findByIdAndPersonId(Long id, Long personId);//TODO NUEVO
 }

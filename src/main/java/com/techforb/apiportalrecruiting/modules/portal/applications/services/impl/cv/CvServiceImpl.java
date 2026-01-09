@@ -78,7 +78,7 @@ public class CvServiceImpl implements CvService {
 		return cvRepository.findById(id).orElseThrow(()->new EntityNotFoundException(localizedMessageService.getMessage("cv.not_found")));
 	}
 
-	@Override
+	@Override //TODO NUEVO
 	public Cv getCvByIdAndPersonId(Long cvId, Long personId) {
 		return cvRepository.findByIdAndPersonId(cvId, personId)
 				.orElseThrow(() -> new RuntimeException("CV no encontrado"));

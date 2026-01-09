@@ -23,6 +23,6 @@ public interface CvService {
 
 	boolean deleteCvByIdAndPersonId(Long cvId,Long personId) throws IOException;
 
-	Cv getCvByIdAndPersonId(Long cvId, Long personId);
+	Cv getCvByIdAndPersonId(Long cvId, Long personId);//TODO NUEVO
 
 }
